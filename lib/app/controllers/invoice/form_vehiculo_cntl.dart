@@ -1,0 +1,136 @@
+import 'package:taller/app/data/models/client_model.dart';
+import 'package:taller/app/data/models/coches/marca.dart';
+import 'package:taller/app/data/models/request/vehiculo_request.dart';
+import 'package:taller/app/data/models/reparacion_model_pagination.dart';
+import 'package:taller/app/data/models/request/reparacion_model_request.dart';
+
+import 'package:taller/app/routes/app_pages.dart';
+import 'package:taller/app/services/marca_service.dart';
+import 'package:taller/app/services/cliente_service.dart';
+import 'package:taller/app/services/reparacion_service.dart';
+import 'package:taller/app/services/vehiculo_service.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:logger/logger.dart';
+import 'package:rounded_loading_button/rounded_loading_button.dart';
+
+class FormVehiculoController extends GetxController {
+  RxList<Modelo> modelList = <Modelo>[].obs;
+  RxList<String> modelNameList = <String>[].obs;
+  RxList<String> listNameBrand = <String>[].obs;
+
+  final Logger log = Logger();
+
+  //*Se usa en el formulario de vehiculo
+  final GlobalKey<FormState> formKeyVehicle = GlobalKey<FormState>();
+  final RoundedLoadingButtonController btnCntlVehicle =
+      RoundedLoadingButtonController();
+
+  final registrationCntrl = TextEditingController();
+  final modelCntrl = TextEditingController();
+  final brandCntrl = TextEditingController();
+
+  //Usado para el autocomplete para que valla cambiando
+  Rx<TextEditingValue> valueBrandEditing = const TextEditingValue().obs;
+  Rx<TextEditingValue> valueModelEditing = const TextEditingValue().obs;
+
+  //*Podemos poner final por que el contexto de GetX maneja el estado y siendo final puede cambiar su valor
+  RxBool changedListBrand = RxBool(true);
+
+  //*Servicios inyectados
+  final ClientService clientService;
+  final ReparacionService reparacionService;
+  final VehiculoService vehiculoService;
+  final MarcaService marcaService;
+
+  FormVehiculoController({
+    required this.clientService,
+    required this.marcaService,
+    required this.reparacionService,
+    required this.vehiculoService,
+  });
+
+  @override
+  void onInit() {
+    super.onInit();
+    changeBrandAndModel();
+  }
+
+  //* Se ejecuta cuando se envíe el formulario
+  void setDataVehicle() async {
+    if (!formKeyVehicle.currentState!.validate()) {
+      log.i("Formulario de login no correcto");
+      btnCntlVehicle.reset();
+    } else {
+      btnCntlVehicle.success();
+      log.i("Formulario de login correcto");
+
+      VehiculoRequest vehiculo = VehiculoRequest(
+          matricula: registrationCntrl.text,
+          marca: valueBrandEditing.value.text,
+          modelo: valueModelEditing.value.text);
+
+      await vehiculoService.saveVehiculo(vehiculo);
+
+      ReparacionRequest reparacion = ReparacionRequest(
+          taller: clientService.cliente.idTaller!,
+          cliente: clientService.cliente.cliente!.id!,
+          vehiculo: vehiculoService.vehiculo.id);
+
+      reparacionService.saveReparacion(reparacion);
+
+      log.i(
+          'Cliente seteado en form vehicle ${clientService.cliente.toString()}');
+      Get.toNamed(Routes.imageWithMarkers);
+      btnCntlVehicle.reset();
+    }
+  }
+
+  //* Se inicia en el onInit y hace una petición para obtener las marcas y los modelos
+  Future<void> changeBrandAndModel() async {
+    try {
+      log.i('Haciendo petición desde el controller para recuperar las marcas');
+      await marcaService.getBrand().then((_) {
+        log.i('Cargando nombre marcas');
+        modelList.value = marcaService.listModel;
+
+        //Get brand hace petición y carga en las listas en el service y nosotros la copiamos en el controller para manipularla
+        modelNameList.value = marcaService.listNameModel;
+
+        listNameBrand.value = marcaService.listNameBrand;
+      });
+    } catch (e) {
+      log.f('Error al cargar las marcas');
+      throw Exception('Error al cargar las marcas');
+    } finally {
+      changedListBrand.value = false;
+    }
+  }
+
+  //*Se usa para en el autocomplete cuando hace clic en una opción
+  void handleBrandSelection(String nameBrand) {
+    log.i('Se ha marcado la marca ${nameBrand.toString()}');
+
+    List<Modelo> modelos = marcaService.listBrand
+        .firstWhere((brand) => brand.nombre == nameBrand)
+        .modelos;
+
+    ///Metemos en el modelo el valor
+    ///modelCntrl.value.text = modelName;
+    valueModelEditing.value = TextEditingValue(text: modelos[0].nombre);
+    log.i('valor initValueModel.value ${valueModelEditing.value.toString()}');
+
+    modelNameList.value = modelos.map((model) => model.nombre).toList();
+
+    valueBrandEditing.value = TextEditingValue(text: nameBrand);
+  }
+
+  void handleModelSelection(String nombreModelo) {
+    log.i('Se ha marcado la marca $nombreModelo');
+    String nombreMarca = marcaService.findMarcaByNombreModelo(nombreModelo);
+
+    valueBrandEditing.value = TextEditingValue(text: nombreMarca);
+
+    valueModelEditing.value = TextEditingValue(text: nombreModelo);
+  }
+}
