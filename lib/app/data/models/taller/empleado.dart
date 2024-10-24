@@ -51,7 +51,7 @@ class Empleado {
         );
 
     factory Empleado.fromJson(Map<String, dynamic> json) => Empleado(
-        id: json["_id"],
+        id: json["id"],
         email: json["email"],
         photoUrl: json["photoUrl"],
         displayName: json["displayName"],
@@ -73,4 +73,8 @@ class Empleado {
         "updatedAt": updatedAt?.toIso8601String(),
         "__v": v,
     };
+    @override
+    String toString() {
+        return 'Empleado{id: $id, email: $email, photoUrl: $photoUrl, displayName: $displayName, provider: $provider, uid: $uid, createdAt: $createdAt, updatedAt: $updatedAt, v: $v}';
+    }
 }

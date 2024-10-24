@@ -4,7 +4,6 @@ import 'package:taller/app/repositories/auth_repository.dart';
 import 'package:taller/app/repositories/taller_repository.dart';
 import 'package:taller/app/routes/app_pages.dart';
 import 'package:taller/app/utils/snack_bar.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

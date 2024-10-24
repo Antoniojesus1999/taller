@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:taller/app/data/models/taller/empleado.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
@@ -13,7 +11,8 @@ class AuthRepository extends GetConnect {
 
   Future<Empleado> saveEmpleado(Empleado empleado) async {
     String url = _baseUrl + _saveEmpleado;
-    String body = jsonEncode(empleado.toJson());
+    String body = empleadoToJson(empleado);
+    //String body = jsonEncode(empleado.toJson());
     log.i('se va a hacer un post a la url -> $url con el body -> $body');
 
     final rsp = await post(
@@ -23,10 +22,13 @@ class AuthRepository extends GetConnect {
     );
 
     if (rsp.statusCode == 201) {
-      final data = jsonDecode(rsp.body);
-      return Empleado.fromJson(data);
+
+      log.i('Respuesta obtenida al guardar empleado -> ${rsp.body}');
+    
+      return Empleado.fromJson(rsp.body);
     } else {
-      log.f('Error al guardar el empleado: $empleado');
+      log.f(
+          'Error al guardar el empleado codigo de respuesta -> ${rsp.statusCode}: Empleado ->${empleado.toString()}');
       throw Error();
     }
   }

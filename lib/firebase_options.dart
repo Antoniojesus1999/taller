@@ -67,9 +67,11 @@ class DefaultFirebaseOptions {
     messagingSenderId: '282498333237',
     projectId: 'tallerapp-62bfb',
     storageBucket: 'tallerapp-62bfb.appspot.com',
-    androidClientId: '282498333237-4gmokslelekrdrn837f0729f0sdqbh3r.apps.googleusercontent.com',
-    iosClientId: '282498333237-nra0feu8qgpfb0k5t624dqrel3oqsrj0.apps.googleusercontent.com',
-    iosBundleId: 'com.example.taller',
+    androidClientId:
+        '282498333237-4gmokslelekrdrn837f0729f0sdqbh3r.apps.googleusercontent.com',
+    iosClientId:
+        '282498333237-nra0feu8qgpfb0k5t624dqrel3oqsrj0.apps.googleusercontent.com',
+    iosBundleId: 'com.surcode.taller',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
@@ -78,8 +80,10 @@ class DefaultFirebaseOptions {
     messagingSenderId: '282498333237',
     projectId: 'tallerapp-62bfb',
     storageBucket: 'tallerapp-62bfb.appspot.com',
-    androidClientId: '282498333237-4gmokslelekrdrn837f0729f0sdqbh3r.apps.googleusercontent.com',
-    iosClientId: '282498333237-nra0feu8qgpfb0k5t624dqrel3oqsrj0.apps.googleusercontent.com',
-    iosBundleId: 'com.example.taller',
+    androidClientId:
+        '282498333237-4gmokslelekrdrn837f0729f0sdqbh3r.apps.googleusercontent.com',
+    iosClientId:
+        '282498333237-nra0feu8qgpfb0k5t624dqrel3oqsrj0.apps.googleusercontent.com',
+    iosBundleId: 'com.surcode.taller',
   );
 }

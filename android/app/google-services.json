@@ -7,62 +7,18 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:282498333237:android:38322df457a3262326cf7c",
+        "mobilesdk_app_id": "1:282498333237:android:7e4de9ed8c77672526cf7c",
         "android_client_info": {
-          "package_name": "com.example.taller_app_git"
+          "package_name": "com.surcode.taller"
         }
       },
       "oauth_client": [
         {
-          "client_id": "282498333237-8uaqkb2rbubgehap1djs1b0gcs1vknl1.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyD4TdUAZ9IdpdzvBn83TBthpaic8NcfYZI"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "282498333237-8uaqkb2rbubgehap1djs1b0gcs1vknl1.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "282498333237-d6pov6b35e9ohtvclafjdave7n56utfa.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.appTaller"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:282498333237:android:62e1191c80b25f8426cf7c",
-        "android_client_info": {
-          "package_name": "com.surcode.app_taller"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "282498333237-ba80cshdneliktk0s5of472gd1urac8o.apps.googleusercontent.com",
+          "client_id": "282498333237-na8f9sj4m0mmebkel85hou986qpe8von.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.surcode.app_taller",
+            "package_name": "com.surcode.taller",
             "certificate_hash": "0fec134a236695b07ee02739d260e677673f738f"
-          }
-        },
-        {
-          "client_id": "282498333237-dbhhgba0abefjjchd41ca7s4n0h0jn4m.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.surcode.app_taller",
-            "certificate_hash": "4f0b4edc0a4c8ce3cc56244a83812eeec3cb2871"
           }
         },
         {

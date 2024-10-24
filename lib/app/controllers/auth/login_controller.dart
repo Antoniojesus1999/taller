@@ -53,13 +53,13 @@ class LoginController extends GetxController {
             btnLoginGoogleCtrl.success();
             authService.setInitialScreen();
           } catch (e) {
-            openSnackbar(Get.context, "Error saving employee data", Colors.red);
+            openSnackbar(Get.context, "Error saving employee data $e", Colors.red);
             log.e('Error saving employee data: $e');
             btnLoginGoogleCtrl.reset();
           }
         }
       } catch (e) {
-        openSnackbar(Get.context, "Error checking user existence", Colors.red);
+        openSnackbar(Get.context, "Error checking user existence $e", Colors.red);
         log.e('Error checking user existence: $e');
         btnLoginGoogleCtrl.reset();
       }
