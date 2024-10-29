@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-class ReparacionModelPagintation {
+class ReparacionPagintation {
     List<ReparacionResponse>? reparaciones;
     int? totalDocs;
     int? limit;
@@ -12,7 +12,7 @@ class ReparacionModelPagintation {
     dynamic prevPage;
     dynamic nextPage;
 
-    ReparacionModelPagintation({
+    ReparacionPagintation({
         this.reparaciones,
         this.totalDocs,
         this.limit,
@@ -25,11 +25,11 @@ class ReparacionModelPagintation {
         this.nextPage,
     });
 
-    factory ReparacionModelPagintation.fromRawJson(String str) => ReparacionModelPagintation.fromJson(json.decode(str));
+    factory ReparacionPagintation.fromRawJson(String str) => ReparacionPagintation.fromJson(json.decode(str));
 
     String toRawJson() => json.encode(toJson());
 
-    factory ReparacionModelPagintation.fromJson(Map<String, dynamic> json) => ReparacionModelPagintation(
+    factory ReparacionPagintation.fromJson(Map<String, dynamic> json) => ReparacionPagintation(
         reparaciones: json["docs"] == null ? [] : List<ReparacionResponse>.from(json["docs"]!.map((x) => ReparacionResponse.fromJson(x))),
         totalDocs: json["totalDocs"],
         limit: json["limit"],
@@ -195,16 +195,16 @@ class Cliente {
 }
 
 class Danyo {
-    String? positionX;
-    String? positionY;
-    String? origWidth;
-    String? origHeight;
+    double positionX;
+    double positionY;
+    double origWidth;
+    double origHeight;
 
     Danyo({
-        this.positionX,
-        this.positionY,
-        this.origWidth,
-        this.origHeight,
+        required this.positionX,
+        required this.positionY,
+        required this.origWidth,
+        required this.origHeight,
     });
 
     factory Danyo.fromRawJson(String str) => Danyo.fromJson(json.decode(str));

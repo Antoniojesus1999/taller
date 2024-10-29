@@ -1,11 +1,11 @@
-/* import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../controllers/image_with_markers/image_marker_controller.dart';
-import '../ui/global_widgets/btn_load.dart';
+import '../../../controllers/image_with_markers/image_marker_cntrl.dart';
+import '../../global_widgets/btn_load.dart';
 
 class ImageWithMarkers extends StatelessWidget {
-  final ImageMarkerController controller = Get.put(ImageMarkerController());
+  final ImageMarkerCntrl controller = Get.put(ImageMarkerCntrl());
 
   ImageWithMarkers({super.key});
 
@@ -48,8 +48,8 @@ class ImageWithMarkers extends StatelessWidget {
                               ),
                               ...controller.markers.map((marker) {
                                 return Positioned(
-                                  left: (marker.position!.dx - 10.5) * (controller.imageWidth.value / marker.origWidth!),
-                                  top: (marker.position!.dy - 10.5) * (controller.imageHeight.value / marker.origHeight!),
+                                  left: (marker.positionX - 10.5) * (controller.imageWidth.value / marker.origWidth),
+                                  top: (marker.positionY - 10.5) * (controller.imageHeight.value / marker.origHeight),
                                   child: GestureDetector(
                                     onTapUp: (TapUpDetails details) => controller.removeMarker(marker),
                                     child: Container(
@@ -98,8 +98,8 @@ class ImageWithMarkers extends StatelessWidget {
                         ),
                         ...controller.markers.map((marker) {
                           return Positioned(
-                            left: (marker.position!.dx - 10.5) * (controller.imageWidth.value / marker.origWidth!),
-                            top: (marker.position!.dy - 10.5) * (controller.imageHeight.value / marker.origHeight!),
+                            left: (marker.positionX - 10.5) * (controller.imageWidth.value / marker.origWidth),
+                            top: (marker.positionY - 10.5) * (controller.imageHeight.value / marker.origHeight),
                             child: GestureDetector(
                               onTapUp: (TapUpDetails details) => controller.removeMarker(marker),
                               child: Container(
@@ -123,4 +123,3 @@ class ImageWithMarkers extends StatelessWidget {
     );
   }
 }
- */

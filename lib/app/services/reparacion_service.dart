@@ -8,7 +8,7 @@ class ReparacionService extends GetxService {
 
   late ReparacionResponse _reparacion = ReparacionResponse();
 
-  get reparacion => _reparacion;
+  ReparacionResponse get reparacion => _reparacion;
 
   ReparacionService({required this.reparacionRepository});
 

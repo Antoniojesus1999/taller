@@ -5,6 +5,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 
+import '../data/models/cliente/cliente_model.dart';
+
 class ClientRepository extends GetConnect {
   final Logger log = Logger();
   final String _baseUrl = dotenv.env['URL_HOST_BACK']!;
@@ -27,6 +29,32 @@ class ClientRepository extends GetConnect {
       final data = jsonDecode(rsp.bodyString!);
       log.i('Respuesta con exito -> ${rsp.body}');
       return Cliente.fromJson(data);
+    } else {
+      // Ocurrió un error
+      log.i('Error al guardar el cliente: ${rsp.body}');
+      throw Exception('Error al guardar el cliente');
+    }
+  }
+
+  Future<ClienteModel> saveClienteModel(String idTaller, ClienteModel cliente) async {
+    String url = _baseUrl + _saveClient;
+    log.i('Valor de client -> ${cliente.toString()}');
+    final body = json.encode({
+      "idTaller": idTaller,
+      "cliente": cliente.toJson(),  // Convertimos ClienteModel a JSON
+    });
+    log.i('Se va a guardar un cliente -> $url con el body -> $body');
+
+    final rsp = await post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body,
+    );
+
+    if (rsp.statusCode == 201) {
+      final data = jsonDecode(rsp.bodyString!);
+      log.i('Respuesta con exito -> ${rsp.body}');
+      return ClienteModel.fromJson(data);
     } else {
       // Ocurrió un error
       log.i('Error al guardar el cliente: ${rsp.body}');

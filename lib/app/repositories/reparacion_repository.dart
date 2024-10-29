@@ -21,7 +21,7 @@ class ReparacionRepository extends GetConnect {
     final rsp = await get(url);
     final data = rsp.body;
     log.i('Se va a obtener todas las reparaciones url -> $url body -> $data');
-    return ReparacionModelPagintation.fromJson(data).reparaciones!;
+    return ReparacionPagintation.fromJson(data).reparaciones!;
   }
 
   Future<ReparacionResponse> saveReparacion(

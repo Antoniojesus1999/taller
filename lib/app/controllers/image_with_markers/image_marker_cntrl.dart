@@ -1,14 +1,15 @@
-/* import 'package:taller/app/data/models/reparacion_model_pagination.dart';
+import 'package:taller/app/data/models/reparacion_model_pagination.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
+import 'package:taller/app/services/reparacion_service.dart';
 import '../../data/models/client_model.dart';
 import '../../services/cliente_service.dart';
 
-class ImageMarkerController extends GetxController {
+class ImageMarkerCntrl extends GetxController {
   final Logger log = Logger();
-  final clientService = Get.find<ClientService>();
+  final reparacionService = Get.find<ReparacionService>();
   final GlobalKey imageKey = GlobalKey();
   final RoundedLoadingButtonController btnCntlDanyos =
       RoundedLoadingButtonController();
@@ -16,12 +17,13 @@ class ImageMarkerController extends GetxController {
   RxList<Danyo> markers = RxList<Danyo>([]);
   RxDouble imageWidth = RxDouble(0.0);
   RxDouble imageHeight = RxDouble(0.0);
+  late ReparacionResponse reparacion;
 
   @override
   void onInit() {
     super.onInit();
-    List<Danyo>? danyos =
-        clientService.clientDto.vehicles?[0].repairs![0].danyos;
+    reparacion = reparacionService.reparacion;
+    List<Danyo>? danyos = reparacion.danyos;
     if (danyos != null && danyos.isNotEmpty) {
       markers.addAll(danyos);
     }
@@ -29,7 +31,8 @@ class ImageMarkerController extends GetxController {
 
   void addMarker(Offset position) {
     markers.add(Danyo(
-      position: position,
+      positionX: position.dx,
+      positionY: position.dy,
       origWidth: imageWidth.value,
       origHeight: imageHeight.value,
     ));
@@ -47,12 +50,9 @@ class ImageMarkerController extends GetxController {
   }
 
   void setDataDanyos() async {
-    clientService.clientDto.vehicles![0].repairs?[0].danyos?.addAll(markers);
+    reparacion.danyos?.addAll(markers);
 
-    Future<Cliente?> clientSaved =
-        clientService.saveClient(clientService.clientDto);
-    log.i("Valor de clientSaved $clientSaved");
-    //Get.toNamed(Routes.invoiceVehicle);
+    //reparacionService.saveReparacion(reparacion);
+    //log.i("Valor de clientSaved $clientSaved");
   }
 }
- */

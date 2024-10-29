@@ -10,7 +10,7 @@ import 'package:taller/app/ui/pages/factura/vehicle_invoice_page.dart';
 import 'package:taller/app/ui/pages/auth/verify_page.dart';
 import 'package:taller/app/ui/pages/factura/reparacion_detail_page.dart';
 import 'package:taller/app/ui/pages/home/taller_page.dart';
-import 'package:taller/app/widgets/image_with_markers_page.dart';
+import 'package:taller/app/ui/pages/factura/image_with_markers_page.dart';
 import 'package:get/get.dart';
 
 import '../bindings/image_marker_bindiing.dart';
@@ -59,11 +59,11 @@ abstract class AppPages {
         page: () => const FormVehiculoPage(),
         binding: FormVehiculoBinding(),
         transition: Transition.leftToRightWithFade),
-    /*  GetPage(
+    GetPage(
         name: Routes.imageWithMarkers,
         page: () => ImageWithMarkers(),
         binding: ImageWithMarkersBinding(),
-        transition: Transition.fadeIn),  */
+        transition: Transition.fadeIn),
     GetPage(
         name: Routes.pageReparacionesDetail,
         page: () => const ReparacionDetailPage(),
