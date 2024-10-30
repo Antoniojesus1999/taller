@@ -1,4 +1,4 @@
-import 'package:taller/app/controllers/invoice/form_persona_cntrl.dart';
+import 'package:taller/app/controllers/reparacion/form_persona_cntrl.dart';
 import 'package:taller/app/ui/global_widgets/btn_load.dart';
 import 'package:taller/app/utils/helpers.dart';
 import 'package:flutter/material.dart';

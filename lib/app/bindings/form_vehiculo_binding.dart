@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:taller/app/controllers/invoice/form_vehiculo_cntl.dart';
+import 'package:taller/app/controllers/reparacion/form_vehiculo_cntl.dart';
 import 'package:taller/app/repositories/marcas_repository.dart';
 import 'package:taller/app/repositories/vehiculo_repository.dart';
 import 'package:taller/app/services/vehiculo_service.dart';

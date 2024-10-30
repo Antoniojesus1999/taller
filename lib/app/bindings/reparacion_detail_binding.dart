@@ -1,4 +1,4 @@
-import 'package:taller/app/controllers/invoice/reparacion_detail_controller.dart';
+import 'package:taller/app/controllers/reparacion/reparacion_detail_controller.dart';
 import 'package:get/get.dart';
 
 class ReparacionDetailBinding extends Bindings {

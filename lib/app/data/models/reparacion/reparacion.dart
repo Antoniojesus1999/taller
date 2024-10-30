@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-class ReparacionModel {
+class Reparacion {
     final DateTime? fecEntrada;
     final String? combustible;
     final String? kilometros;
@@ -12,7 +12,7 @@ class ReparacionModel {
     final String cliente;
     final String vehiculo;
 
-    ReparacionModel({
+    Reparacion({
         this.fecEntrada,
         this.combustible,
         this.kilometros,
@@ -25,11 +25,11 @@ class ReparacionModel {
         required this.vehiculo,
     });
 
-    factory ReparacionModel.fromRawJson(String str) => ReparacionModel.fromJson(json.decode(str));
+    factory Reparacion.fromRawJson(String str) => Reparacion.fromJson(json.decode(str));
 
     String toRawJson() => json.encode(toJson());
 
-    factory ReparacionModel.fromJson(Map<String, dynamic> json) => ReparacionModel(
+    factory Reparacion.fromJson(Map<String, dynamic> json) => Reparacion(
         fecEntrada: json["fecEntrada"] == null ? null : DateTime.parse(json["fecEntrada"]),
         combustible: json["combustible"],
         kilometros: json["kilometros"],
@@ -57,7 +57,7 @@ class ReparacionModel {
   
     @override
     String toString() {
-      return 'ReparacionModel{fecEntrada: $fecEntrada, combustible: $combustible, kilometros: $kilometros, seguro: $seguro, chasis: $chasis, trabajos: $trabajos, danyos: $danyos, taller: $taller, cliente: $cliente, vehiculo: $vehiculo}';
+      return 'Reparacion{fecEntrada: $fecEntrada, combustible: $combustible, kilometros: $kilometros, seguro: $seguro, chasis: $chasis, trabajos: $trabajos, danyos: $danyos, taller: $taller, cliente: $cliente, vehiculo: $vehiculo}';
    }
 }
 

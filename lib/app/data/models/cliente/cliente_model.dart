@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:taller/app/data/models/reparacion/reparacion_model.dart';
+import 'package:taller/app/data/models/reparacion/reparacion.dart';
 
 class ClienteModel {
   String? id;
@@ -10,7 +10,7 @@ class ClienteModel {
   String? apellido2;
   String? telefono;
   String? email;
-  List<ReparacionModel>? reparaciones;
+  List<Reparacion>? reparaciones;
   DateTime? createdAt;
   DateTime? updatedAt;
 
@@ -40,7 +40,7 @@ class ClienteModel {
     apellido2: json["apellido2"],
     telefono: json["telefono"],
     email: json["email"],
-    reparaciones: List<ReparacionModel>.from(json["reparaciones"].map((x) => ReparacionModel.fromJson(x))),
+    reparaciones: List<Reparacion>.from(json["reparaciones"].map((x) => Reparacion.fromJson(x))),
     createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
     updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
   );

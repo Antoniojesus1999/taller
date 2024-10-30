@@ -1,4 +1,4 @@
-import 'package:taller/app/controllers/invoice/form_vehiculo_cntl.dart';
+import 'package:taller/app/controllers/reparacion/form_vehiculo_cntl.dart';
 import 'package:taller/app/data/models/coches/marca.dart';
 import 'package:taller/app/ui/global_widgets/auto_complete_custom.dart';
 import 'package:taller/app/ui/global_widgets/btn_load.dart';

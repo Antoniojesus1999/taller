@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../controllers/image_with_markers/image_marker_cntrl.dart';
+import '../../../controllers/reparacion/image_marker_cntrl.dart';
 import '../../global_widgets/btn_load.dart';
 
 class ImageWithMarkers extends StatelessWidget {

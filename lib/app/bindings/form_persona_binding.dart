@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:taller/app/controllers/invoice/form_persona_cntrl.dart';
+import 'package:taller/app/controllers/reparacion/form_persona_cntrl.dart';
 import 'package:taller/app/services/cliente_service.dart';
 
 import '../repositories/client_repository.dart';
