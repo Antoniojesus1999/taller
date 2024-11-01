@@ -1,7 +1,6 @@
 import 'package:taller/app/repositories/marcas_repository.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
-import 'package:dio/dio.dart';
 import '../data/models/coches/marca.dart';
 
 class MarcaService extends GetxService {
