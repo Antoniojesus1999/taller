@@ -4,8 +4,6 @@ import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:taller/app/services/reparacion_service.dart';
-import '../../data/models/client_model.dart';
-import '../../services/cliente_service.dart';
 
 class ImageMarkerCntrl extends GetxController {
   final Logger log = Logger();

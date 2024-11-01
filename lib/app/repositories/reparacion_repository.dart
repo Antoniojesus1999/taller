@@ -1,5 +1,5 @@
+import 'package:taller/app/data/models/reparacion/reparacion.dart';
 import 'package:taller/app/data/models/reparacion_model_pagination.dart';
-import 'package:taller/app/data/models/request/reparacion_model_request.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
@@ -25,7 +25,7 @@ class ReparacionRepository extends GetConnect {
   }
 
   Future<ReparacionResponse> saveReparacion(
-      ReparacionRequest reparacion) async {
+      Reparacion reparacion) async {
     String url = _urlHost + _urlSaveReparacion;
     log.i(
         'Se va a guardar la reparacion url $url body -> ${reparacion.toRawJson()}');

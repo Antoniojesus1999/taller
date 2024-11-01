@@ -1,6 +1,5 @@
 import 'package:taller/app/data/models/coches/marca.dart';
-import 'package:taller/app/data/models/request/vehiculo_request.dart';
-import 'package:taller/app/data/models/request/reparacion_model_request.dart';
+import 'package:taller/app/data/models/reparacion/reparacion.dart';
 
 import 'package:taller/app/routes/app_pages.dart';
 import 'package:taller/app/services/marca_service.dart';
@@ -11,6 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
+
+import '../../data/models/response/vehiculo.dart';
 
 class FormVehiculoController extends GetxController {
   RxList<Modelo> modelList = <Modelo>[].obs;
@@ -63,16 +64,16 @@ class FormVehiculoController extends GetxController {
       btnCntlVehicle.success();
       log.i("Formulario de login correcto");
 
-      VehiculoRequest vehiculo = VehiculoRequest(
+      Vehiculo vehiculo = Vehiculo(
           matricula: registrationCntrl.text,
           marca: valueBrandEditing.value.text,
           modelo: valueModelEditing.value.text);
 
       await vehiculoService.saveVehiculo(vehiculo);
 
-      ReparacionRequest reparacion = ReparacionRequest(
+      Reparacion reparacion = Reparacion(
           taller: clientService.cliente.idTaller!,
-          cliente: clientService.cliente.cliente!.id!,
+          cliente: clientService.cliente.id!,
           vehiculo: vehiculoService.vehiculo.id);
 
       reparacionService.saveReparacion(reparacion);

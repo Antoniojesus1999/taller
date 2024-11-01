@@ -1,4 +1,3 @@
-import 'package:taller/app/data/models/client_model.dart';
 import 'package:taller/app/data/models/cliente/cliente_model.dart';
 
 import 'package:taller/app/routes/app_pages.dart';
@@ -24,9 +23,9 @@ class FormPersonaCntrl extends GetxController {
   final emailCntrl = TextEditingController();
 
   //*Seteamos el cliente que necesita la siguiente pagina para factura
-  late ClienteRequest clienteRequest;
+  late Cliente cliente;
 
-  late ClienteModel clienteModel;
+  late Cliente clienteModel;
 
   //*Servicios inyectados
   final ClientService clientService;
@@ -47,7 +46,7 @@ class FormPersonaCntrl extends GetxController {
       cliente.telefono = tlfCntrl.text;
       cliente.email = emailCntrl.text;*/
 
-      clienteModel = ClienteModel(nif: nifCntrl.text, nombre: nameCntrl.text);
+      clienteModel = Cliente(nif: nifCntrl.text, nombre: nameCntrl.text);
       clienteModel.apellido1 = surName1Cntrl.text;
       clienteModel.apellido2 = surName2Cntrl.text;
       clienteModel.telefono = tlfCntrl.text;
@@ -55,7 +54,7 @@ class FormPersonaCntrl extends GetxController {
 
       //clienteRequest = ClienteRequest(cliente: cliente);
       //clientService.saveClient(clienteRequest);
-      clientService.saveClienteModel(clienteModel);
+      clientService.saveClient(clienteModel);
 
       log.i('Cliente seteado en form person ${clientService.cliente}');
       Get.toNamed(Routes.formVehicle);
