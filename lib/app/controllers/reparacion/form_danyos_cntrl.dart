@@ -1,11 +1,13 @@
-import 'package:taller/app/data/models/reparacion_model_pagination.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:taller/app/services/reparacion_service.dart';
 
-class ImageMarkerCntrl extends GetxController {
+import '../../data/models/reparacion/reparacion.dart';
+
+
+class FormDanyosCntrl extends GetxController {
   final Logger log = Logger();
   final reparacionService = Get.find<ReparacionService>();
   final GlobalKey imageKey = GlobalKey();
@@ -15,7 +17,7 @@ class ImageMarkerCntrl extends GetxController {
   RxList<Danyo> markers = RxList<Danyo>([]);
   RxDouble imageWidth = RxDouble(0.0);
   RxDouble imageHeight = RxDouble(0.0);
-  late ReparacionResponse reparacion;
+  late Reparacion reparacion;
 
   @override
   void onInit() {

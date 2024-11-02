@@ -1,8 +1,9 @@
-import 'package:taller/app/data/models/reparacion/reparacion.dart';
 import 'package:taller/app/data/models/reparacion_model_pagination.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
+
+import '../data/models/reparacion/reparacion.dart';
 
 class ReparacionRepository extends GetConnect {
   final String _urlHost = dotenv.env['URL_HOST_BACK']!;
@@ -24,7 +25,7 @@ class ReparacionRepository extends GetConnect {
     return ReparacionPagintation.fromJson(data).reparaciones!;
   }
 
-  Future<ReparacionResponse> saveReparacion(
+  Future<Reparacion> saveReparacion(
       Reparacion reparacion) async {
     String url = _urlHost + _urlSaveReparacion;
     log.i(
@@ -37,7 +38,7 @@ class ReparacionRepository extends GetConnect {
             'Error al guardar la reparacion codigo -> ${response.statusCode}');
       } else {
         log.i('Reparacion guardada correctamente ${reparacion.toString()}');
-        return ReparacionResponse.fromJson(response.body);
+        return Reparacion.fromJson(response.body);
       }
     } catch (e) {
       log.e('Error al guardar la reparacion -> $e');

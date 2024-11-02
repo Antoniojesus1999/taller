@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../controllers/reparacion/image_marker_cntrl.dart';
+import '../../../controllers/reparacion/form_danyos_cntrl.dart';
 import '../../global_widgets/btn_load.dart';
 
 class ImageWithMarkers extends StatelessWidget {
-  final ImageMarkerCntrl controller = Get.put(ImageMarkerCntrl());
+  final FormDanyosCntrl controller = Get.put(FormDanyosCntrl());
 
   ImageWithMarkers({super.key});
 

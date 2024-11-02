@@ -4,7 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 
-import '../data/models/cliente/cliente_model.dart';
+import '../data/models/cliente/cliente.dart';
 
 class ClientRepository extends GetConnect {
   final Logger log = Logger();

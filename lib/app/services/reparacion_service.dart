@@ -6,9 +6,9 @@ import 'package:get/get.dart';
 class ReparacionService extends GetxService {
   final ReparacionRepository reparacionRepository;
 
-  late ReparacionResponse _reparacion = ReparacionResponse();
+  late Reparacion _reparacion = Reparacion();
 
-  ReparacionResponse get reparacion => _reparacion;
+  Reparacion get reparacion => _reparacion;
 
   ReparacionService({required this.reparacionRepository});
 

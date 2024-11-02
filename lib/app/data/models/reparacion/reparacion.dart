@@ -8,9 +8,9 @@ class Reparacion {
     final String? chasis;
     final List<Trabajo>? trabajos;
     final List<Danyo>? danyos;
-    final String taller;
-    final String cliente;
-    final String vehiculo;
+    final String? taller;
+    final String? cliente;
+    final String? vehiculo;
 
     Reparacion({
         this.fecEntrada,
@@ -20,9 +20,9 @@ class Reparacion {
         this.chasis,
         this.trabajos,
         this.danyos,
-        required this.taller,
-        required this.cliente,
-        required this.vehiculo,
+        this.taller,
+        this.cliente,
+        this.vehiculo,
     });
 
     factory Reparacion.fromRawJson(String str) => Reparacion.fromJson(json.decode(str));

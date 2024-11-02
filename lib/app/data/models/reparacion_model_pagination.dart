@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:taller/app/data/models/cliente/cliente_model.dart';
+import 'package:taller/app/data/models/cliente/cliente.dart';
 
 class ReparacionPagintation {
   List<ReparacionResponse>? reparaciones;

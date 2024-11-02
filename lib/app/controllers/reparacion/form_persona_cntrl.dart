@@ -1,4 +1,4 @@
-import 'package:taller/app/data/models/cliente/cliente_model.dart';
+import 'package:taller/app/data/models/cliente/cliente.dart';
 
 import 'package:taller/app/routes/app_pages.dart';
 import 'package:taller/app/services/cliente_service.dart';

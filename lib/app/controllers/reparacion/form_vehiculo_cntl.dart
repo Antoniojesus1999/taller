@@ -5,6 +5,7 @@ import 'package:taller/app/routes/app_pages.dart';
 import 'package:taller/app/services/marca_service.dart';
 import 'package:taller/app/services/cliente_service.dart';
 import 'package:taller/app/services/reparacion_service.dart';
+import 'package:taller/app/services/taller_service.dart';
 import 'package:taller/app/services/vehiculo_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -37,12 +38,14 @@ class FormVehiculoController extends GetxController {
   RxBool changedListBrand = RxBool(true);
 
   //*Servicios inyectados
+  final TallerService tallerService;
   final ClientService clientService;
   final ReparacionService reparacionService;
   final VehiculoService vehiculoService;
   final MarcaService marcaService;
 
   FormVehiculoController({
+    required this.tallerService,
     required this.clientService,
     required this.marcaService,
     required this.reparacionService,
