@@ -2,7 +2,7 @@
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 
-import 'package:taller/app/data/models/taller/taller_model.dart';
+import 'package:taller/app/data/models/taller/taller.dart';
 import 'package:taller/app/routes/app_pages.dart';
 import 'package:taller/app/services/auth_service.dart';
 import 'package:taller/app/services/taller_service.dart';
@@ -35,9 +35,9 @@ class TallerCntrl extends GetxController {
       listaFiltradaTalleres.value = listaTalleres;
       listaFiltradaTalleres.value = listaFiltradaTalleres
           .where((taller) =>
-              taller.nombre.toLowerCase().contains(value.toLowerCase()) ||
-              taller.cif.toLowerCase().contains(value.toLowerCase()) ||
-              taller.municipio.toLowerCase().contains(value.toLowerCase()))
+              taller.nombre!.toLowerCase().contains(value.toLowerCase()) ||
+              taller.cif!.toLowerCase().contains(value.toLowerCase()) ||
+              taller.municipio!.toLowerCase().contains(value.toLowerCase()))
           .toList();
     });
   }

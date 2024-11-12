@@ -1,16 +1,18 @@
 import 'package:taller/app/data/models/coches/marca.dart';
-import 'package:taller/app/data/models/request/vehiculo_request.dart';
-import 'package:taller/app/data/models/request/reparacion_model_request.dart';
 
 import 'package:taller/app/routes/app_pages.dart';
 import 'package:taller/app/services/marca_service.dart';
 import 'package:taller/app/services/cliente_service.dart';
 import 'package:taller/app/services/reparacion_service.dart';
+import 'package:taller/app/services/taller_service.dart';
 import 'package:taller/app/services/vehiculo_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
+
+import '../../data/models/reparacion/reparacion.dart';
+import '../../data/models/vehiculo/vehiculo.dart';
 
 class FormVehiculoController extends GetxController {
   RxList<Modelo> modelList = <Modelo>[].obs;
@@ -36,12 +38,14 @@ class FormVehiculoController extends GetxController {
   RxBool changedListBrand = RxBool(true);
 
   //*Servicios inyectados
+  final TallerService tallerService;
   final ClientService clientService;
   final ReparacionService reparacionService;
   final VehiculoService vehiculoService;
   final MarcaService marcaService;
 
   FormVehiculoController({
+    required this.tallerService,
     required this.clientService,
     required this.marcaService,
     required this.reparacionService,
@@ -63,17 +67,17 @@ class FormVehiculoController extends GetxController {
       btnCntlVehicle.success();
       log.i("Formulario de login correcto");
 
-      VehiculoRequest vehiculo = VehiculoRequest(
+      Vehiculo vehiculo = Vehiculo(
           matricula: registrationCntrl.text,
           marca: valueBrandEditing.value.text,
           modelo: valueModelEditing.value.text);
 
       await vehiculoService.saveVehiculo(vehiculo);
 
-      ReparacionRequest reparacion = ReparacionRequest(
-          taller: clientService.cliente.idTaller!,
-          cliente: clientService.cliente.cliente!.id!,
-          vehiculo: vehiculoService.vehiculo.id);
+      Reparacion reparacion = Reparacion(
+          taller: tallerService.taller,
+          cliente: clientService.cliente,
+          vehiculo: vehiculoService.vehiculo);
 
       reparacionService.saveReparacion(reparacion);
 

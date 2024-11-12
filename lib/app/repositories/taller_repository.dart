@@ -1,4 +1,6 @@
-import 'package:taller/app/data/models/taller/taller_model.dart';
+import 'dart:convert';
+
+import 'package:taller/app/data/models/taller/taller.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get_connect/connect.dart';
 import 'package:logger/logger.dart';
@@ -27,15 +29,16 @@ class TallerRepository extends GetConnect {
     }
   }
 
-  Future<String?> tallerAsociadoEmpleado(String email) async {
+  Future<Taller> tallerAsociadoEmpleado(String email) async {
     Response<dynamic> rsp = Response();
     try {
       rsp = await get("$_baseUrl$_existTallerByEmailEmpleado?email=$email");
       if (rsp.statusCode == 200) {
+        final data = jsonDecode(rsp.bodyString!);
         //Devolvemos el id del taller
-        return rsp.body['id'];
+        return Taller.fromJson(data);
       } else if (rsp.statusCode == 404) {
-        return null;
+        throw Exception('El empleado no tiene asociado ningún taller');
       } else {
         throw Exception('Fallo al ver si un empleado tiene asociado un taller');
       }

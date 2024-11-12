@@ -34,12 +34,12 @@ class TallerPage extends GetView<TallerCntrl> {
                   itemBuilder: (context, index) {
                     final taller = controller.listaFiltradaTalleres[index];
                     return ListTile(
-                      onTap: () => controller.asociandoEmailATaller(taller.id),
+                      onTap: () => controller.asociandoEmailATaller(taller.id!),
                       title: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            taller.nombre,
+                            taller.nombre!,
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 20),

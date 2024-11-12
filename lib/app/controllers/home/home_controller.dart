@@ -1,9 +1,10 @@
-import 'package:taller/app/data/models/reparacion_model_pagination.dart';
 import 'package:taller/app/services/auth_service.dart';
 import 'package:taller/app/services/reparacion_service.dart';
 import 'package:taller/app/services/taller_service.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
+
+import '../../data/models/reparacion/reparacion.dart';
 
 class HomeController extends GetxController {
   final Logger log = Logger();
@@ -14,7 +15,7 @@ class HomeController extends GetxController {
 
   final int _limit = 10;
   int _page = 1;
-  var reparaciones = <ReparacionResponse>[];
+  var reparaciones = <Reparacion>[];
   var hayMas = true.obs;
 
   late String idTaller;
@@ -23,14 +24,14 @@ class HomeController extends GetxController {
 
   @override
   Future<void> onInit() async {
-    idTaller = tallerService.idTaller;
+    idTaller = tallerService.taller.id;
     getReparaciones();
     super.onInit();
   }
 
   Future getReparaciones() async {
     try {
-      List<ReparacionResponse> rsp =
+      List<Reparacion> rsp =
           await workService.getReparaciones(_page, _limit, idTaller);
 
       if (rsp.length < _limit) {

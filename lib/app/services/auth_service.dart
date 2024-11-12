@@ -71,7 +71,7 @@ class AuthService extends GetxService {
         if (tallerAsociado == null) {
           Get.offAllNamed(Routes.taller);
         } else {
-          tallerService.setIdTaller = tallerAsociado;
+          tallerService.setTaller = tallerAsociado;
           Get.offAllNamed(Routes.home);
         }
       });

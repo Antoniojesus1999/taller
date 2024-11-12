@@ -14,6 +14,7 @@ class FormVehiculoBinding extends Bindings {
     Get.lazyPut(() => MarcaService(marcasRepository: Get.find()));
     Get.lazyPut(() => VehiculoService(vehiculoRepository: Get.find()));
     Get.lazyPut<FormVehiculoController>(() => FormVehiculoController(
+        tallerService: Get.find(),
         clientService: Get.find(),
         marcaService: Get.find(),
         reparacionService: Get.find(),
