@@ -38,7 +38,7 @@ class TallerRepository extends GetConnect {
         //Devolvemos el id del taller
         return Taller.fromJson(data);
       } else if (rsp.statusCode == 404) {
-        throw Exception('El empleado no tiene asociado ningún taller');
+        return Taller();
       } else {
         throw Exception('Fallo al ver si un empleado tiene asociado un taller');
       }
@@ -48,7 +48,7 @@ class TallerRepository extends GetConnect {
     }
   }
 
-  Future<void> asociandoEmailATaller(String email, String idTaller) async {
+  Future<Taller> asociandoEmailATaller(String email, String idTaller) async {
     try {
       log.i(
           'Petición a /taller/add-empleado-taller email: $email idTaller: $idTaller');
@@ -65,5 +65,6 @@ class TallerRepository extends GetConnect {
     } catch (e) {
       throw Exception('Error al asociar un email al taller: $e');
     }
+    return Taller();
   }
 }
