@@ -58,13 +58,15 @@ class TallerRepository extends GetConnect {
       );
 
       log.i('Petición de asociar email a taller -> ${response.statusCode}');
-      if (response.statusCode != 200) {
+      if (response.statusCode == 200) {
+        Taller taller = Taller.fromJson(response.body);
+        return taller;
+      } else {
         throw Exception(
             'Back a devuelto un codigo distinto a 200 ok: $response');
       }
     } catch (e) {
       throw Exception('Error al asociar un email al taller: $e');
     }
-    return Taller();
   }
 }

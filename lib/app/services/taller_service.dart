@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 
 class TallerService extends GetxService {
   final TallerRepository tallerRepository;
-  late Taller _taller;
+  late Taller _taller = Taller();
 
   get taller => _taller;
   set setTaller(Taller taller) => _taller = taller;
@@ -21,7 +21,8 @@ class TallerService extends GetxService {
     return await tallerRepository.tallerAsociadoEmpleado(email);
   }
 
-  void asociandoEmailATaller(String email, String idTaller) {
-    tallerRepository.asociandoEmailATaller(email, idTaller);
+  Future<void> asociandoEmailATaller(String email, String idTaller) async {
+    _taller = await tallerRepository.asociandoEmailATaller(email, idTaller);
+    return Future.value();
   }
 }

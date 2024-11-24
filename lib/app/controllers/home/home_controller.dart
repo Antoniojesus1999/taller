@@ -18,18 +18,18 @@ class HomeController extends GetxController {
   var reparaciones = <Reparacion>[];
   var hayMas = true.obs;
 
-  late String idTaller;
-
   HomeController({required this.workService, required this.authService});
 
   @override
   Future<void> onInit() async {
-    idTaller = tallerService.taller.id;
-    getReparaciones();
     super.onInit();
+    if (tallerService.taller.id != null) {
+      getReparaciones();
+    }
   }
 
   Future getReparaciones() async {
+    final idTaller = await tallerService.taller.id;
     try {
       List<Reparacion> rsp =
           await workService.getReparaciones(_page, _limit, idTaller);
