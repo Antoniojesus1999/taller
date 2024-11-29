@@ -21,8 +21,8 @@ class TallerService extends GetxService {
     return await tallerRepository.tallerAsociadoEmpleado(email);
   }
 
-  Future<void> asociandoEmailATaller(String email, String idTaller) async {
-    _taller = await tallerRepository.asociandoEmailATaller(email, idTaller);
-    return Future.value();
+  Future<Taller> asociandoEmailATaller(String email, String idTaller) async {
+    return await tallerRepository.asociandoEmailATaller(email, idTaller);
   }
+
 }

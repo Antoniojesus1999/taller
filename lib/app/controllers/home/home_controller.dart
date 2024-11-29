@@ -11,25 +11,23 @@ class HomeController extends GetxController {
 
   final ReparacionService workService;
   final AuthService authService;
-  final TallerService tallerService = Get.find<TallerService>();
+  final TallerService tallerService;
 
   final int _limit = 10;
   int _page = 1;
   var reparaciones = <Reparacion>[];
   var hayMas = true.obs;
 
-  HomeController({required this.workService, required this.authService});
+  HomeController({required this.workService, required this.authService, required this.tallerService});
 
   @override
   Future<void> onInit() async {
     super.onInit();
-    if (tallerService.taller.id != null) {
-      getReparaciones();
-    }
+    await getReparaciones();
   }
 
   Future getReparaciones() async {
-    final idTaller = await tallerService.taller.id;
+    final idTaller = tallerService.taller.id;
     try {
       List<Reparacion> rsp =
           await workService.getReparaciones(_page, _limit, idTaller);

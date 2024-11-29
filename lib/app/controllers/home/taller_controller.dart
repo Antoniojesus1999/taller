@@ -44,8 +44,12 @@ class TallerCntrl extends GetxController {
 
   void asociandoEmailATaller(String idTaller) {
     String email = authService.firebaseUser!.email!;
-    tallerService.asociandoEmailATaller(email, idTaller);
-    //Get.offAndToNamed(Routes.home, arguments: {'idTaller': idTaller});
+
+    tallerService
+        .asociandoEmailATaller(email, idTaller)
+        .then((taller) {
+          tallerService.setTaller = taller;
+        });
     Get.toNamed(Routes.home);
   }
   /*@override

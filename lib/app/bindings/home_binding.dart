@@ -11,6 +11,7 @@ class HomeBinding extends Bindings {
     Get.lazyPut<ReparacionService>(
         () => ReparacionService(reparacionRepository: Get.find()));
     Get.lazyPut<HomeController>(
-        () => HomeController(workService: Get.find(), authService: Get.find()));
+        () => HomeController(workService: Get.find(), authService: Get.find(),
+            tallerService: Get.find()));
   }
 }
