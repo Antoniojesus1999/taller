@@ -5,7 +5,7 @@ import '../../../controllers/reparacion/form_danyos_cntrl.dart';
 import '../../global_widgets/btn_load.dart';
 
 class ImageWithMarkers extends StatelessWidget {
-  final ImageMarkerCntrl controller = Get.find<ImageMarkerCntrl>();
+  final FormDanyosCntrl controller = Get.find<FormDanyosCntrl>();
 
   ImageWithMarkers({super.key});
 

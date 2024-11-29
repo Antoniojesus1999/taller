@@ -48,11 +48,13 @@ class HomePage extends GetView<HomeController> {
             itemBuilder: (context, index) {
               if (index < controller.reparaciones.length) {
                 return ListTile(
-                  tileColor: const Color.fromRGBO(208, 236, 250, 0.5),
-                  shape: const Border(
+                  //tileColor: const Color.fromRGBO(208, 236, 250, 0.5),
+                  tileColor: const Color.fromRGBO(250, 250, 0, 1.0),
+                  /*shape: const Border(
                     bottom: BorderSide(
-                        color: Color.fromRGBO(2, 136, 209, 0.7), width: 0.5),
-                  ),
+                        color: Color.fromRGBO(0, 0, 0, 1.0), width: 1.0),
+                  ),*/
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(25)), side: BorderSide(color: Color.fromRGBO(250, 0, 250, 1.0))),
                   leading: const Icon(
                     Icons.settings,
                     size: 25,
@@ -71,9 +73,10 @@ class HomePage extends GetView<HomeController> {
                 return const Padding(
                   padding: EdgeInsets.all(15),
                   child: Center(
-                    child: CircularProgressIndicator(
+                    /*child: CircularProgressIndicator(
                       color: Colors.black,
-                    ),
+                    ),*/
+                    child: Text("Empiece por dar de alta una reparación"),
                   ),
                 );
               }

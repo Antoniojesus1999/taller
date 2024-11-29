@@ -19,7 +19,7 @@ class FormDanyosCntrl extends GetxController {
   //*Servicios inyectados
   final ReparacionService reparacionService;
 
-  ImageMarkerCntrl({
+  FormDanyosCntrl({
     required this.reparacionService,
   });
 

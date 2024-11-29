@@ -9,7 +9,7 @@ class ImageWithMarkersBinding extends Bindings {
   void dependencies() {
     Get.lazyPut<ClientRepository>(() => ClientRepository());
     Get.lazyPut(() => ClientService(clientRepository: Get.find()));
-    Get.lazyPut<ImageMarkerCntrl>(() => ImageMarkerCntrl(
+    Get.lazyPut<FormDanyosCntrl>(() => FormDanyosCntrl(
       reparacionService: Get.find(),
     ));
   }
