@@ -1,9 +1,7 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:taller/app/data/models/reparacion_model_pagination.dart';
 import 'package:get/get.dart';
-
+import '../../data/models/reparacion/reparacion.dart';
 
 class ReparacionDetailController extends GetxController {
   ReparacionDetailController();
-  late ReparacionResponse reparacion = Get.arguments['reparacion'];
+  late Reparacion reparacion = Get.arguments['reparacion'];
 }

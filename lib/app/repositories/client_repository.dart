@@ -1,10 +1,9 @@
 import 'dart:convert';
 
+import 'package:taller/app/data/models/cliente/cliente.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
-
-import '../data/models/cliente/cliente.dart';
 
 class ClientRepository extends GetConnect {
   final Logger log = Logger();
@@ -12,13 +11,12 @@ class ClientRepository extends GetConnect {
   final String _clientByIdWork = dotenv.env['URL_CLIENT_BY_ID_WORK']!;
   final String _saveClient = dotenv.env['URL_SAVE_CLIENT']!;
 
-  
-
   Future<Cliente> saveCliente(String idTaller, Cliente cliente) async {
     String url = _baseUrl + _saveClient;
+    log.i('Valor de client -> ${cliente.toString()}');
     final body = json.encode({
       "idTaller": idTaller,
-      "cliente": cliente.toJson(), // Convertimos ClienteModel a JSON
+      "cliente": cliente.toJson(),  // Convertimos ClienteModel a JSON
     });
     log.i('Se va a guardar un cliente -> $url con el body -> $body');
 

@@ -68,10 +68,10 @@ class AuthService extends GetxService {
       tallerService
           .empleadoAsociadoATaller(firebaseUser!.email!)
           .then((tallerAsociado) {
-        if (tallerAsociado == null) {
+        if (tallerAsociado?.id == null) {
           Get.offAllNamed(Routes.taller);
         } else {
-          tallerService.setIdTaller = tallerAsociado;
+          tallerService.setTaller = tallerAsociado!;
           Get.offAllNamed(Routes.home);
         }
       });

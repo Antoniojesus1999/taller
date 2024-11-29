@@ -1,9 +1,9 @@
-import 'package:taller/app/data/models/reparacion_model_pagination.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 
 import '../data/models/reparacion/reparacion.dart';
+import '../data/models/response/pagination_response.dart';
 
 class ReparacionRepository extends GetConnect {
   final String _urlHost = dotenv.env['URL_HOST_BACK']!;
@@ -12,7 +12,7 @@ class ReparacionRepository extends GetConnect {
   final String _urlSaveReparacion = dotenv.env['URL_SAVE_REPARACION']!;
   final Logger log = Logger();
 
-  Future<List<ReparacionResponse>> getReparaciones(
+  Future<List<Reparacion>> getReparaciones(
       int page, int limit, String idTaller) async {
     String url = "$_urlHost$_urlFindReparacionesByTaller"
         .replaceAll('{idTaller}', idTaller)
@@ -21,8 +21,12 @@ class ReparacionRepository extends GetConnect {
 
     final rsp = await get(url);
     final data = rsp.body;
-    log.i('Se va a obtener todas las reparaciones url -> $url body -> $data');
-    return ReparacionPagintation.fromJson(data).reparaciones!;
+    final paginationResponse = PaginationResponse<Reparacion>.fromJson(
+      data,
+      (json) => Reparacion.fromJson(json),
+    );
+
+    return paginationResponse.docs!;
   }
 
   Future<Reparacion> saveReparacion(

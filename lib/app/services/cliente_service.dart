@@ -13,14 +13,10 @@ class ClientService extends GetxService {
 
   Cliente get cliente => _cliente;
 
-  Future<void> saveClient(Cliente client) async {
-    String idTaller = tallerService.idTaller;
-    _cliente = client;
-    _cliente = await clientRepository.saveCliente(idTaller,_cliente);
-    _cliente.idTaller = idTaller;
-  }
-
-  Future<Cliente> getClientByIdWork(String id) {
-    return clientRepository.getClientByIdWork(id);
+  Future<void> saveCliente(Cliente cliente) async {
+    final idTaller = tallerService.taller.id;
+    //Inicializamos la variable para que no de error
+    _cliente = await clientRepository.saveCliente(idTaller, cliente);
+    return Future.value();
   }
 }

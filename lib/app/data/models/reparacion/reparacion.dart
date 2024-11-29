@@ -1,5 +1,10 @@
 import 'dart:convert';
 
+import 'package:taller/app/data/models/cliente/cliente.dart';
+import 'package:taller/app/data/models/taller/taller.dart';
+
+import '../vehiculo/vehiculo.dart';
+
 class Reparacion {
     final DateTime? fecEntrada;
     final String? combustible;
@@ -8,9 +13,9 @@ class Reparacion {
     final String? chasis;
     final List<Trabajo>? trabajos;
     final List<Danyo>? danyos;
-    final String? taller;
-    final String? cliente;
-    final String? vehiculo;
+    final Taller? taller;
+    final Cliente? cliente;
+    final Vehiculo? vehiculo;
 
     Reparacion({
         this.fecEntrada,
@@ -37,9 +42,9 @@ class Reparacion {
         chasis: json["chasis"],
         trabajos: List<Trabajo>.from(json["trabajos"].map((x) => Trabajo.fromJson(x))),
         danyos: List<Danyo>.from(json["danyos"].map((x) => Danyo.fromJson(x))),
-        taller: json["taller"],
-        cliente: json["cliente"],
-        vehiculo: json["vehiculo"],
+        taller: Taller.fromJson(json["taller"]),
+        cliente: Cliente.fromJson(json["cliente"]),
+        vehiculo: Vehiculo.fromJson(json["vehiculo"]),
     );
 
     Map<String, dynamic> toJson() => {
@@ -49,10 +54,10 @@ class Reparacion {
         "seguro": seguro,
         "chasis": chasis,
         "trabajos": trabajos == null ? [] : List<dynamic>.from(trabajos!.map((x) => x.toJson())),
-        "danyos": danyos == null ? [] : List<Danyo>.from(danyos!.map((x) => x.toJson())),
-        "taller": taller,
-        "cliente": cliente,
-        "vehiculo": vehiculo,
+        "danyos": danyos == null ? [] : List<dynamic>.from(danyos!.map((x) => x.toJson())),
+        "taller": taller?.id,
+        "cliente": cliente?.id,
+        "vehiculo": vehiculo?.id,
     };
   
     @override
@@ -79,10 +84,10 @@ class Danyo {
     String toRawJson() => json.encode(toJson());
 
     factory Danyo.fromJson(Map<String, dynamic> json) => Danyo(
-        positionX: json["positionX"],
-        positionY: json["positionY"],
-        origWidth: json["origWidth"],
-        origHeight: json["origHeight"],
+        positionX: double.parse(json["positionX"] as String),
+        positionY: double.parse(json["positionY"] as String),
+        origWidth: double.parse(json["origWidth"] as String),
+        origHeight: double.parse(json["origHeight"] as String),
     );
 
     Map<String, dynamic> toJson() => {

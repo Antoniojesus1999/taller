@@ -5,16 +5,12 @@ import '../../../controllers/reparacion/form_danyos_cntrl.dart';
 import '../../global_widgets/btn_load.dart';
 
 class ImageWithMarkers extends StatelessWidget {
-  final FormDanyosCntrl controller = Get.put(FormDanyosCntrl());
+  final ImageMarkerCntrl controller = Get.find<ImageMarkerCntrl>();
 
   ImageWithMarkers({super.key});
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      controller.onImageLoaded();
-    });
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Introduzca daños observados'),
@@ -23,7 +19,7 @@ class ImageWithMarkers extends StatelessWidget {
       body: SafeArea(
         child: Center(
               child: Obx(
-                    () => (MediaQuery.of(context).orientation == Orientation.portrait)
+                () => (MediaQuery.of(context).orientation == Orientation.portrait)
                     ? Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -32,7 +28,13 @@ class ImageWithMarkers extends StatelessWidget {
                               Image.asset(
                                 'assets/images/car_plane.png',
                                 fit: BoxFit.contain,
-                                key: controller.imageKey, // No longer needed for size calculation
+                                key: controller.imageKey,
+                                frameBuilder: (BuildContext context, Widget child, int? frame, bool wasSynchronouslyLoaded) {
+                                                if (wasSynchronouslyLoaded || frame != null) {
+                                                  controller.onImageLoaded();
+                                                }
+                                                return child;
+                                              },
                               ),
                               GestureDetector(
                                 onTapUp: (TapUpDetails details) {
@@ -62,7 +64,7 @@ class ImageWithMarkers extends StatelessWidget {
                                     ),
                                   ),
                                 );
-                              }).toList(),
+                              }),
                             ],
                           ),
                           SizedBox(height: Get.mediaQuery.size.height * 0.02),
@@ -112,7 +114,7 @@ class ImageWithMarkers extends StatelessWidget {
                               ),
                             ),
                           );
-                        }).toList(),
+                        }),
                       ],
                     ),
                   ],

@@ -25,8 +25,6 @@ class FormPersonaCntrl extends GetxController {
   //*Seteamos el cliente que necesita la siguiente pagina para factura
   late Cliente cliente;
 
-  late Cliente clienteModel;
-
   //*Servicios inyectados
   final ClientService clientService;
 
@@ -46,15 +44,15 @@ class FormPersonaCntrl extends GetxController {
       cliente.telefono = tlfCntrl.text;
       cliente.email = emailCntrl.text;*/
 
-      clienteModel = Cliente(nif: nifCntrl.text, nombre: nameCntrl.text);
-      clienteModel.apellido1 = surName1Cntrl.text;
-      clienteModel.apellido2 = surName2Cntrl.text;
-      clienteModel.telefono = tlfCntrl.text;
-      clienteModel.email = emailCntrl.text;
+      cliente = Cliente(nif: nifCntrl.text, nombre: nameCntrl.text);
+      cliente.apellido1 = surName1Cntrl.text;
+      cliente.apellido2 = surName2Cntrl.text;
+      cliente.telefono = tlfCntrl.text;
+      cliente.email = emailCntrl.text;
 
       //clienteRequest = ClienteRequest(cliente: cliente);
       //clientService.saveClient(clienteRequest);
-      clientService.saveClient(clienteModel);
+      clientService.saveCliente(cliente);
 
       log.i('Cliente seteado en form person ${clientService.cliente}');
       Get.toNamed(Routes.formVehicle);

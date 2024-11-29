@@ -6,20 +6,20 @@ import 'package:taller/app/bindings/reset_binding.dart';
 import 'package:taller/app/bindings/taller_binding.dart';
 import 'package:taller/app/bindings/verification_binding.dart';
 import 'package:taller/app/ui/pages/auth/register_page.dart';
-import 'package:taller/app/ui/pages/factura/vehicle_invoice_page.dart';
 import 'package:taller/app/ui/pages/auth/verify_page.dart';
-import 'package:taller/app/ui/pages/factura/reparacion_detail_page.dart';
 import 'package:taller/app/ui/pages/home/taller_page.dart';
-import 'package:taller/app/ui/pages/factura/image_with_markers_page.dart';
 import 'package:get/get.dart';
 
-import '../bindings/image_marker_bindiing.dart';
+import '../bindings/form_danyos_bindiing.dart';
 import '../bindings/login_binding.dart';
 import '../bindings/reparacion_detail_binding.dart';
 import '../ui/pages/home/home_page.dart';
 import '../ui/pages/auth/login_page.dart';
-import '../ui/pages/factura/person_invoice_page.dart';
 import '../ui/pages/auth/reset_password_page.dart';
+import '../ui/pages/reparacion/person_invoice_page.dart';
+import '../ui/pages/reparacion/danyos_page.dart';
+import '../ui/pages/reparacion/reparacion_detail_page.dart';
+import '../ui/pages/reparacion/vehicle_invoice_page.dart';
 part 'routes.dart';
 
 abstract class AppPages {

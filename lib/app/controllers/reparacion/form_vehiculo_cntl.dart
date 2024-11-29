@@ -1,5 +1,4 @@
 import 'package:taller/app/data/models/coches/marca.dart';
-import 'package:taller/app/data/models/reparacion/reparacion.dart';
 
 import 'package:taller/app/routes/app_pages.dart';
 import 'package:taller/app/services/marca_service.dart';
@@ -12,7 +11,8 @@ import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 
-import '../../data/models/response/vehiculo.dart';
+import '../../data/models/reparacion/reparacion.dart';
+import '../../data/models/vehiculo/vehiculo.dart';
 
 class FormVehiculoController extends GetxController {
   RxList<Modelo> modelList = <Modelo>[].obs;
@@ -75,9 +75,9 @@ class FormVehiculoController extends GetxController {
       await vehiculoService.saveVehiculo(vehiculo);
 
       Reparacion reparacion = Reparacion(
-          taller: clientService.cliente.idTaller!,
-          cliente: clientService.cliente.id!,
-          vehiculo: vehiculoService.vehiculo.id);
+          taller: tallerService.taller,
+          cliente: clientService.cliente,
+          vehiculo: vehiculoService.vehiculo);
 
       reparacionService.saveReparacion(reparacion);
 

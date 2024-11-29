@@ -3,13 +3,10 @@ import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:taller/app/services/reparacion_service.dart';
-
 import '../../data/models/reparacion/reparacion.dart';
-
 
 class FormDanyosCntrl extends GetxController {
   final Logger log = Logger();
-  final reparacionService = Get.find<ReparacionService>();
   final GlobalKey imageKey = GlobalKey();
   final RoundedLoadingButtonController btnCntlDanyos =
       RoundedLoadingButtonController();
@@ -17,13 +14,19 @@ class FormDanyosCntrl extends GetxController {
   RxList<Danyo> markers = RxList<Danyo>([]);
   RxDouble imageWidth = RxDouble(0.0);
   RxDouble imageHeight = RxDouble(0.0);
-  late Reparacion reparacion;
+  RxBool isLoading = RxBool(false);
+
+  //*Servicios inyectados
+  final ReparacionService reparacionService;
+
+  ImageMarkerCntrl({
+    required this.reparacionService,
+  });
 
   @override
   void onInit() {
     super.onInit();
-    reparacion = reparacionService.reparacion;
-    List<Danyo>? danyos = reparacion.danyos;
+    List<Danyo>? danyos = reparacionService.reparacion.danyos;
     if (danyos != null && danyos.isNotEmpty) {
       markers.addAll(danyos);
     }
@@ -42,17 +45,19 @@ class FormDanyosCntrl extends GetxController {
     markers.remove(marker);
   }
 
-  void onImageLoaded() {
-    final RenderBox imageBox =
-        imageKey.currentContext!.findRenderObject() as RenderBox;
-    imageWidth.value = imageBox.size.width;
-    imageHeight.value = imageBox.size.height;
+  Future<void> onImageLoaded() async {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final RenderBox imageBox = imageKey.currentContext!.findRenderObject() as RenderBox;
+      imageWidth.value = imageBox.size.width;
+      imageHeight.value = imageBox.size.height;
+    });
   }
 
   void setDataDanyos() async {
+    Reparacion reparacion = reparacionService.reparacion;
     reparacion.danyos?.addAll(markers);
 
-    //reparacionService.saveReparacion(reparacion);
-    //log.i("Valor de clientSaved $clientSaved");
+    reparacionService.saveReparacion(reparacion);
+
   }
 }

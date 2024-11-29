@@ -1,15 +1,15 @@
 import 'dart:async';
 
-import 'package:taller/app/data/models/taller/taller_model.dart';
+import 'package:taller/app/data/models/taller/taller.dart';
 import 'package:taller/app/repositories/taller_repository.dart';
 import 'package:get/get.dart';
 
 class TallerService extends GetxService {
   final TallerRepository tallerRepository;
-  late String _idTaller;
+  late Taller _taller = Taller();
 
-  get idTaller => _idTaller;
-  set setIdTaller(String idTaller) => _idTaller = idTaller;
+  get taller => _taller;
+  set setTaller(Taller taller) => _taller = taller;
 
   TallerService({required this.tallerRepository});
 
@@ -17,11 +17,12 @@ class TallerService extends GetxService {
     return tallerRepository.getAllTalleres();
   }
 
-  Future<String?> empleadoAsociadoATaller(String email) {
-    return tallerRepository.tallerAsociadoEmpleado(email);
+  Future<Taller?> empleadoAsociadoATaller(String email) async {
+    return await tallerRepository.tallerAsociadoEmpleado(email);
   }
 
-  void asociandoEmailATaller(String email, String idTaller) {
-    tallerRepository.asociandoEmailATaller(email, idTaller);
+  Future<Taller> asociandoEmailATaller(String email, String idTaller) async {
+    return await tallerRepository.asociandoEmailATaller(email, idTaller);
   }
+
 }

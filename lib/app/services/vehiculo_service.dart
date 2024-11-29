@@ -1,6 +1,7 @@
-import 'package:taller/app/data/models/response/vehiculo.dart';
 import 'package:taller/app/repositories/vehiculo_repository.dart';
 import 'package:get/get.dart';
+
+import '../data/models/vehiculo/vehiculo.dart';
 
 class VehiculoService extends GetxService {
   late Vehiculo _vehiculo = Vehiculo();

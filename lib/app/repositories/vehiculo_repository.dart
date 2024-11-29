@@ -1,7 +1,8 @@
-import 'package:taller/app/data/models/response/vehiculo.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
+
+import '../data/models/vehiculo/vehiculo.dart';
 
 class VehiculoRepository extends GetConnect {
   final String urlHostBack = dotenv.env['URL_HOST_BACK']!;
