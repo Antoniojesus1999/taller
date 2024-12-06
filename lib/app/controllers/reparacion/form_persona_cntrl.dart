@@ -15,10 +15,10 @@ class FormPersonaCntrl extends GetxController {
       RoundedLoadingButtonController();
   //formulario persona
   final GlobalKey<FormState> formKeyPerson = GlobalKey<FormState>();
-  TextEditingController nameCntrl = TextEditingController();
+  final nifCntrl = TextEditingController();
+  final nameCntrl = TextEditingController();
   final surName1Cntrl = TextEditingController();
   final surName2Cntrl = TextEditingController();
-  final nifCntrl = TextEditingController();
   final tlfCntrl = TextEditingController();
   final emailCntrl = TextEditingController();
 

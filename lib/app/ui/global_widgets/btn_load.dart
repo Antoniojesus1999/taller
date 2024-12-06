@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 
 class BtnLoad extends StatelessWidget {
@@ -17,6 +19,7 @@ class BtnLoad extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: RoundedLoadingButton(
+        width: Get.mediaQuery.size.width * 0.9,
         controller: btnController,
         onPressed: onTap,
         color: Colors.black, // Color de fondo negro
