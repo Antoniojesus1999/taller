@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
+import 'package:taller/app/utils/snack_bar.dart';
 
 class FormPersonaCntrl extends GetxController {
   final Logger log = Logger();
@@ -52,11 +53,24 @@ class FormPersonaCntrl extends GetxController {
 
       //clienteRequest = ClienteRequest(cliente: cliente);
       //clientService.saveClient(clienteRequest);
-      clientService.saveCliente(cliente);
+      try {
+      await clientService.saveCliente(cliente);
+    } catch (e) {
+      handleSaveClientError(e as Exception);
+      return; // Detener la ejecución del método
+    }
 
-      log.i('Cliente seteado en form person ${clientService.cliente}');
+      log.i(' ${clientService.cliente}: Como minimo un cliente tiene que tener un dni valido');
       Get.toNamed(Routes.formVehicle);
       btnCntlPerson.reset();
     }
+  }
+
+  void handleSaveClientError(Exception e) {
+    btnCntlPerson.reset();
+    log.e('${e.toString()} el cliente tiene que tener un dni valido');
+    openSnackbar(
+    Get.context, 'Error al guardar el cliente ${e.toString()}', Colors.red);
+    Get.toNamed(Routes.formPerson);
   }
 }
