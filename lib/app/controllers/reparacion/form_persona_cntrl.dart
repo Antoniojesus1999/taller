@@ -54,7 +54,7 @@ class FormPersonaCntrl extends GetxController {
       //clienteRequest = ClienteRequest(cliente: cliente);
       //clientService.saveClient(clienteRequest);
       try {
-      await clientService.saveCliente(cliente);
+      //await clientService.saveCliente(cliente);
     } catch (e) {
       handleSaveClientError(e as Exception);
       return; // Detener la ejecución del método
