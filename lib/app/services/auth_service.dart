@@ -56,7 +56,8 @@ class AuthService extends GetxService {
       //_firebaseUser.value = userCredential.user;
       _isSignedIn.value = true;
     } catch (e) {
-      log.e('Error signing in with Google: $e');
+      openSnackbar(Get.context, "Huella no configurada", Colors.red);
+        log.e('Error signing in with Google: $e');
     }
   }
 
