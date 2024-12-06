@@ -60,7 +60,7 @@ class FormPersonaCntrl extends GetxController {
       return; // Detener la ejecución del método
     }
 
-      log.i(' ${clientService.cliente}: Como minimo un cliente tiene que tener un dni valido');
+      log.i('Cliente seteado en form person ${clientService.cliente}');
       Get.toNamed(Routes.formVehicle);
       btnCntlPerson.reset();
     }
@@ -70,7 +70,7 @@ class FormPersonaCntrl extends GetxController {
     btnCntlPerson.reset();
     log.e('${e.toString()} el cliente tiene que tener un dni valido');
     openSnackbar(
-    Get.context, 'Error al guardar el cliente ${e.toString()}', Colors.red);
+    Get.context, 'Para pasar a la siguiente pagina tienes que introducir un dni o email valido', Colors.red);
     Get.toNamed(Routes.formPerson);
   }
 }
