@@ -27,6 +27,7 @@ class HomePage extends GetView<HomeController> {
     scrollController.addListener(onScroll);
 
     return Scaffold(
+      backgroundColor: Color.fromRGBO(200, 200, 200, 1.0),
       appBar: AppBar(
         actions: [
           IconButton(
@@ -47,27 +48,34 @@ class HomePage extends GetView<HomeController> {
                 : controller.reparaciones.length,
             itemBuilder: (context, index) {
               if (index < controller.reparaciones.length) {
-                return ListTile(
-                  //tileColor: const Color.fromRGBO(208, 236, 250, 0.5),
-                  tileColor: const Color.fromRGBO(250, 250, 0, 1.0),
-                  /*shape: const Border(
-                    bottom: BorderSide(
-                        color: Color.fromRGBO(0, 0, 0, 1.0), width: 1.0),
-                  ),*/
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(25)), side: BorderSide(color: Color.fromRGBO(250, 0, 250, 1.0))),
-                  leading: const Icon(
-                    Icons.settings,
-                    size: 25,
-                    color: Color.fromRGBO(2, 136, 209, 1.0),
+                return Card(
+                  margin: EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
+                  elevation: 10.0,
+                  child: ListTile(
+                    tileColor: const Color.fromRGBO(250, 250, 250, 1.0),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(25)),
+                    ),
+                    leading: const Icon(
+                        Icons.handyman,
+                        size: 25,
+                        color: Color.fromRGBO(2, 136, 209, 1.0),
+                    ),
+                    //titleAlignment: ListTileTitleAlignment.threeLine,
+                    title: Row(children: [
+                        Text(controller.reparaciones[index].vehiculo!.marca!),
+                        SizedBox(width: 5),
+                        Text(controller.reparaciones[index].vehiculo!.modelo!),
+                        SizedBox(width: 5),
+                        Text(controller.reparaciones[index].vehiculo!.matricula!),
+                      ],
+                    ),
+                    subtitle: Text('${controller.reparaciones[index].fecEntrada}'),
+                    onTap: () => Get.toNamed(Routes.pageReparacionesDetail,
+                        arguments: {
+                          'reparacion': controller.reparaciones[index]
+                        }),
                   ),
-                  titleAlignment: ListTileTitleAlignment.titleHeight,
-                  title: Text(controller.reparaciones[index].cliente!.nombre!),
-                  subtitle:
-                      Text('${controller.reparaciones[index].fecEntrada}'),
-                  onTap: () => Get.toNamed(Routes.pageReparacionesDetail,
-                      arguments: {
-                        'reparacion': controller.reparaciones[index]
-                      }),
                 );
               } else {
                 return const Padding(

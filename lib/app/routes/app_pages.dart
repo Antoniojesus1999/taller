@@ -9,6 +9,7 @@ import 'package:taller/app/ui/pages/auth/register_page.dart';
 import 'package:taller/app/ui/pages/auth/verify_page.dart';
 import 'package:taller/app/ui/pages/home/taller_page.dart';
 import 'package:get/get.dart';
+import 'package:taller/app/ui/pages/reparacion/form_persona_page.dart';
 
 import '../bindings/form_danyos_bindiing.dart';
 import '../bindings/login_binding.dart';
@@ -16,10 +17,9 @@ import '../bindings/reparacion_detail_binding.dart';
 import '../ui/pages/home/home_page.dart';
 import '../ui/pages/auth/login_page.dart';
 import '../ui/pages/auth/reset_password_page.dart';
-import '../ui/pages/reparacion/person_invoice_page.dart';
+import '../ui/pages/reparacion/form_vehiculo_page.dart';
 import '../ui/pages/reparacion/danyos_page.dart';
 import '../ui/pages/reparacion/reparacion_detail_page.dart';
-import '../ui/pages/reparacion/vehicle_invoice_page.dart';
 part 'routes.dart';
 
 abstract class AppPages {
@@ -52,7 +52,8 @@ abstract class AppPages {
     GetPage(
         name: Routes.formPerson,
         binding: FormPersonaBinding(),
-        page: () => const FormPersonPage(),
+        //page: () => const FormPersonPage(),
+        page: () => const FormPersonaPage(),
         transition: Transition.leftToRightWithFade),
     GetPage(
         name: Routes.formVehicle,
