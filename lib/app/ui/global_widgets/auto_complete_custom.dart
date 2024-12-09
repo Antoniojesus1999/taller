@@ -1,5 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:substring_highlight/substring_highlight.dart';
 
 // ignore: must_be_immutable
@@ -39,31 +41,37 @@ class AutoCompleteCustom extends StatelessWidget {
       onSelected: (String value) => onSelected(value),
       optionsViewBuilder: (context, onSelected, options) {
         return Material(
-          elevation: 4,
-          child: ListView.separated(
+          //elevation: 4,
+          child: ListView.builder(
             padding: EdgeInsets.zero,
             itemBuilder: (context, index) {
               final option = options.elementAt(index);
 
               return SingleChildScrollView(
-                child: ListTile(
-                  // title: Text(option.toString()),
-                  title: SubstringHighlight(
-                    text: option.toString(),
-                    term: controller.text,
-                    textStyleHighlight: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.red,
-                    ),
+                child: Card(
+                  shape: Border(
+                      bottom: BorderSide(color: Color.fromRGBO(0, 0, 0, 0.2))
                   ),
-                  //subtitle: const Text("This is subtitle"),
-                  onTap: () {
-                    onSelected(option.toString());
-                  },
+                  margin: EdgeInsets.only(right: Get.mediaQuery.size.width * 0.1),
+                  child: ListTile(
+                    // title: Text(option.toString()),
+                    title: SubstringHighlight(
+                      text: option.toString(),
+                      term: controller.text,
+                      textStyleHighlight: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.red,
+                      ),
+                    ),
+                    //subtitle: const Text("This is subtitle"),
+                    onTap: () {
+                      onSelected(option.toString());
+                    },
+                  ),
                 ),
               );
             },
-            separatorBuilder: (context, index) => const Divider(),
+            //separatorBuilder: (context, index) => const Divider(),
             itemCount: options.length,
           ),
         );
