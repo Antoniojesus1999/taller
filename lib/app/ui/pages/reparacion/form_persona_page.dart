@@ -1,4 +1,5 @@
 import 'package:taller/app/controllers/reparacion/form_persona_cntrl.dart';
+import 'package:taller/app/data/models/cliente/cliente.dart';
 import 'package:taller/app/ui/global_widgets/btn_load.dart';
 import 'package:taller/app/utils/helpers.dart';
 import 'package:flutter/material.dart';
@@ -28,11 +29,43 @@ class FormPersonaPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 SizedBox(height: Get.mediaQuery.size.height * 0.02),
-                TextFormFieldCustom(
-                    controller: personaCntrl.nifCntrl,
-                    validator: (value) => Helpers.validateEmpty(value),
-                    hintText: 'NIF',
-                    obscureText: false),
+                Autocomplete<Cliente>(
+                  optionsBuilder: (TextEditingValue textEditingValue) {
+                    if (textEditingValue.text.isEmpty) {
+                      return const Iterable<Cliente>.empty();
+                    }
+                    return personaCntrl.clientService.clientes
+                        .where((Cliente cliente) {
+                      return cliente.nif!.contains(textEditingValue.text);
+                    });
+                  },
+                  displayStringForOption: (Cliente cliente) => cliente.nif!,
+                  fieldViewBuilder: (BuildContext context,
+                      TextEditingController textEditingController,
+                      FocusNode focusNode,
+                      VoidCallback onFieldSubmitted) {
+                    personaCntrl.nifCntrl.text = textEditingController.text;
+                    return TextFormField(
+                      controller: textEditingController,
+                      validator: (value) => Helpers.validateEmpty(value),
+                      //hintText: 'NIF',
+                      focusNode: focusNode,
+                      obscureText: false,
+                      //sonFieldSubmitted: (value) => personaCntrl.nifCntrl.text = value,
+                      onChanged: (value) {
+                              personaCntrl.nifCntrl.text = value;
+                            },
+                    );
+                  },
+                  onSelected: (Cliente cliente) {
+                    personaCntrl.nifCntrl.text = cliente.nif!;
+                    personaCntrl.nameCntrl.text = cliente.nombre!;
+                    personaCntrl.surName1Cntrl.text = cliente.apellido1!;
+                    personaCntrl.surName2Cntrl.text = cliente.apellido2!;
+                    personaCntrl.tlfCntrl.text = cliente.telefono!;
+                    personaCntrl.emailCntrl.text = cliente.email!;
+                  },
+                ),
                 SizedBox(height: Get.mediaQuery.size.height * 0.02),
                 TextFormFieldCustom(
                     controller: personaCntrl.nameCntrl,

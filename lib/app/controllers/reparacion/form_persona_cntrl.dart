@@ -31,6 +31,12 @@ class FormPersonaCntrl extends GetxController {
 
   FormPersonaCntrl({required this.clientService});
 
+  @override
+  void onInit() {
+    super.onInit();
+    clientService.getAllClientsByTaller();
+  }
+
   //* Setea la primera parte del formulario y nos da la posibilidad de meter al final de este metodo el guardado en baes de datos
   void setDataPersona() async {
     if (!formKeyPerson.currentState!.validate()) {
@@ -54,11 +60,11 @@ class FormPersonaCntrl extends GetxController {
       //clienteRequest = ClienteRequest(cliente: cliente);
       //clientService.saveClient(clienteRequest);
       try {
-      await clientService.saveCliente(cliente);
-    } catch (e) {
-      handleSaveClientError(e as Exception);
-      return; // Detener la ejecución del método
-    }
+        await clientService.saveCliente(cliente);
+      } catch (e) {
+        handleSaveClientError(e as Exception);
+        return; // Detener la ejecución del método
+      }
 
       log.i('Cliente seteado en form person ${clientService.cliente}');
       Get.toNamed(Routes.formVehicle);
@@ -70,7 +76,9 @@ class FormPersonaCntrl extends GetxController {
     btnCntlPerson.reset();
     log.e('${e.toString()} el cliente tiene que tener un dni valido');
     openSnackbar(
-    Get.context, 'Para pasar a la siguiente pagina tienes que introducir un dni o email valido', Colors.red);
+        Get.context,
+        'Para pasar a la siguiente pagina tienes que introducir un dni o email valido',
+        Colors.red);
     Get.toNamed(Routes.formPerson);
   }
 }

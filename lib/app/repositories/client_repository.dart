@@ -10,13 +10,15 @@ class ClientRepository extends GetConnect {
   final String _baseUrl = dotenv.env['URL_HOST_BACK']!;
   final String _clientByIdWork = dotenv.env['URL_CLIENT_BY_ID_WORK']!;
   final String _saveClient = dotenv.env['URL_SAVE_CLIENT']!;
+  final String _getAllClientsByTaller =
+      dotenv.env['URL_GET_ALL_CLIENTS_BY_TALLER']!;
 
   Future<Cliente> saveCliente(String idTaller, Cliente cliente) async {
     String url = _baseUrl + _saveClient;
     log.i('Valor de client -> ${cliente.toString()}');
     final body = json.encode({
       "idTaller": idTaller,
-      "cliente": cliente.toJson(),  // Convertimos ClienteModel a JSON
+      "cliente": cliente.toJson(), // Convertimos ClienteModel a JSON
     });
     log.i('Se va a guardar un cliente -> $url con el body -> $body');
 
@@ -45,5 +47,13 @@ class ClientRepository extends GetConnect {
     final rsp = await get(url);
     final data = rsp.body;
     return Cliente.fromJson(data);
+  }
+
+  Future<List<Cliente>> getAllClientsByTaller(String idTaller) async{
+    Uri url = Uri.parse(_baseUrl + _getAllClientsByTaller.replaceFirst('{idTaller}', idTaller));
+    log.i('se va a obtener todos los  clientes del taller url -> $url.toString()');
+    final rsp = await get(url.toString());
+    final data = rsp.body;
+    return List<Cliente>.from(data.map((x) => Cliente.fromJson(x)));
   }
 }

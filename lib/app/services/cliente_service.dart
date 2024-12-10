@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 
 class ClientService extends GetxService {
   Cliente _cliente = Cliente();
+  late List<Cliente> _clientes;
 
   final ClientRepository clientRepository;
   final TallerService tallerService = Get.find<TallerService>();
@@ -12,11 +13,19 @@ class ClientService extends GetxService {
   ClientService({required this.clientRepository});
 
   Cliente get cliente => _cliente;
+  //Clientes de un taller
+  List<Cliente> get clientes => _clientes;
 
   Future<void> saveCliente(Cliente cliente) async {
     final idTaller = tallerService.taller.id;
     //Inicializamos la variable para que no de error
     _cliente = await clientRepository.saveCliente(idTaller, cliente);
     return Future.value();
+  }
+
+  Future<List<Cliente>> getAllClientsByTaller() async {
+    final idTaller = tallerService.taller.id;
+    _clientes =  await clientRepository.getAllClientsByTaller(idTaller);
+    return _clientes;
   }
 }
