@@ -34,8 +34,7 @@ class FormVehiculoPage extends StatelessWidget {
                       SizedBox(height: Get.mediaQuery.size.height * 0.02),
                       TextFormFieldCustom(
                           controller: invoiceCntrl.registrationCntrl,
-                          validator: (value) =>
-                              Helpers.validateEmpty(value),
+                          validator: (value) => Helpers.validateEmpty(value),
                           hintText: 'Matricula',
                           obscureText: false),
                       SizedBox(height: Get.mediaQuery.size.height * 0.02),
@@ -44,6 +43,19 @@ class FormVehiculoPage extends StatelessWidget {
                         controller: invoiceCntrl.brandCntrl,
                         onSelected: invoiceCntrl.handleBrandSelection,
                         options: invoiceCntrl.listNameBrand,
+                        displayStringForOption: (String brand) => brand,
+                        optionsBuilder: (TextEditingValue textEditingValue) {
+                          if (textEditingValue.text.isEmpty) {
+                            return const Iterable<String>.empty();
+                          }
+                          return invoiceCntrl.listNameBrand.where((String option) {
+                            final text = textEditingValue.text.toLowerCase();
+                            final optionLower = option.toLowerCase();
+                            // Compara si la opción comienza con el texto ingresado
+                            return optionLower.startsWith(text);
+                          });
+                        },       
+
                         title: 'Marcas',
                       ),
                       SizedBox(height: Get.mediaQuery.size.height * 0.02),
@@ -52,6 +64,18 @@ class FormVehiculoPage extends StatelessWidget {
                         controller: invoiceCntrl.modelCntrl,
                         onSelected: invoiceCntrl.handleModelSelection,
                         options: invoiceCntrl.modelNameList,
+                        optionsBuilder: (TextEditingValue textEditingValue) {
+                          if (textEditingValue.text.isEmpty) {
+                            return const Iterable<String>.empty();
+                          }
+                          return invoiceCntrl.modelNameList.where((String option) {
+                            final text = textEditingValue.text.toLowerCase();
+                            final optionLower = option.toLowerCase();
+                            // Compara si la opción comienza con el texto ingresado
+                            return optionLower.startsWith(text);
+                          });
+                        },
+                        displayStringForOption: (String option) => option,
                         title: 'Modelo',
                       ),
 /*                      SizedBox(height: Get.mediaQuery.size.height * 0.02),

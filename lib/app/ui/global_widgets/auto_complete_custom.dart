@@ -1,44 +1,35 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:substring_highlight/substring_highlight.dart';
 
-// ignore: must_be_immutable
-class AutoCompleteCustom extends StatelessWidget {
+class AutoCompleteCustom<T extends Object> extends StatelessWidget {
   //Esta clase es Mutable por que para que el input valla pintando la letra en roja el controller tiene que cambiar de valor una vez que se ha construido el widget
-  TextEditingController controller;
-  final ValueChanged<String> onSelected;
-  final List<String> options;
+  final TextEditingController controller;
+  final ValueChanged<T> onSelected;
+  final List<T> options;
   final String title;
   final TextEditingValue? initValue;
-
-  AutoCompleteCustom({
-    Key? key,
+  final Iterable<T> Function(TextEditingValue) optionsBuilder;
+  final AutocompleteOptionToString<T> displayStringForOption; // Cambiar el tipo
+  const AutoCompleteCustom({
+    super.key,
     required this.controller,
+    required this.optionsBuilder,
+    required this.displayStringForOption,
     required this.onSelected,
     required this.options,
     required this.title,
     this.initValue,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Autocomplete<String>(
+    return Autocomplete<T>(
       initialValue: initValue,
-      optionsBuilder: (TextEditingValue textEditingValue) {
-        if (textEditingValue.text.isEmpty) {
-          return const Iterable<String>.empty();
-        }
-        return options.where((String option) {
-          final text = textEditingValue.text.toLowerCase();
-          final optionLower = option.toLowerCase();
-          // Compara si la opción comienza con el texto ingresado
-          return optionLower.startsWith(text);
-        });
-      },
-      displayStringForOption: (String option) => option,
-      onSelected: (String value) => onSelected(value),
+      optionsBuilder: optionsBuilder,
+      displayStringForOption: displayStringForOption,
+      onSelected: (T value) => onSelected(value),
       optionsViewBuilder: (context, onSelected, options) {
         return Material(
           //elevation: 4,
@@ -50,9 +41,9 @@ class AutoCompleteCustom extends StatelessWidget {
               return SingleChildScrollView(
                 child: Card(
                   shape: Border(
-                      bottom: BorderSide(color: Color.fromRGBO(0, 0, 0, 0.2))
-                  ),
-                  margin: EdgeInsets.only(right: Get.mediaQuery.size.width * 0.1),
+                      bottom: BorderSide(color: Color.fromRGBO(0, 0, 0, 0.2))),
+                  margin:
+                      EdgeInsets.only(right: Get.mediaQuery.size.width * 0.1),
                   child: ListTile(
                     // title: Text(option.toString()),
                     title: SubstringHighlight(
@@ -65,7 +56,7 @@ class AutoCompleteCustom extends StatelessWidget {
                     ),
                     //subtitle: const Text("This is subtitle"),
                     onTap: () {
-                      onSelected(option.toString());
+                      onSelected(option);
                     },
                   ),
                 ),
@@ -77,8 +68,10 @@ class AutoCompleteCustom extends StatelessWidget {
         );
       },
       fieldViewBuilder: (context, controller, focusNode, onEditingComplete) {
-        this.controller = controller;
+       
+        controller = controller;
         controller.text = initValue!.text;
+        
         return TextField(
           controller: controller,
           focusNode: focusNode,
