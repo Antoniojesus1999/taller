@@ -17,7 +17,7 @@ class FormVehiculoPage extends StatelessWidget {
         Get.find<FormVehiculoController>();
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Introduzca datos de cliente'),
+        title: const Text('Datos del vehículo'),
         leading: BackButton(onPressed: Get.back),
       ),
       body: SafeArea(
@@ -31,28 +31,6 @@ class FormVehiculoPage extends StatelessWidget {
                 : Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      const SizedBox(height: 10),
-                      SizedBox(height: Get.mediaQuery.size.height * 0.02),
-
-                      AutoCompleteCustom(
-                        initValue: invoiceCntrl.valueBrandEditing.value,
-                        controller: invoiceCntrl.brandCntrl,
-                        onSelected: invoiceCntrl.handleBrandSelection,
-                        options: invoiceCntrl.listNameBrand,
-                        title: 'Marcas',
-                      ),
-
-                      SizedBox(height: Get.mediaQuery.size.height * 0.02),
-                      // Auto complete widget (Model)
-
-                      AutoCompleteCustom(
-                        initValue: invoiceCntrl.valueModelEditing.value,
-                        controller: invoiceCntrl.modelCntrl,
-                        onSelected: invoiceCntrl.handleModelSelection,
-                        options: invoiceCntrl.modelNameList,
-                        title: 'Modelo',
-                      ),
-
                       SizedBox(height: Get.mediaQuery.size.height * 0.02),
                       TextFormFieldCustom(
                           controller: invoiceCntrl.registrationCntrl,
@@ -61,6 +39,30 @@ class FormVehiculoPage extends StatelessWidget {
                           hintText: 'Matricula',
                           obscureText: false),
                       SizedBox(height: Get.mediaQuery.size.height * 0.02),
+                      AutoCompleteCustom(
+                        initValue: invoiceCntrl.valueBrandEditing.value,
+                        controller: invoiceCntrl.brandCntrl,
+                        onSelected: invoiceCntrl.handleBrandSelection,
+                        options: invoiceCntrl.listNameBrand,
+                        title: 'Marcas',
+                      ),
+                      SizedBox(height: Get.mediaQuery.size.height * 0.02),
+                      AutoCompleteCustom(
+                        initValue: invoiceCntrl.valueModelEditing.value,
+                        controller: invoiceCntrl.modelCntrl,
+                        onSelected: invoiceCntrl.handleModelSelection,
+                        options: invoiceCntrl.modelNameList,
+                        title: 'Modelo',
+                      ),
+/*                      SizedBox(height: Get.mediaQuery.size.height * 0.02),
+                      AutoCompleteCustom(
+                        initValue: invoiceCntrl.valueModelEditing.value,
+                        controller: invoiceCntrl.modelCntrl,
+                        onSelected: invoiceCntrl.handleModelSelection,
+                        options: invoiceCntrl.modelNameList,
+                        title: 'Color',
+                      ),*/
+                      SizedBox(height: Get.mediaQuery.size.height * 0.12),
                       BtnLoad(
                           onTap: () => invoiceCntrl.setDataVehicle(),
                           btnController: invoiceCntrl.btnCntlVehicle,
