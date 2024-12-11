@@ -11,6 +11,7 @@ class AutoCompleteCustom extends StatelessWidget {
   final TextEditingValue? initValue;
   final Iterable<String> Function(TextEditingValue) optionsBuilder;
   final AutocompleteOptionToString<String> displayStringForOption; // Cambiar el tipo
+  final void Function(String)? onSubmitted;
   const AutoCompleteCustom({
     super.key,
     required this.controller,
@@ -19,6 +20,7 @@ class AutoCompleteCustom extends StatelessWidget {
     required this.onSelected,
     required this.title,
     this.initValue,
+    this.onSubmitted,
   });
 
   @override
@@ -77,6 +79,7 @@ class AutoCompleteCustom extends StatelessWidget {
           controller: controller,
           focusNode: focusNode,
           onEditingComplete: onEditingComplete,
+          onSubmitted: onSubmitted,
           decoration: InputDecoration(
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(6),

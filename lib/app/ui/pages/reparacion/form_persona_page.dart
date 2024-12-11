@@ -47,11 +47,16 @@ class FormPersonaPage extends StatelessWidget {
                     Cliente cliente = personaCntrl.clientService.clientes.singleWhere((cliente) => cliente.nif == nifCliente);
                     personaCntrl.nifCntrl.text = cliente.nif!;
                     personaCntrl.nameCntrl.text = cliente.nombre!;
+                    personaCntrl.nameCntrl.text = cliente.nombre!;
                     personaCntrl.surName1Cntrl.text = cliente.apellido1!;
                     personaCntrl.surName2Cntrl.text = cliente.apellido2!;
                     personaCntrl.tlfCntrl.text = cliente.telefono!;
                     personaCntrl.emailCntrl.text = cliente.email!;
                   },
+                  onSubmitted: (String value) {
+                    personaCntrl.nifCntrl.text = value;
+                  },
+              
                 ),
                 SizedBox(height: Get.mediaQuery.size.height * 0.02),
                 TextFormFieldCustom(
