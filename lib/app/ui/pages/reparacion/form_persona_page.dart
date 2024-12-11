@@ -29,24 +29,22 @@ class FormPersonaPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 SizedBox(height: Get.mediaQuery.size.height * 0.02),
-                AutoCompleteCustom<Cliente>(
+                AutoCompleteCustom(
                   controller: personaCntrl.nifCntrl,
                   title: 'NIF',
-                  optionsBuilder: (TextEditingValue textEditingValue) {
-                    if (textEditingValue.text.isEmpty) {
-                      return const Iterable<Cliente>.empty();
-                    }
-                    return personaCntrl.clientService.clientes
-                        .where((Cliente cliente) {
-                      return cliente.nif!.contains(textEditingValue.text);
-                    });
+              optionsBuilder: (TextEditingValue textEditingValue) {
+                if (textEditingValue.text.isEmpty) {
+                  return const Iterable<String>.empty();
+                }
+                return personaCntrl.clientService.clientes
+                    .where((cliente) => cliente.nif!.startsWith(textEditingValue.text))
+                    .map((cliente) => cliente.nif!);
+              },
+                  displayStringForOption: (String option) {
+                    return option;
                   },
-                  displayStringForOption: (Cliente option) {
-                    print('Valor de option -> $option');
-                    print('Valor de nif -> ${option.nif}');
-                    return option.nif!;
-                  },
-                  onSelected: (Cliente cliente) {
+                  onSelected: (String nifCliente) {
+                    Cliente cliente = personaCntrl.clientService.clientes.singleWhere((cliente) => cliente.nif == nifCliente);
                     personaCntrl.nifCntrl.text = cliente.nif!;
                     personaCntrl.nameCntrl.text = cliente.nombre!;
                     personaCntrl.surName1Cntrl.text = cliente.apellido1!;
