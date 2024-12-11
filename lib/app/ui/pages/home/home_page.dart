@@ -57,9 +57,11 @@ class HomePage extends GetView<HomeController> {
                         borderRadius: BorderRadius.all(Radius.circular(25)),
                     ),
                     leading: const Icon(
-                        Icons.handyman,
+                        //Icons.handyman,
+                        Icons.square,
                         size: 25,
-                        color: Color.fromRGBO(2, 136, 209, 1.0),
+                        //color: Color.fromRGBO(2, 136, 209, 1.0),
+                      color: Color.fromRGBO(0, 0, 0, 1.0),
                     ),
                     //titleAlignment: ListTileTitleAlignment.threeLine,
                     title: Row(children: [
