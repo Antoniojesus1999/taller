@@ -1,7 +1,7 @@
 import 'package:taller/app/controllers/reparacion/form_persona_cntrl.dart';
 import 'package:taller/app/data/models/cliente/cliente.dart';
+import 'package:taller/app/ui/global_widgets/auto_complete_custom.dart';
 import 'package:taller/app/ui/global_widgets/btn_load.dart';
-import 'package:taller/app/utils/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -29,7 +29,9 @@ class FormPersonaPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 SizedBox(height: Get.mediaQuery.size.height * 0.02),
-                Autocomplete<Cliente>(
+                AutoCompleteCustom<Cliente>(
+                  controller: personaCntrl.nifCntrl,
+                  title: 'NIF',
                   optionsBuilder: (TextEditingValue textEditingValue) {
                     if (textEditingValue.text.isEmpty) {
                       return const Iterable<Cliente>.empty();
@@ -39,23 +41,10 @@ class FormPersonaPage extends StatelessWidget {
                       return cliente.nif!.contains(textEditingValue.text);
                     });
                   },
-                  displayStringForOption: (Cliente cliente) => cliente.nif!,
-                  fieldViewBuilder: (BuildContext context,
-                      TextEditingController textEditingController,
-                      FocusNode focusNode,
-                      VoidCallback onFieldSubmitted) {
-                    personaCntrl.nifCntrl.text = textEditingController.text;
-                    return TextFormField(
-                      controller: textEditingController,
-                      validator: (value) => Helpers.validateEmpty(value),
-                      //hintText: 'NIF',
-                      focusNode: focusNode,
-                      obscureText: false,
-                      //sonFieldSubmitted: (value) => personaCntrl.nifCntrl.text = value,
-                      onChanged: (value) {
-                              personaCntrl.nifCntrl.text = value;
-                            },
-                    );
+                  displayStringForOption: (Cliente option) {
+                    print('Valor de option -> $option');
+                    print('Valor de nif -> ${option.nif}');
+                    return option.nif!;
                   },
                   onSelected: (Cliente cliente) {
                     personaCntrl.nifCntrl.text = cliente.nif!;

@@ -42,7 +42,6 @@ class FormVehiculoPage extends StatelessWidget {
                         initValue: invoiceCntrl.valueBrandEditing.value,
                         controller: invoiceCntrl.brandCntrl,
                         onSelected: invoiceCntrl.handleBrandSelection,
-                        options: invoiceCntrl.listNameBrand,
                         displayStringForOption: (String brand) => brand,
                         optionsBuilder: (TextEditingValue textEditingValue) {
                           if (textEditingValue.text.isEmpty) {
@@ -63,7 +62,6 @@ class FormVehiculoPage extends StatelessWidget {
                         initValue: invoiceCntrl.valueModelEditing.value,
                         controller: invoiceCntrl.modelCntrl,
                         onSelected: invoiceCntrl.handleModelSelection,
-                        options: invoiceCntrl.modelNameList,
                         optionsBuilder: (TextEditingValue textEditingValue) {
                           if (textEditingValue.text.isEmpty) {
                             return const Iterable<String>.empty();

@@ -7,7 +7,6 @@ class AutoCompleteCustom<T extends Object> extends StatelessWidget {
   //Esta clase es Mutable por que para que el input valla pintando la letra en roja el controller tiene que cambiar de valor una vez que se ha construido el widget
   final TextEditingController controller;
   final ValueChanged<T> onSelected;
-  final List<T> options;
   final String title;
   final TextEditingValue? initValue;
   final Iterable<T> Function(TextEditingValue) optionsBuilder;
@@ -18,7 +17,6 @@ class AutoCompleteCustom<T extends Object> extends StatelessWidget {
     required this.optionsBuilder,
     required this.displayStringForOption,
     required this.onSelected,
-    required this.options,
     required this.title,
     this.initValue,
   });
@@ -70,7 +68,10 @@ class AutoCompleteCustom<T extends Object> extends StatelessWidget {
       fieldViewBuilder: (context, controller, focusNode, onEditingComplete) {
        
         controller = controller;
+        //Este if esta puesto para cuando tiene que tener un init por defecto por ejeplo el caso en el que selecciona la marca y se pone automaticamente el modelo
+        if (initValue != null){
         controller.text = initValue!.text;
+        }
         
         return TextField(
           controller: controller,
