@@ -23,6 +23,8 @@ class FormPersonaCntrl extends GetxController {
   final tlfCntrl = TextEditingController();
   final emailCntrl = TextEditingController();
 
+  RxBool nifSeleccionado = RxBool(false);
+
   //*Seteamos el cliente que necesita la siguiente pagina para factura
   late Cliente cliente;
 
@@ -45,20 +47,17 @@ class FormPersonaCntrl extends GetxController {
     } else {
       btnCntlPerson.success();
       log.i("Formulario de login correcto");
-/*      Cliente cliente = Cliente(nif: nifCntrl.text, nombre: nameCntrl.text);
-      cliente.apellido1 = surName1Cntrl.text;
-      cliente.apellido2 = surName2Cntrl.text;
-      cliente.telefono = tlfCntrl.text;
-      cliente.email = emailCntrl.text;*/
-
-      cliente = Cliente(nif: nifCntrl.text, nombre: nameCntrl.text);
+      if (nifSeleccionado == RxBool(false)) {
+        cliente = Cliente(nif: nifCntrl.text, nombre: nameCntrl.text);
+      } else {
+        cliente.nif = nifCntrl.text;
+        cliente.nombre = nameCntrl.text;
+      }
       cliente.apellido1 = surName1Cntrl.text;
       cliente.apellido2 = surName2Cntrl.text;
       cliente.telefono = tlfCntrl.text;
       cliente.email = emailCntrl.text;
 
-      //clienteRequest = ClienteRequest(cliente: cliente);
-      //clientService.saveClient(clienteRequest);
       try {
         await clientService.saveCliente(cliente);
       } catch (e) {

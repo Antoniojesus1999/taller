@@ -32,19 +32,36 @@ class FormPersonaPage extends StatelessWidget {
                 AutoCompleteCustom(
                   controller: personaCntrl.nifCntrl,
                   title: 'NIF',
-              optionsBuilder: (TextEditingValue textEditingValue) {
-                if (textEditingValue.text.isEmpty) {
-                  return const Iterable<String>.empty();
-                }
-                return personaCntrl.clientService.clientes
-                    .where((cliente) => cliente.nif!.startsWith(textEditingValue.text))
-                    .map((cliente) => cliente.nif!);
-              },
+                  optionsBuilder: (TextEditingValue textEditingValue) {
+                      if (textEditingValue.text.isEmpty) {
+                          personaCntrl.nifSeleccionado = RxBool(false);
+                          personaCntrl.nifCntrl.text = "";
+                          personaCntrl.nameCntrl.clear();
+                          personaCntrl.surName1Cntrl.clear();
+                          personaCntrl.surName2Cntrl.clear();
+                          personaCntrl.emailCntrl.clear();
+                          personaCntrl.tlfCntrl.clear();
+
+                          return const Iterable<String>.empty();
+                      }
+
+                      if (personaCntrl.clientService.clientes
+                          .where((cliente) => cliente.nif!.startsWith(textEditingValue.text))
+                          .map((cliente) => cliente.nif!).isEmpty) {
+                          personaCntrl.nifCntrl.text = textEditingValue.text;
+                      }
+
+                      return personaCntrl.clientService.clientes
+                            .where((cliente) => cliente.nif!.startsWith(textEditingValue.text))
+                            .map((cliente) => cliente.nif!);
+                  },
                   displayStringForOption: (String option) {
                     return option;
                   },
                   onSelected: (String nifCliente) {
                     Cliente cliente = personaCntrl.clientService.clientes.singleWhere((cliente) => cliente.nif == nifCliente);
+                    personaCntrl.nifSeleccionado = RxBool(true);
+                    personaCntrl.cliente = cliente;
                     personaCntrl.nifCntrl.text = cliente.nif!;
                     personaCntrl.nameCntrl.text = cliente.nombre!;
                     personaCntrl.surName1Cntrl.text = cliente.apellido1!;
