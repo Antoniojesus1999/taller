@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
@@ -5,27 +7,32 @@ import 'package:logger/logger.dart';
 import '../data/models/vehiculo/vehiculo.dart';
 
 class VehiculoRepository extends GetConnect {
-  final String urlHostBack = dotenv.env['URL_HOST_BACK']!;
-  final String urlSaveVehiculo = dotenv.env['URL_SAVE_VEHICULO']!;
+  final String _baseUrl = dotenv.env['URL_HOST_BACK']!;
+  final String _urlSaveVehiculo = dotenv.env['URL_SAVE_VEHICULO']!;
   Logger log = Logger();
 
-  Future<Vehiculo> saveVehiculo(Vehiculo vehiculo) async {
+  Future<Vehiculo> saveVehiculo(String idCliente, Vehiculo vehiculo) async {
+    String url = _baseUrl + _urlSaveVehiculo;
     log.i('Se va a guardar el vehiculo -> ${vehiculo.toString()}');
-    try {
-      final response =
-          await post('$urlHostBack$urlSaveVehiculo', vehiculo.toJson());
-      if (response.statusCode != 201) {
-        log.e('Error al guardar el vehiculo -> ${response.statusText}');
-        return Future.error(
-            'Error al guardar el vehiculo codigo -> ${response.statusCode}');
-      } else {
-        log.i(
-            'Vehiculo guardado correctamente ${Vehiculo.fromJson(response.body).toString()}');
-        return Vehiculo.fromJson(response.body);
-      }
-    } catch (e) {
-      log.e('Error al guardar el vehiculo -> $e');
-      return Future.error('Error al guardar el vehiculo -> $e');
+    final body = json.encode({
+      "idCliente": idCliente,
+      "vehiculo": vehiculo.toJson(), // Convertimos ClienteModel a JSON
+    });
+
+    final rsp = await post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body,
+    );
+
+    if (rsp.statusCode == 201) {
+      final data = jsonDecode(rsp.bodyString!);
+      log.i('Respuesta con exito -> ${rsp.body}');
+      return Vehiculo.fromJson(data);
+    } else {
+      // Ocurrió un error
+      log.i('Error al guardar vehiculo: ${rsp.body}');
+      throw Exception('Error al guardar vehiculo');
     }
   }
 }
