@@ -1,11 +1,13 @@
 import 'dart:convert';
 
+import 'package:taller/app/data/models/coches/color_vehiculo.dart';
+
 class Vehiculo {
   String? id;
   String? matricula;
   String? marca;
   String? modelo;
-  String? color;
+  ColorVehiculo? color;
   DateTime? createdAt;
   DateTime? updatedAt;
 
@@ -29,7 +31,7 @@ class Vehiculo {
     matricula: json["matricula"],
     marca: json["marca"],
     modelo: json["modelo"],
-    color: json["color"],
+    color: json["color"] != null ? ColorVehiculo.fromJson(json["color"]) : null,
     createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
     updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
   );
@@ -39,13 +41,13 @@ class Vehiculo {
     "matricula": matricula,
     "marca": marca,
     "modelo": modelo,
-    "color": color,
+    "color": color?.toJson(),
     "createdAt": createdAt?.toIso8601String(),
     "updatedAt": updatedAt?.toIso8601String(),
   };
 
   @override
   String toString() {
-    return 'Cliente{id: $id, matricula: $matricula, marca: $marca, modelo: $modelo, color: $color}';
+    return 'Vehiculo{id: $id, matricula: $matricula, marca: $marca, modelo: $modelo, color: $color}';
   }
 }
