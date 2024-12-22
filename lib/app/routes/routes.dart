@@ -9,6 +9,7 @@ abstract class Routes {
   static const verify = '/verify';
   static const formPerson = '/form-person';
   static const formVehicle = '/form-vehicle';
+  static const selectVehicle = '/select-vehicle';
   static const selectableCar = '/selectable-car';
   static const imageWithMarkers = '/image-with-markers';
   static const pageReparacionesDetail = '/view-work';

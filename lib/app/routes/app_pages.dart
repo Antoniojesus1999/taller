@@ -10,10 +10,12 @@ import 'package:taller/app/ui/pages/auth/verify_page.dart';
 import 'package:taller/app/ui/pages/home/taller_page.dart';
 import 'package:get/get.dart';
 import 'package:taller/app/ui/pages/reparacion/form_persona_page.dart';
+import 'package:taller/app/ui/pages/reparacion/select_vehiculo_page.dart';
 
 import '../bindings/form_danyos_bindiing.dart';
 import '../bindings/login_binding.dart';
 import '../bindings/reparacion_detail_binding.dart';
+import '../bindings/select_vehiculo_binding.dart';
 import '../ui/pages/home/home_page.dart';
 import '../ui/pages/auth/login_page.dart';
 import '../ui/pages/auth/reset_password_page.dart';
@@ -75,5 +77,10 @@ abstract class AppPages {
         page: () => const TallerPage(),
         binding: TallerBinding(),
         transition: Transition.circularReveal),
+    GetPage(
+        name: Routes.selectVehicle,
+        page: () => const SelectVehiculoPage(),
+        binding: SelectVehiculoBinding(),
+        transition: Transition.size),
   ];
 }

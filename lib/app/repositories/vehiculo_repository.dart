@@ -9,6 +9,8 @@ import '../data/models/vehiculo/vehiculo.dart';
 class VehiculoRepository extends GetConnect {
   final String _baseUrl = dotenv.env['URL_HOST_BACK']!;
   final String _urlSaveVehiculo = dotenv.env['URL_SAVE_VEHICULO']!;
+  final String _urlFindVehiculoByCliente =
+      dotenv.env['URL_FIND_VEHICULO_BY_CLIENTE']!;
   Logger log = Logger();
 
   Future<Vehiculo> saveVehiculo(String idCliente, Vehiculo vehiculo) async {
@@ -33,6 +35,22 @@ class VehiculoRepository extends GetConnect {
       // Ocurrió un error
       log.i('Error al guardar vehiculo: ${rsp.body}');
       throw Exception('Error al guardar vehiculo');
+    }
+  }
+
+  Future<List<Vehiculo>> getAllVehiculosByCliente(String idCliente) async {
+    String url = _baseUrl +
+        _urlFindVehiculoByCliente.replaceAll('{idCliente}', idCliente);
+    final rsp = await get(url);
+
+    if (rsp.statusCode == 200) {
+      final data = jsonDecode(rsp.bodyString!);
+      log.i('Respuesta con exito -> ${rsp.body}');
+      return List<Vehiculo>.from(data.map((x) => Vehiculo.fromJson(x)));
+    } else {
+      // Ocurrió un error
+      log.i('Error al obtener vehiculos: ${rsp.body}');
+      throw Exception('Error al obtener vehiculos');
     }
   }
 }

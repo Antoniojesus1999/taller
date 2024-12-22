@@ -6,7 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
+import 'package:taller/app/services/vehiculo_service.dart';
 import 'package:taller/app/utils/snack_bar.dart';
+
+import '../../data/models/vehiculo/vehiculo.dart';
 
 class FormPersonaCntrl extends GetxController {
   final Logger log = Logger();
@@ -30,8 +33,9 @@ class FormPersonaCntrl extends GetxController {
 
   //*Servicios inyectados
   final ClientService clientService;
+  final VehiculoService vehiculoService;
 
-  FormPersonaCntrl({required this.clientService});
+  FormPersonaCntrl({required this.clientService,required this.vehiculoService});
 
   @override
   void onInit() {
@@ -65,8 +69,11 @@ class FormPersonaCntrl extends GetxController {
         return; // Detener la ejecución del método
       }
 
+      
       log.i('Cliente seteado en form person ${clientService.cliente}');
-      Get.toNamed(Routes.formVehicle);
+      //Metodo que decisor para mostrar una la pantalla formVehicle o selectVehicle
+
+      await handleViewFormVehicleOrSelectVehicle(clientService.cliente.id!);
       btnCntlPerson.reset();
     }
   }
@@ -80,4 +87,17 @@ class FormPersonaCntrl extends GetxController {
         Colors.red);
     Get.toNamed(Routes.formPerson);
   }
+  
+  /// Metodo decisor para saber si ir a la pantalla formVehicle o a la pantalla selectVehicle
+  Future handleViewFormVehicleOrSelectVehicle(String idCliente) async{
+    List<Vehiculo> listaVehiculo = await vehiculoService.getAllVehiculosByCliente(idCliente);
+  if (listaVehiculo.isEmpty) {
+    await Get.toNamed(Routes.formVehicle);
+  } else {
+    await Get.toNamed(Routes.selectVehicle);
+  }
+
+
+  }
+  
 }
