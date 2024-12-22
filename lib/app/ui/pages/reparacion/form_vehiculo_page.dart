@@ -1,4 +1,5 @@
 import 'package:taller/app/controllers/reparacion/form_vehiculo_cntl.dart';
+import 'package:taller/app/data/models/coches/color_vehiculo.dart';
 import 'package:taller/app/data/models/coches/marca.dart';
 import 'package:taller/app/ui/global_widgets/auto_complete_custom.dart';
 import 'package:taller/app/ui/global_widgets/btn_load.dart';
@@ -13,7 +14,7 @@ class FormVehiculoPage extends StatelessWidget {
   static List<Modelo> modelList = [];
   @override
   Widget build(BuildContext context) {
-    final FormVehiculoController invoiceCntrl =
+    final FormVehiculoController formVehiculoCntrl =
         Get.find<FormVehiculoController>();
     return Scaffold(
       appBar: AppBar(
@@ -23,31 +24,31 @@ class FormVehiculoPage extends StatelessWidget {
       body: SafeArea(
         minimum: EdgeInsets.all(Get.mediaQuery.size.width * 0.05),
         child: Form(
-          key: invoiceCntrl.formKeyVehicle,
+          key: formVehiculoCntrl.formKeyVehicle,
           child: SizedBox(
             width: Get.mediaQuery.size.width * 0.9,
-            child: Obx(() => invoiceCntrl.changedListBrand.value
+            child: Obx(() => formVehiculoCntrl.changedListBrand.value && formVehiculoCntrl.changedListColor.value
                 ? const Center(child: CircularProgressIndicator())
                 : Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       SizedBox(height: Get.mediaQuery.size.height * 0.02),
                       TextFormFieldCustom(
-                          controller: invoiceCntrl.registrationCntrl,
+                          controller: formVehiculoCntrl.registrationCntrl,
                           validator: (value) => Helpers.validateEmpty(value),
                           hintText: 'Matricula',
                           obscureText: false),
                       SizedBox(height: Get.mediaQuery.size.height * 0.02),
                       AutoCompleteCustom(
-                        initValue: invoiceCntrl.valueBrandEditing.value,
-                        controller: invoiceCntrl.brandCntrl,
-                        onSelected: invoiceCntrl.handleBrandSelection,
+                        initValue: formVehiculoCntrl.valueBrandEditing.value,
+                        controller: formVehiculoCntrl.brandCntrl,
+                        onSelected: formVehiculoCntrl.handleBrandSelection,
                         displayStringForOption: (String brand) => brand,
                         optionsBuilder: (TextEditingValue textEditingValue) {
                           if (textEditingValue.text.isEmpty) {
                             return const Iterable<String>.empty();
                           }
-                          return invoiceCntrl.listNameBrand.where((String option) {
+                          return formVehiculoCntrl.listNameBrand.where((String option) {
                             final text = textEditingValue.text.toLowerCase();
                             final optionLower = option.toLowerCase();
                             // Compara si la opción comienza con el texto ingresado
@@ -59,14 +60,14 @@ class FormVehiculoPage extends StatelessWidget {
                       ),
                       SizedBox(height: Get.mediaQuery.size.height * 0.02),
                       AutoCompleteCustom(
-                        initValue: invoiceCntrl.valueModelEditing.value,
-                        controller: invoiceCntrl.modelCntrl,
-                        onSelected: invoiceCntrl.handleModelSelection,
+                        initValue: formVehiculoCntrl.valueModelEditing.value,
+                        controller: formVehiculoCntrl.modelCntrl,
+                        onSelected: formVehiculoCntrl.handleModelSelection,
                         optionsBuilder: (TextEditingValue textEditingValue) {
                           if (textEditingValue.text.isEmpty) {
                             return const Iterable<String>.empty();
                           }
-                          return invoiceCntrl.modelNameList.where((String option) {
+                          return formVehiculoCntrl.modelNameList.where((String option) {
                             final text = textEditingValue.text.toLowerCase();
                             final optionLower = option.toLowerCase();
                             // Compara si la opción comienza con el texto ingresado
@@ -76,18 +77,61 @@ class FormVehiculoPage extends StatelessWidget {
                         displayStringForOption: (String option) => option,
                         title: 'Modelo',
                       ),
-/*                      SizedBox(height: Get.mediaQuery.size.height * 0.02),
-                      AutoCompleteCustom(
-                        initValue: invoiceCntrl.valueModelEditing.value,
-                        controller: invoiceCntrl.modelCntrl,
-                        onSelected: invoiceCntrl.handleModelSelection,
-                        options: invoiceCntrl.modelNameList,
-                        title: 'Color',
-                      ),*/
+                      SizedBox(height: Get.mediaQuery.size.height * 0.02),
+                      SizedBox(
+                        width: Get.mediaQuery.size.width * 0.9,
+                        height: Get.mediaQuery.size.height * 0.061,
+                        child: Card(
+                          color: Colors.white,
+                          shape: Border.all(color: Color.fromRGBO(180, 180, 180, 0.3)),
+                          margin: EdgeInsets.zero,
+                          child: DropdownButton<ColorVehiculo>(
+                            value: formVehiculoCntrl.selectedColor.value,
+                            hint: const Text('Selecciona un color'),
+                            icon: const Icon(Icons.arrow_drop_down),
+                            underline: Container(
+                              height: 0,
+                              color: Colors.transparent,
+                            ),
+                            onChanged: (ColorVehiculo? colorVehiculo) => formVehiculoCntrl.handleColorSelection(colorVehiculo!),
+                            items: formVehiculoCntrl.listColores.map<DropdownMenuItem<ColorVehiculo>>((colorInfo) {
+                              final color = Color.fromRGBO(
+                                int.parse(colorInfo.colorR!),
+                                int.parse(colorInfo.colorG!),
+                                int.parse(colorInfo.colorB!),
+                                1.0,
+                              );
+                              return DropdownMenuItem<ColorVehiculo>(
+                                value: colorInfo,
+                                child: SizedBox(
+                                  width: Get.mediaQuery.size.width * 0.82,
+                                  child: ListTile(
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                    leading: Container(
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: Colors.black38, // Color del borde
+                                          width: 1.0, // Grosor del borde
+                                        ),
+                                      ),
+                                      child: Icon(
+                                        Icons.square,
+                                        color: color,
+                                        size: 25.0,
+                                      ),
+                                    ),
+                                    title: Text(colorInfo.nombre!),
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                      ),
                       SizedBox(height: Get.mediaQuery.size.height * 0.12),
                       BtnLoad(
-                          onTap: () => invoiceCntrl.setDataVehicle(),
-                          btnController: invoiceCntrl.btnCntlVehicle,
+                          onTap: () => formVehiculoCntrl.setDataVehicle(),
+                          btnController: formVehiculoCntrl.btnCntlVehicle,
                           title: 'Continuar'),
                       SizedBox(height: Get.mediaQuery.size.height * 0.02),
                     ],

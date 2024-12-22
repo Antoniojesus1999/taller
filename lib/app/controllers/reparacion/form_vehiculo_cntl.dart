@@ -1,6 +1,8 @@
+import 'package:taller/app/data/models/coches/color_vehiculo.dart';
 import 'package:taller/app/data/models/coches/marca.dart';
 
 import 'package:taller/app/routes/app_pages.dart';
+import 'package:taller/app/services/color_vehiculo_service.dart';
 import 'package:taller/app/services/marca_service.dart';
 import 'package:taller/app/services/cliente_service.dart';
 import 'package:taller/app/services/reparacion_service.dart';
@@ -18,6 +20,8 @@ class FormVehiculoController extends GetxController {
   RxList<Modelo> modelList = <Modelo>[].obs;
   RxList<String> modelNameList = <String>[].obs;
   RxList<String> listNameBrand = <String>[].obs;
+  RxList<ColorVehiculo> listColores = <ColorVehiculo>[].obs;
+  Rx<ColorVehiculo> selectedColor = ColorVehiculo().obs;
 
   final Logger log = Logger();
 
@@ -36,6 +40,7 @@ class FormVehiculoController extends GetxController {
 
   //*Podemos poner final por que el contexto de GetX maneja el estado y siendo final puede cambiar su valor
   RxBool changedListBrand = RxBool(true);
+  RxBool changedListColor = RxBool(true);
 
   //*Servicios inyectados
   final TallerService tallerService;
@@ -43,6 +48,7 @@ class FormVehiculoController extends GetxController {
   final ReparacionService reparacionService;
   final VehiculoService vehiculoService;
   final MarcaService marcaService;
+  final ColorVehiculoService colorVehiculoService;
 
   FormVehiculoController({
     required this.tallerService,
@@ -50,12 +56,14 @@ class FormVehiculoController extends GetxController {
     required this.marcaService,
     required this.reparacionService,
     required this.vehiculoService,
+    required this.colorVehiculoService,
   });
 
   @override
   void onInit() {
     super.onInit();
     changeBrandAndModel();
+    cargarColor();
   }
 
   //* Se ejecuta cuando se envíe el formulario
@@ -70,7 +78,9 @@ class FormVehiculoController extends GetxController {
       Vehiculo vehiculo = Vehiculo(
           matricula: registrationCntrl.text,
           marca: valueBrandEditing.value.text,
-          modelo: valueModelEditing.value.text);
+          modelo: valueModelEditing.value.text,
+          color: selectedColor.value,
+      );
 
       await vehiculoService.saveVehiculo(vehiculo);
 
@@ -109,6 +119,22 @@ class FormVehiculoController extends GetxController {
     }
   }
 
+  Future<void> cargarColor() async {
+    try {
+      log.i('Haciendo petición desde el controller para cargar los colores');
+      await colorVehiculoService.getColores().then((_) {
+        log.i('Cargando colores');
+        listColores.value = colorVehiculoService.listColores;
+      });
+    } catch (e) {
+      log.f('Error al cargar los colores');
+      throw Exception('Error al cargar los colores');
+    } finally {
+      selectedColor.value = listColores.first;
+      changedListColor.value = false;
+    }
+  }
+
   //*Se usa para en el autocomplete cuando hace clic en una opción
   void handleBrandSelection(String nameBrand) {
     log.i('Se ha marcado la marca ${nameBrand.toString()}');
@@ -134,5 +160,10 @@ class FormVehiculoController extends GetxController {
     valueBrandEditing.value = TextEditingValue(text: nombreMarca);
 
     valueModelEditing.value = TextEditingValue(text: nombreModelo);
+  }
+
+  void handleColorSelection(ColorVehiculo colorVehiculo) {
+    log.i('Se ha marcado el color $colorVehiculo');
+    selectedColor.value = colorVehiculo;
   }
 }

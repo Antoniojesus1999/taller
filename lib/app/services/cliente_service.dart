@@ -4,7 +4,7 @@ import 'package:taller/app/services/taller_service.dart';
 import 'package:get/get.dart';
 
 class ClientService extends GetxService {
-  Cliente _cliente = Cliente();
+  late Cliente _cliente = Cliente();
   late List<Cliente> _clientes;
 
   final ClientRepository clientRepository;
