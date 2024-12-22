@@ -94,9 +94,8 @@ class FormPersonaCntrl extends GetxController {
   if (listaVehiculo.isEmpty) {
     await Get.toNamed(Routes.formVehicle);
   } else {
-    await Get.toNamed(Routes.selectVehicle);
+    await Get.toNamed(Routes.selectVehicle, arguments: listaVehiculo);
   }
-
 
   }
   

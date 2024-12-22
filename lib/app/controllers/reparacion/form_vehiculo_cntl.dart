@@ -81,8 +81,11 @@ class FormVehiculoController extends GetxController {
           modelo: valueModelEditing.value.text,
           color: selectedColor.value,
       );
-
-      await vehiculoService.saveVehiculo(vehiculo);
+      try {
+        await vehiculoService.saveVehiculo(vehiculo);
+      } catch (e) {
+         btnCntlVehicle.reset();
+      }
 
       Reparacion reparacion = Reparacion(
           taller: tallerService.taller,

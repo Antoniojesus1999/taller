@@ -11,6 +11,8 @@ class VehiculoRepository extends GetConnect {
   final String _urlSaveVehiculo = dotenv.env['URL_SAVE_VEHICULO']!;
   final String _urlFindVehiculoByCliente =
       dotenv.env['URL_FIND_VEHICULO_BY_CLIENTE']!;
+  final String _urlClienteVehiculo = dotenv.env['URL_DELETE_CLIENTE_VEHICULO']!;
+
   Logger log = Logger();
 
   Future<Vehiculo> saveVehiculo(String idCliente, Vehiculo vehiculo) async {
@@ -53,4 +55,20 @@ class VehiculoRepository extends GetConnect {
       throw Exception('Error al obtener vehiculos');
     }
   }
+
+  Future deleteClienteVehiculo(String idCliente, String idVehiculo) async{
+    String url = _baseUrl + _urlClienteVehiculo.replaceAll('{idCliente}', idCliente).replaceAll('{idVehiculo}', idVehiculo);
+    final response = await delete(
+      url,
+    headers: {'Content-Type': 'text/plain'}, // Cambiar el Content-Type a text/plain o eliminarlo
+    );
+
+    if (response.statusCode == 200) {
+      log.i('Vehículo eliminado con éxito');
+    } else {
+      log.i('Error al eliminar vehículo: ${response.body}');
+      throw Exception('Error al eliminar vehículo');
+    }
+  }
+  
 }

@@ -8,6 +8,7 @@ class VehiculoService extends GetxService {
   late Vehiculo _vehiculo = Vehiculo();
 
   get vehiculo => _vehiculo;
+  set setVehiculo(Vehiculo vehiculo) => _vehiculo = vehiculo;
 
   final VehiculoRepository vehiculoRepository;
 
@@ -22,5 +23,9 @@ class VehiculoService extends GetxService {
   }
   Future<List<Vehiculo>> getAllVehiculosByCliente(String idCliente) async {
     return await vehiculoRepository.getAllVehiculosByCliente(idCliente);
+  }
+  Future<void> deleteClienteVehiculo(String idCliente, String idVehiculo) async {
+    await vehiculoRepository.deleteClienteVehiculo(idCliente,idVehiculo);
+    return Future.value();
   }
 }
