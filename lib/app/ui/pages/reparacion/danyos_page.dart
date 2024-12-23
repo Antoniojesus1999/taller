@@ -26,7 +26,7 @@ class ImageWithMarkers extends StatelessWidget {
                           Stack(
                             children: [
                               Image.asset(
-                                'assets/images/car_plane.png',
+                                'assets/images/car_plane_v3.png',
                                 fit: BoxFit.contain,
                                 key: controller.imageKey,
                                 frameBuilder: (BuildContext context, Widget child, int? frame, bool wasSynchronouslyLoaded) {
@@ -54,14 +54,7 @@ class ImageWithMarkers extends StatelessWidget {
                                   top: (marker.positionY - 10.5) * (controller.imageHeight.value / marker.origHeight),
                                   child: GestureDetector(
                                     onTapUp: (TapUpDetails details) => controller.removeMarker(marker),
-                                    child: Container(
-                                      width: 21,
-                                      height: 21,
-                                      decoration: const BoxDecoration(
-                                        color: Colors.red,
-                                        shape: BoxShape.circle,
-                                      ),
-                                    ),
+                                    child: Image.asset('assets/images/danyo_v3.png', width: 30, height: 30,),
                                   ),
                                 );
                               }),
@@ -82,7 +75,7 @@ class ImageWithMarkers extends StatelessWidget {
                       // Same content as in portrait mode
                       children: [
                         Image.asset(
-                          'assets/images/car_plane.png',
+                          'assets/images/car_plane_v3.png',
                           fit: BoxFit.contain,
                           key: controller.imageKey,
                         ),
@@ -104,14 +97,7 @@ class ImageWithMarkers extends StatelessWidget {
                             top: (marker.positionY - 10.5) * (controller.imageHeight.value / marker.origHeight),
                             child: GestureDetector(
                               onTapUp: (TapUpDetails details) => controller.removeMarker(marker),
-                              child: Container(
-                                width: 21,
-                                height: 21,
-                                decoration: const BoxDecoration(
-                                  color: Colors.red,
-                                  shape: BoxShape.circle,
-                                ),
-                              ),
+                              child: Image.asset('assets/images/danyo_v3.png', width: 30, height: 30,),
                             ),
                           );
                         }),
