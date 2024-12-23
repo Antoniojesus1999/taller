@@ -16,10 +16,10 @@ class VehiculoService extends GetxService {
 
   VehiculoService({required this.vehiculoRepository});
 
-  Future<void> saveVehiculo(Vehiculo vehiculo) async {
+  Future<Vehiculo> saveVehiculo(Vehiculo vehiculo) async {
     final idCliente = clienteService.cliente.id;
     _vehiculo = await vehiculoRepository.saveVehiculo(idCliente!, vehiculo);
-    return Future.value();
+    return _vehiculo;
   }
   Future<List<Vehiculo>> getAllVehiculosByCliente(String idCliente) async {
     return await vehiculoRepository.getAllVehiculosByCliente(idCliente);

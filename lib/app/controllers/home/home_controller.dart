@@ -15,10 +15,13 @@ class HomeController extends GetxController {
 
   final int _limit = 10;
   int _page = 1;
-  var reparaciones = <Reparacion>[];
+  var reparaciones = <Reparacion>[].obs;
   var hayMas = true.obs;
 
-  HomeController({required this.workService, required this.authService, required this.tallerService});
+  HomeController(
+      {required this.workService,
+      required this.authService,
+      required this.tallerService});
 
   @override
   Future<void> onInit() async {
@@ -48,7 +51,7 @@ class HomeController extends GetxController {
   Future refreshData() async {
     _page = 1;
     hayMas.value = true;
-    reparaciones = [];
+    reparaciones = <Reparacion>[].obs;
     await getReparaciones();
   }
 

@@ -11,9 +11,6 @@ class HomePage extends GetView<HomeController> {
     final ScrollController scrollController = ScrollController();
     final sizeWidth = Get.mediaQuery.size.width;
 
-    Future onRefresh() async {
-      controller.refreshData();
-    }
 
     void onScroll() {
       double maxScroll = scrollController.position.maxScrollExtent;
@@ -40,7 +37,9 @@ class HomePage extends GetView<HomeController> {
         ],
       ),
       body: RefreshIndicator(
-        onRefresh: onRefresh,
+        onRefresh: () async {
+          await controller.refreshData();
+        },
         child: Obx(() => ListView.builder(
             controller: scrollController,
             itemCount: controller.hayMas.value
