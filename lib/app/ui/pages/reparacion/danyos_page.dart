@@ -26,7 +26,7 @@ class ImageWithMarkers extends StatelessWidget {
                           Stack(
                             children: [
                               Image.asset(
-                                'assets/images/car_plane_v3.png',
+                                'assets/images/car_plane_v2.png',
                                 fit: BoxFit.contain,
                                 key: controller.imageKey,
                                 frameBuilder: (BuildContext context, Widget child, int? frame, bool wasSynchronouslyLoaded) {
@@ -75,7 +75,7 @@ class ImageWithMarkers extends StatelessWidget {
                       // Same content as in portrait mode
                       children: [
                         Image.asset(
-                          'assets/images/car_plane_v3.png',
+                          'assets/images/car_plane_v2.png',
                           fit: BoxFit.contain,
                           key: controller.imageKey,
                         ),
