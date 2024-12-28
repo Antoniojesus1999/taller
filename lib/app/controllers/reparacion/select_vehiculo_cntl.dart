@@ -11,15 +11,13 @@ class SelectVehiculoCntrl extends GetxController {
   final ClientService clientService;
   final VehiculoService vehiculoService;
 
+  late List<Vehiculo> listVehiculo;
+
   SelectVehiculoCntrl({
     required this.clientService,
     required this.vehiculoService,
   });
 
-  @override
-  void onInit() {
-    super.onInit();
-  }
 
   setVehiculo(Vehiculo vehiculo) {
     vehiculoService.setVehiculo = vehiculo;
@@ -28,5 +26,15 @@ class SelectVehiculoCntrl extends GetxController {
   void eliminarVehiculo(Vehiculo vehiculo) {
     vehiculoService.deleteClienteVehiculo(
         clientService.cliente.id!, vehiculo.id!);
+  }
+
+  void handleArguments(Map<String, dynamic>? args) {
+    if (args != null) {
+      if (args['listaVehiculo'] != null) {
+        listVehiculo = args['listaVehiculo'];
+      }
+    } else {
+      log.e('Ha entrado en select vehiculo sin argumentos');
+    }
   }
 }

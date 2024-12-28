@@ -12,10 +12,17 @@ import '../../global_widgets/text_form_field_custom.dart';
 class FormVehiculoPage extends StatelessWidget {
   const FormVehiculoPage({super.key});
   static List<Modelo> modelList = [];
+
   @override
   Widget build(BuildContext context) {
+
+    
     final FormVehiculoController formVehiculoCntrl =
         Get.find<FormVehiculoController>();
+
+    final args = Get.arguments as Map<String, dynamic>?;
+    formVehiculoCntrl.handleArguments(args);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Datos del vehículo'),

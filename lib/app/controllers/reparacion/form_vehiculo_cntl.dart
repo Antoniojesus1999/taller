@@ -76,15 +76,15 @@ class FormVehiculoController extends GetxController {
       log.i("Formulario de login correcto");
 
       Vehiculo vehiculo = Vehiculo(
-          matricula: registrationCntrl.text,
-          marca: valueBrandEditing.value.text,
-          modelo: valueModelEditing.value.text,
-          color: selectedColor.value,
+        matricula: registrationCntrl.text,
+        marca: valueBrandEditing.value.text,
+        modelo: valueModelEditing.value.text,
+        color: selectedColor.value,
       );
       try {
         await vehiculoService.saveVehiculo(vehiculo);
       } catch (e) {
-         btnCntlVehicle.reset();
+        btnCntlVehicle.reset();
       }
 
       Reparacion reparacion = Reparacion(
@@ -99,6 +99,15 @@ class FormVehiculoController extends GetxController {
       Get.toNamed(Routes.imageWithMarkers);
       btnCntlVehicle.reset();
     }
+  }
+
+  //* Precargamos los datos que ha seleccionado el usuario
+  void setDataVehiculoInPage() {
+       registrationCntrl.text = vehiculoService.vehiculo.matricula!;
+      valueBrandEditing.value =
+          TextEditingValue(text: vehiculoService.vehiculo.marca!);
+      valueModelEditing.value =
+          TextEditingValue(text: vehiculoService.vehiculo.modelo!);
   }
 
   //* Se inicia en el onInit y hace una petición para obtener las marcas y los modelos
@@ -169,4 +178,20 @@ class FormVehiculoController extends GetxController {
     log.i('Se ha marcado el color $colorVehiculo');
     selectedColor.value = colorVehiculo;
   }
+
+  void handleArguments(Map<String, dynamic>? args) {
+    if (args != null && args.containsKey('from')) {
+      if (args['from'] == 'fromSelectVehicle' ) {
+        setDataVehiculoInPage();
+      }
+      if (args['from'] == 'fromPerson') {
+        List<Vehiculo> listaVehiculo =args['listaVehiculo'];
+        vehiculoService.setVehiculo = listaVehiculo.first;
+      setDataVehiculoInPage();
+      }
+      
+    }
+  }
+  
+  
 }

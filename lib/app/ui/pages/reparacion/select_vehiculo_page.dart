@@ -1,7 +1,6 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:taller/app/data/models/vehiculo/vehiculo.dart';
 import 'package:taller/app/routes/app_pages.dart';
 
 import '../../../controllers/reparacion/select_vehiculo_cntl.dart';
@@ -11,7 +10,9 @@ class SelectVehiculoPage extends GetView<SelectVehiculoCntrl> {
 
   @override
   Widget build(BuildContext context) {
-    final List<Vehiculo> vehiculos = Get.arguments as List<Vehiculo>;
+    final args = Get.arguments as Map<String, dynamic>?;
+    controller.handleArguments(args);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Datos del vehículo'),
@@ -20,7 +21,7 @@ class SelectVehiculoPage extends GetView<SelectVehiculoCntrl> {
       body: SafeArea(
         minimum: EdgeInsets.all(Get.mediaQuery.size.width * 0.05),
         child: ListView.builder(
-          itemCount: vehiculos.length,
+          itemCount: controller.listVehiculo.length,
           itemBuilder: (context, index) {
             return Card(
                 margin: EdgeInsets.only(top: 10.0),
@@ -36,16 +37,19 @@ class SelectVehiculoPage extends GetView<SelectVehiculoCntrl> {
                       color: Color.fromRGBO(2, 136, 209, 1.0),
                     ),
                     //titleAlignment: ListTileTitleAlignment.threeLine,
-                    title: Row(
-                      children: [
-                        Text(vehiculos[index].marca!),
-                        SizedBox(width: 5),
-                        Text(vehiculos[index].modelo!),
-                        SizedBox(width: 5),
-                        Text(vehiculos[index].matricula!),
-                      ],
+                    title: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          Text(controller.listVehiculo[index].marca!),
+                          SizedBox(width: 5),
+                          Text(controller.listVehiculo[index].modelo!),
+                          SizedBox(width: 5),
+                          Text(controller.listVehiculo[index].matricula!),
+                        ],
+                      ),
                     ),
-                    subtitle: Text('${vehiculos[index].updatedAt}'),
+                    subtitle: Text('${controller.listVehiculo[index].updatedAt}'),
                     trailing: IconButton(
                       icon: const Icon(Icons.delete, color: Colors.red),
                       onPressed: () {
@@ -61,7 +65,7 @@ class SelectVehiculoPage extends GetView<SelectVehiculoCntrl> {
                             Get.back();
                           },
                           btnOkOnPress: () {
-                            controller.eliminarVehiculo(vehiculos[index]);
+                            controller.eliminarVehiculo(controller.listVehiculo[index]);
                             Get.snackbar(
                                 'Éxito', 'El vehiculo ha sido eliminado');
                           },
@@ -69,8 +73,9 @@ class SelectVehiculoPage extends GetView<SelectVehiculoCntrl> {
                       },
                     ),
                     onTap: () {
-                      controller.setVehiculo(vehiculos[index]);
-                      Get.toNamed(Routes.imageWithMarkers);
+                      controller.setVehiculo(controller.listVehiculo[index]);
+                      Get.toNamed(Routes.formVehicle,
+                          arguments: {'from': 'fromSelectVehicle'});
                     }));
           },
         ),
