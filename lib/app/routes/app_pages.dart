@@ -4,11 +4,13 @@ import 'package:taller/app/bindings/form_persona_binding.dart';
 import 'package:taller/app/bindings/register_binding.dart';
 import 'package:taller/app/bindings/reset_binding.dart';
 import 'package:taller/app/bindings/taller_binding.dart';
+import 'package:taller/app/bindings/trabajo_binding.dart';
 import 'package:taller/app/bindings/verification_binding.dart';
 import 'package:taller/app/ui/pages/auth/register_page.dart';
 import 'package:taller/app/ui/pages/auth/verify_page.dart';
 import 'package:taller/app/ui/pages/home/taller_page.dart';
 import 'package:get/get.dart';
+import 'package:taller/app/ui/pages/home/trabajo_page.dart';
 import 'package:taller/app/ui/pages/reparacion/form_persona_page.dart';
 import 'package:taller/app/ui/pages/reparacion/select_vehiculo_page.dart';
 
@@ -82,5 +84,10 @@ abstract class AppPages {
         page: () => const SelectVehiculoPage(),
         binding: SelectVehiculoBinding(),
         transition: Transition.size),
+    GetPage(
+        name: Routes.formTrabajos,
+        page: () => const TrabajoPage(),
+        binding: TrabajoBinding(),
+        transition: Transition.rightToLeftWithFade),
   ];
 }

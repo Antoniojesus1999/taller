@@ -13,4 +13,5 @@ abstract class Routes {
   static const selectableCar = '/selectable-car';
   static const imageWithMarkers = '/image-with-markers';
   static const pageReparacionesDetail = '/view-work';
+  static const formTrabajos = '/form-trabajos';
 }

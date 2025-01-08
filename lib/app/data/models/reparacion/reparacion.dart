@@ -6,6 +6,7 @@ import 'package:taller/app/data/models/taller/taller.dart';
 import '../vehiculo/vehiculo.dart';
 
 class Reparacion {
+    final String? id;
     final DateTime? fecEntrada;
     final String? combustible;
     final String? kilometros;
@@ -18,6 +19,7 @@ class Reparacion {
     final Vehiculo? vehiculo;
 
     Reparacion({
+        this.id,
         this.fecEntrada,
         this.combustible,
         this.kilometros,
@@ -35,6 +37,7 @@ class Reparacion {
     String toRawJson() => json.encode(toJson());
 
     factory Reparacion.fromJson(Map<String, dynamic> json) => Reparacion(
+        id:json["_id"],
         fecEntrada: json["fecEntrada"] == null ? null : DateTime.parse(json["fecEntrada"]),
         combustible: json["combustible"],
         kilometros: json["kilometros"],
@@ -48,6 +51,7 @@ class Reparacion {
     );
 
     Map<String, dynamic> toJson() => {
+        "_id": id,
        "fecEntrada": fecEntrada?.toIso8601String(),
         "combustible": combustible,
         "kilometros": kilometros,

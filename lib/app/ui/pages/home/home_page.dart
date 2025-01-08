@@ -61,19 +61,31 @@ class HomePage extends GetView<HomeController> {
                         color: Color.fromRGBO(2, 136, 209, 1.0),
                     ),
                     //titleAlignment: ListTileTitleAlignment.threeLine,
-                    title: Row(children: [
+                    title: 
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(children: [
                         Text(controller.reparaciones[index].vehiculo!.marca!),
                         SizedBox(width: 5),
                         Text(controller.reparaciones[index].vehiculo!.modelo!),
                         SizedBox(width: 5),
                         Text(controller.reparaciones[index].vehiculo!.matricula!),
                       ],
-                    ),
+                    )),
+                    
                     subtitle: Text('${controller.reparaciones[index].fecEntrada}'),
                     onTap: () => Get.toNamed(Routes.pageReparacionesDetail,
                         arguments: {
                           'reparacion': controller.reparaciones[index]
                         }),
+                        trailing: IconButton(
+                    icon: Icon(Icons.add_card_outlined, size: 25, color: const Color.fromARGB(255, 172, 172, 172)),
+                    onPressed: () {
+                      Get.toNamed(Routes.formTrabajos, arguments: {
+                        'idReparacion': controller.reparaciones[index].id!
+                      });
+                    },
+                  ),
                   ),
                 );
               } else {

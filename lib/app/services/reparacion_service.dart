@@ -21,4 +21,12 @@ class ReparacionService extends GetxService {
     _reparacion = await reparacionRepository.saveReparacion(reparacion);
     return Future.value();
   }
+
+  Future<void> saveTrabajo(String idReparacion, String descripcionTrabajo) async {
+    return reparacionRepository.saveTrabajo(idReparacion, descripcionTrabajo);
+  }
+
+  Future<List<Trabajo>> getTrabajos(String idReparacion) async {
+    return reparacionRepository.getTrabajos(idReparacion);
+  }
 }

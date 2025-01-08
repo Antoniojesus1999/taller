@@ -3,34 +3,39 @@ import 'package:flutter/material.dart';
 class TextFormFieldCustom extends StatelessWidget {
   final TextEditingController controller;
   final String hintText;
-  final bool obscureText;
+  final bool? obscureText;
   final FormFieldValidator<String>? validator;
   final TextInputType? keyboardTypeEmail;
   final String? label;
   final Icon? suffixIcon;
   final bool? focus;
+  final int? maxLines;
 
   const TextFormFieldCustom({
     super.key,
     required this.controller,
     required this.hintText,
-    required this.obscureText,
+    this.obscureText,
     this.validator,
     this.keyboardTypeEmail,
     this.label,
-    this.suffixIcon, this.focus,
+    this.suffixIcon,
+    this.focus,
+    this.maxLines
   });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
         controller: controller,
-        obscureText: obscureText,
+        obscureText: obscureText ?? false,
         validator: validator,
+
         autofocus:focus == null ? false:true,
         keyboardType: keyboardTypeEmail != null
             ? TextInputType.emailAddress
             : TextInputType.text,
+        maxLines: obscureText == true ? 1 : maxLines, 
         decoration: InputDecoration(
           enabledBorder: const OutlineInputBorder(
             borderSide: BorderSide(color: Colors.white),
