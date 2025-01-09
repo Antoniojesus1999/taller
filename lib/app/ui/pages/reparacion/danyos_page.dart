@@ -64,7 +64,8 @@ class ImageWithMarkers extends StatelessWidget {
                           BtnLoad(
                             onTap: () => controller.setDataDanyos(),
                             btnController: controller.btnCntlDanyos,
-                            title: 'Continuar'
+                            title: 'Continuar',
+                            width: Get.mediaQuery.size.width * 0.9,
                           ),
                         ],
                       )

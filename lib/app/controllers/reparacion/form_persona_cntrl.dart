@@ -91,12 +91,11 @@ class FormPersonaCntrl extends GetxController {
   /// Metodo decisor para saber si ir a la pantalla formVehicle o a la pantalla selectVehicle
   Future handleViewFormVehicleOrSelectVehicle(String idCliente) async{
     List<Vehiculo> listaVehiculo = await vehiculoService.getAllVehiculosByCliente(idCliente);
-  if (listaVehiculo.isEmpty || listaVehiculo.length == 1) {
-    await Get.toNamed(Routes.formVehicle, arguments:  {'from': 'fromPerson','listaVehiculo': listaVehiculo});
-  } else {
-    await Get.toNamed(Routes.selectVehicle, arguments: {'listaVehiculo': listaVehiculo});
-  }
-
+    if (listaVehiculo.isEmpty || listaVehiculo.length == 1) {
+      await Get.toNamed(Routes.formVehicle, arguments:  {'from': 'fromPerson','listaVehiculo': listaVehiculo});
+    } else {
+      await Get.toNamed(Routes.selectVehicle, arguments: {'listaVehiculo': listaVehiculo});
+    }
   }
   
 }

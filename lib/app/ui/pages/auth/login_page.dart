@@ -93,6 +93,7 @@ class LoginPage extends StatelessWidget {
                     onTap: loginCtl.signUserIn,
                     title: "Login",
                     btnController: loginCtl.btnLoginCtrl,
+                    width: Get.mediaQuery.size.width * 0.9,
                   ),
 
                   SizedBox(height: Get.mediaQuery.size.height * 0.02),

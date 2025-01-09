@@ -7,23 +7,25 @@ class BtnLoad extends StatelessWidget {
   final Function()? onTap;
   final RoundedLoadingButtonController btnController;
   final String title;
+  final double width;
 
   const BtnLoad({
     super.key,
     required this.onTap,
     required this.btnController,
     required this.title,
+    required this.width,
   });
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: RoundedLoadingButton(
-        width: Get.mediaQuery.size.width * 0.9,
+        width: width,
         controller: btnController,
         onPressed: onTap,
         color: Colors.black, // Color de fondo negro
-        borderRadius: 8, // Radio de borde
+        borderRadius: 8,// Radio de borde
         child: Text(
           title,
           style: const TextStyle(

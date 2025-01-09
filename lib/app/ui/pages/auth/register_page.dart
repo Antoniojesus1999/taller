@@ -91,6 +91,7 @@ class RegisterPage extends StatelessWidget {
                             registerCtl.handleRegister();
                           },
                           title: "Register",
+                          width: Get.mediaQuery.size.width * 0.9,
                         ),
 
                         SizedBox(height: Get.mediaQuery.size.height * 0.03),

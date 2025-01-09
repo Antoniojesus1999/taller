@@ -110,7 +110,9 @@ class FormPersonaPage extends StatelessWidget {
                       BtnLoad(
                           onTap: () => personaCntrl.setDataPersona(),
                           btnController: personaCntrl.btnCntlPerson,
-                          title: 'Continuar'),
+                          title: 'Continuar',
+                          width: Get.mediaQuery.size.width * 0.9,
+                      ),
                       SizedBox(height: Get.mediaQuery.size.height * 0.02),
                     ],
                   ),

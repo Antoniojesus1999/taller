@@ -1,3 +1,4 @@
+import 'package:taller/app/bindings/firma_bindiing.dart';
 import 'package:taller/app/bindings/form_vehiculo_binding.dart';
 import 'package:taller/app/bindings/home_binding.dart';
 import 'package:taller/app/bindings/form_persona_binding.dart';
@@ -10,6 +11,7 @@ import 'package:taller/app/ui/pages/auth/register_page.dart';
 import 'package:taller/app/ui/pages/auth/verify_page.dart';
 import 'package:taller/app/ui/pages/home/taller_page.dart';
 import 'package:get/get.dart';
+import 'package:taller/app/ui/pages/reparacion/firma_page.dart';
 import 'package:taller/app/ui/pages/home/trabajo_page.dart';
 import 'package:taller/app/ui/pages/reparacion/form_persona_page.dart';
 import 'package:taller/app/ui/pages/reparacion/select_vehiculo_page.dart';
@@ -68,6 +70,11 @@ abstract class AppPages {
         name: Routes.imageWithMarkers,
         page: () => ImageWithMarkers(),
         binding: ImageWithMarkersBinding(),
+        transition: Transition.fadeIn),
+    GetPage(
+        name: Routes.firmar,
+        page: () => FirmaPage(),
+        binding: FirmaBinding(),
         transition: Transition.fadeIn),
     GetPage(
         name: Routes.pageReparacionesDetail,

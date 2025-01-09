@@ -74,6 +74,7 @@ class ResetPasswordPage extends StatelessWidget {
                       ).show();
                     },
                     title: "Enviar email",
+                    width: Get.mediaQuery.size.width * 0.9,
                     btnController: btnController,
                   ),
 

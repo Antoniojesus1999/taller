@@ -144,7 +144,9 @@ class FormVehiculoPage extends StatelessWidget {
                             BtnLoad(
                                 onTap: () => formVehiculoCntrl.setDataVehicle(),
                                 btnController: formVehiculoCntrl.btnCntlVehicle,
-                                title: 'Continuar'),
+                                title: 'Continuar',
+                                width: Get.mediaQuery.size.width * 0.9,
+                            ),
                             SizedBox(height: Get.mediaQuery.size.height * 0.02),
                           ],
                         ),

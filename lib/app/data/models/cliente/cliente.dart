@@ -1,4 +1,7 @@
 import 'dart:convert';
+import 'dart:ui';
+
+import 'package:signature/signature.dart';
 
 class Cliente {
   String? id;
@@ -8,6 +11,8 @@ class Cliente {
   String? apellido2;
   String? telefono;
   String? email;
+  List<Point>? firma;
+  String? firmaBase64;
   DateTime? createdAt;
   DateTime? updatedAt;
 
@@ -19,6 +24,8 @@ class Cliente {
     this.apellido2,
     this.telefono,
     this.email,
+    this.firma,
+    this.firmaBase64,
     this.createdAt,
     this.updatedAt,
   });
@@ -36,6 +43,16 @@ class Cliente {
     apellido2: json["apellido2"],
     telefono: json["telefono"],
     email: json["email"],
+    firma: json["firma"] == null
+        ? null
+        : (json["firma"] as List)
+        .map((point) => Point(
+          Offset(double.parse(point["dx"] as String), double.parse(point["dy"] as String)),
+          (point["type"] == "tap")  ? PointType.tap : PointType.move,
+          double.parse(point["pressure"] as String),
+        ))
+        .toList(),
+    firmaBase64: json["firmaBase64"],
     createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
     updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
   );
@@ -48,6 +65,15 @@ class Cliente {
     "apellido2": apellido2,
     "telefono": telefono,
     "email": email,
+    "firma": firma
+        ?.map((point) => {
+          "dx": point.offset.dx,
+          "dy": point.offset.dy,
+          "pressure": point.pressure,
+          "type": point.type.name,
+        })
+        .toList(),
+    "firmaBase64": firmaBase64,
     "createdAt": createdAt?.toIso8601String(),
     "updatedAt": updatedAt?.toIso8601String(),
   };
