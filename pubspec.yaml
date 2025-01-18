@@ -42,7 +42,7 @@ dependencies:
   flutter_dotenv: ^5.2.1
   get: ^4.6.6
   google_sign_in: ^6.2.1
-  logger: ^2.4.0
+  permission_handler: ^11.3.1
   rounded_loading_button:
     git:
       url: https://github.com/scopendo/flutter_rounded_loading_button.git
@@ -50,8 +50,13 @@ dependencies:
   shared_preferences: ^2.3.2
   substring_highlight: ^1.0.33
   signature: ^5.5.0
+  share_plus: ^10.1.4
+  flutter_pdfview: ^1.4.0
+  flutter_file_dialog: ^3.0.2
+  path_provider: ^2.1.5
 
 dev_dependencies:
+  logger: ^2.4.0
   device_preview: ^1.2.0
   flutter_lints: ^5.0.0
   flutter_test:
