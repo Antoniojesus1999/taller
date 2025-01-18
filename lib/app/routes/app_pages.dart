@@ -2,6 +2,7 @@ import 'package:taller/app/bindings/firma_bindiing.dart';
 import 'package:taller/app/bindings/form_vehiculo_binding.dart';
 import 'package:taller/app/bindings/home_binding.dart';
 import 'package:taller/app/bindings/form_persona_binding.dart';
+import 'package:taller/app/bindings/pdf_binding.dart';
 import 'package:taller/app/bindings/register_binding.dart';
 import 'package:taller/app/bindings/reset_binding.dart';
 import 'package:taller/app/bindings/taller_binding.dart';
@@ -11,6 +12,7 @@ import 'package:taller/app/ui/pages/auth/register_page.dart';
 import 'package:taller/app/ui/pages/auth/verify_page.dart';
 import 'package:taller/app/ui/pages/home/taller_page.dart';
 import 'package:get/get.dart';
+import 'package:taller/app/ui/pages/pdf/pdf_page.dart';
 import 'package:taller/app/ui/pages/reparacion/firma_page.dart';
 import 'package:taller/app/ui/pages/home/trabajo_page.dart';
 import 'package:taller/app/ui/pages/reparacion/form_persona_page.dart';
@@ -96,5 +98,10 @@ abstract class AppPages {
         page: () => const TrabajoPage(),
         binding: TrabajoBinding(),
         transition: Transition.rightToLeftWithFade),
+         GetPage(
+        name: Routes.viewPdf,
+        page: () => const PdfPage(),
+        binding: PdfBinding(),
+        transition: Transition.cupertino),
   ];
 }

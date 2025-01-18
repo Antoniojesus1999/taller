@@ -8,6 +8,8 @@ class TrabajoController extends GetxController {
   final GlobalKey<FormState> formTrabajo = GlobalKey<FormState>();
   final descripcionTrabajo = TextEditingController();
   final btnCntlFormTrabajo = RoundedLoadingButtonController();
+  final btnCntlGenerarPdf = RoundedLoadingButtonController();
+
   late String idReparacion;
   RxList<String> trabajos = <String>[].obs;
 
@@ -17,8 +19,11 @@ class TrabajoController extends GetxController {
 
   void sendData() async {
     if (formTrabajo.currentState!.validate()) {
+      btnCntlFormTrabajo.success();
       await reparacionService.saveTrabajo(idReparacion, descripcionTrabajo.text);
       await getTrabajosByReparacion(idReparacion);
+      descripcionTrabajo.clear();
+      
     }
 
     btnCntlFormTrabajo.reset();
@@ -40,4 +45,5 @@ class TrabajoController extends GetxController {
     trabajos.assignAll(a.map((e) => e.descripcion).toList());
     
   }
+
 }

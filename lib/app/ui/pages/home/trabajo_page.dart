@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:taller/app/controllers/home/trabajo_controller.dart';
+import 'package:taller/app/routes/app_pages.dart';
 import 'package:taller/app/ui/global_widgets/btn_load.dart';
 import 'package:taller/app/ui/global_widgets/text_form_field_custom.dart';
 
@@ -12,9 +13,9 @@ class TrabajoPage extends GetView<TrabajoController> {
     final args = Get.arguments as Map<String, dynamic>?;
     controller.handleArguments(args);
     return Scaffold(
-      appBar: AppBar(title: Text('Trabajos')),
-      body: SafeArea(
-        child: Padding(
+        appBar: AppBar(title: Text('Trabajos')),
+        body: SafeArea(
+            child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -33,8 +34,8 @@ class TrabajoPage extends GetView<TrabajoController> {
                         title: Text(controller.trabajos[index]),
                         contentPadding: EdgeInsets.symmetric(horizontal: 8.0),
                         dense: true, // Ajusta el padding interno del ListTile
-                        visualDensity: VisualDensity(vertical: -4), // Ajustar la densidad visual
-
+                        visualDensity: VisualDensity(
+                            vertical: -4), // Ajustar la densidad visual
                       );
                     },
                   );
@@ -48,29 +49,44 @@ class TrabajoPage extends GetView<TrabajoController> {
                   children: [
                     Text(
                       'Descripción del Trabajo',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                     SizedBox(height: 8),
                     TextFormFieldCustom(
                       controller: controller.descripcionTrabajo,
                       hintText: 'Descripción del trabajo',
-                      validator: (value) => value!.isEmpty ? 'Campo requerido' : null,
+                      validator: (value) =>
+                          value!.isEmpty ? 'Campo requerido' : null,
                       maxLines: 5,
                       obscureText: false,
                     ),
                     SizedBox(height: 16),
-                    BtnLoad(
-                      onTap: () => controller.sendData(),
-                      btnController: controller.btnCntlFormTrabajo,
-                      title: 'Guardar',
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        BtnLoad(
+                          onTap: () => controller.sendData(),
+                          btnController: controller.btnCntlFormTrabajo,
+                          title: 'Guardar',
+                          width: 100,
+                        ),
+                        BtnLoad(
+                          onTap: () {
+                            controller.btnCntlGenerarPdf.success();
+                            Get.toNamed(Routes.viewPdf);
+                          },
+                          btnController: controller.btnCntlGenerarPdf,
+                          title: 'Generar PDF',
+                          width: 100,
+                        ),
+                      ],
                     ),
                   ],
                 ),
               ),
             ],
           ),
-        ),
-      ),
-    );
+        )));
   }
 }

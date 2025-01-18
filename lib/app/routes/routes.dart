@@ -15,4 +15,5 @@ abstract class Routes {
   static const imageWithMarkers = '/image-with-markers';
   static const pageReparacionesDetail = '/view-work';
   static const formTrabajos = '/form-trabajos';
+  static const viewPdf = '/view-pdf';
 }
