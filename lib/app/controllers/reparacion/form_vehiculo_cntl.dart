@@ -103,11 +103,12 @@ class FormVehiculoController extends GetxController {
 
   //* Precargamos los datos que ha seleccionado el usuario
   void setDataVehiculoInPage() {
-       registrationCntrl.text = vehiculoService.vehiculo.matricula!;
+      registrationCntrl.text = vehiculoService.vehiculo.matricula!;
       valueBrandEditing.value =
           TextEditingValue(text: vehiculoService.vehiculo.marca!);
       valueModelEditing.value =
           TextEditingValue(text: vehiculoService.vehiculo.modelo!);
+      selectedColor.value = vehiculoService.vehiculo.color!;
   }
 
   //* Se inicia en el onInit y hace una petición para obtener las marcas y los modelos
@@ -183,13 +184,13 @@ class FormVehiculoController extends GetxController {
     if (args != null && args.containsKey('from')) {
       if (args['from'] == 'fromSelectVehicle' ) {
         setDataVehiculoInPage();
-      }
-      if (args['from'] == 'fromPerson') {
+      } else if (args['from'] == 'fromPerson') {
         List<Vehiculo> listaVehiculo =args['listaVehiculo'];
-        vehiculoService.setVehiculo = listaVehiculo.first;
-      setDataVehiculoInPage();
+        if (listaVehiculo.isNotEmpty) {
+          vehiculoService.setVehiculo = listaVehiculo.first;
+          setDataVehiculoInPage();
+        }
       }
-      
     }
   }
   
