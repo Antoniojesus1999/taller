@@ -143,7 +143,7 @@ class FormVehiculoController extends GetxController {
       log.f('Error al cargar los colores');
       throw Exception('Error al cargar los colores');
     } finally {
-      if (vehiculoService.vehiculo != null) {
+      if (vehiculoService.vehiculo.id != null) {
         selectedColor.value = listColores.firstWhere((color) => color.nombre == vehiculoService.vehiculo.color.nombre);
       } else {
         selectedColor.value = listColores.first;

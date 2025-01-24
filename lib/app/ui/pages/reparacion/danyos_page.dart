@@ -21,7 +21,7 @@ class ImageWithMarkers extends StatelessWidget {
               child: Obx(
                 () => (MediaQuery.of(context).orientation == Orientation.portrait)
                     ? Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Stack(
                             children: [
@@ -60,13 +60,14 @@ class ImageWithMarkers extends StatelessWidget {
                               }),
                             ],
                           ),
-                          SizedBox(height: Get.mediaQuery.size.height * 0.02),
+                          SizedBox(height: Get.mediaQuery.size.height * 0.24),
                           BtnLoad(
                             onTap: () => controller.setDataDanyos(),
                             btnController: controller.btnCntlDanyos,
                             title: 'Continuar',
                             width: Get.mediaQuery.size.width * 0.9,
                           ),
+                          SizedBox(height: Get.mediaQuery.size.height * 0.02),
                         ],
                       )
                     : Row(
