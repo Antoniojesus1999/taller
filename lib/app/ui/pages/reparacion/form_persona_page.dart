@@ -1,3 +1,4 @@
+import 'package:taller/app/controllers/home/home_controller.dart';
 import 'package:taller/app/controllers/reparacion/form_persona_cntrl.dart';
 import 'package:taller/app/data/models/cliente/cliente.dart';
 import 'package:taller/app/ui/global_widgets/auto_complete_custom.dart';
@@ -14,10 +15,14 @@ class FormPersonaPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final FormPersonaCntrl personaCntrl = Get.find<FormPersonaCntrl>();
+    final homeCntrl = Get.find<HomeController>();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Datos de cliente'),
-        leading: BackButton(onPressed: Get.back),
+        leading: BackButton(onPressed: (){
+          homeCntrl.refreshData();
+          Get.back();
+        }),
       ),
       body: SafeArea(
         minimum: EdgeInsets.all(Get.mediaQuery.size.width * 0.05),
