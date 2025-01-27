@@ -20,30 +20,30 @@ class TrabajoController extends GetxController {
   void sendData() async {
     if (formTrabajo.currentState!.validate()) {
       btnCntlFormTrabajo.success();
-      await reparacionService.saveTrabajo(idReparacion, descripcionTrabajo.text);
+      await reparacionService.saveTrabajo(
+          idReparacion, descripcionTrabajo.text);
       await getTrabajosByReparacion(idReparacion);
       descripcionTrabajo.clear();
-      
     }
 
     btnCntlFormTrabajo.reset();
   }
 
-  void handleArguments(Map<String, dynamic>? args) {
+  void handleArguments(Map<String, dynamic>? args) async{
     if (args != null) {
       if (args['idReparacion'] != null) {
         idReparacion = args['idReparacion'];
-        getTrabajosByReparacion(idReparacion);
+        await getTrabajosByReparacion(idReparacion);
+      } else {
+        Get.snackbar('Error', 'No se ha podido cargar la reparación');
       }
     } else {
-      Get.snackbar('Error', 'No se ha podido cargar la reparación');
+      Get.snackbar('Error', 'No se ha podido cargar los argumentos');
     }
   }
 
   Future<void> getTrabajosByReparacion(String idReparacion) async {
-    List<Trabajo> a  = await reparacionService.getTrabajos(idReparacion);
+    List<Trabajo> a = await reparacionService.getTrabajos(idReparacion);
     trabajos.assignAll(a.map((e) => e.descripcion).toList());
-    
   }
-
 }

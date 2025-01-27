@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
+import 'package:taller/app/routes/app_pages.dart';
 import 'package:taller/app/services/reparacion_service.dart';
 import '../../data/models/reparacion/reparacion.dart';
 
@@ -54,10 +55,13 @@ class FormDanyosCntrl extends GetxController {
   }
 
   void setDataDanyos() async {
-    Reparacion reparacion = reparacionService.reparacion;
+    btnCntlDanyos.success();
+    Reparacion reparacion = reparacionService.implementar find reparación por id;
     reparacion.danyos?.addAll(markers);
-
-    reparacionService.saveReparacion(reparacion);
-
+    btnCntlDanyos.reset();
+    reparacion = await reparacionService.saveReparacion(reparacion);
+    Get.toNamed(Routes.formTrabajos, arguments: {'idReparacion': reparacion.id});
+    
+    
   }
 }

@@ -8,18 +8,19 @@ class ReparacionService extends GetxService {
 
   late Reparacion _reparacion = Reparacion();
 
-  get reparacion => _reparacion;
 
   ReparacionService({required this.reparacionRepository});
+
+  Reparacion get reparacion => _reparacion;
 
   Future<List<Reparacion>> getReparaciones(
       int page, int limit, String idTaller) async {
     return reparacionRepository.getReparaciones(page, limit, idTaller);
   }
 
-  Future<void> saveReparacion(Reparacion reparacion) async {
+  Future<Reparacion> saveReparacion(Reparacion reparacion) async {
     _reparacion = await reparacionRepository.saveReparacion(reparacion);
-    return Future.value();
+    return reparacion;
   }
 
   Future<void> saveTrabajo(String idReparacion, String descripcionTrabajo) async {
@@ -29,4 +30,6 @@ class ReparacionService extends GetxService {
   Future<List<Trabajo>> getTrabajos(String idReparacion) async {
     return reparacionRepository.getTrabajos(idReparacion);
   }
+
+  
 }
