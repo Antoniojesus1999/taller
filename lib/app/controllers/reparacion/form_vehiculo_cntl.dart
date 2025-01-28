@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
+import 'package:taller/app/utils/snack_bar.dart';
 
 import '../../data/models/reparacion/reparacion.dart';
 import '../../data/models/vehiculo/vehiculo.dart';
@@ -84,6 +85,8 @@ class FormVehiculoController extends GetxController {
       try {
         await vehiculoService.saveVehiculo(vehiculo);
       } catch (e) {
+        openSnackbar(Get.context, 'Error al guardar el vehiculo', Colors.red);
+      }finally{
         btnCntlVehicle.reset();
       }
 
@@ -92,7 +95,7 @@ class FormVehiculoController extends GetxController {
           cliente: clientService.cliente,
           vehiculo: vehiculoService.vehiculo);
 
-      reparacionService.saveReparacion(reparacion);
+      await reparacionService.saveReparacion(reparacion);
 
       log.i(
           'Cliente seteado en form vehicle ${clientService.cliente.toString()}');

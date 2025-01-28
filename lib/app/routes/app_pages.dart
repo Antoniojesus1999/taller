@@ -1,4 +1,4 @@
-import 'package:taller/app/bindings/firma_bindiing.dart';
+import 'package:taller/app/bindings/firma_binding.dart';
 import 'package:taller/app/bindings/form_vehiculo_binding.dart';
 import 'package:taller/app/bindings/home_binding.dart';
 import 'package:taller/app/bindings/form_persona_binding.dart';
@@ -18,7 +18,7 @@ import 'package:taller/app/ui/pages/home/trabajo_page.dart';
 import 'package:taller/app/ui/pages/reparacion/form_persona_page.dart';
 import 'package:taller/app/ui/pages/reparacion/select_vehiculo_page.dart';
 
-import '../bindings/form_danyos_bindiing.dart';
+import '../bindings/form_danyos_binding.dart';
 import '../bindings/login_binding.dart';
 import '../bindings/reparacion_detail_binding.dart';
 import '../bindings/select_vehiculo_binding.dart';

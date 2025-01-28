@@ -12,6 +12,8 @@ class ReparacionRepository extends GetConnect {
   final String _urlSaveReparacion = dotenv.env['URL_SAVE_REPARACION']!;
   final String _urlSaveTrabajo = dotenv.env['URL_SAVE_TRABAJO']!;
   final String _urlGetTrabajo = dotenv.env['URL_GET_TRABAJOS']!;
+    final String _urlGetRepracionById = dotenv.env['URL_FIND_REPARACION_BY_ID']!;
+
   final Logger log = Logger();
 
   Future<List<Reparacion>> getReparaciones(
@@ -86,6 +88,24 @@ class ReparacionRepository extends GetConnect {
     } catch (e) {
       log.e('Error al obtener los trabajos -> $e');
       return Future.error('Error al obtener los trabajos -> $e');
+    }
+  }
+  Future<Reparacion> getReparacionById(String id) async {
+    String url = _urlHost + _urlGetRepracionById.replaceFirst('{id}', id);
+    log.i('Se va a obtener la reparacion url $url');
+    try {
+      final response = await get(url);
+      if (response.statusCode != 200) {
+        log.e('Error al obtener la reparacion -> ${response.statusText}');
+        return Future.error(
+            'Error al obtener la reparacion codigo -> ${response.statusCode}');
+      } else {
+        log.i('Reparacion obtenida correctamente ${response.body}');
+        return Reparacion.fromJson(response.body);
+      }
+    } catch (e) {
+      log.e('Error al obtener la reparacion -> $e');
+      return Future.error('Error al obtener la reparacion -> $e');
     }
   }
 }

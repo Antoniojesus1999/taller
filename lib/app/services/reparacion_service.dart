@@ -31,5 +31,9 @@ class ReparacionService extends GetxService {
     return reparacionRepository.getTrabajos(idReparacion);
   }
 
+  Future<Reparacion>getReparacionById(String id) async{
+    return reparacionRepository.getReparacionById(id);
+  }
+
   
 }

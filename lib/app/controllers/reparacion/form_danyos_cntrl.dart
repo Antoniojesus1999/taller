@@ -56,7 +56,7 @@ class FormDanyosCntrl extends GetxController {
 
   void setDataDanyos() async {
     btnCntlDanyos.success();
-    Reparacion reparacion = reparacionService.implementar find reparación por id;
+    Reparacion reparacion = await reparacionService.getReparacionById(reparacionService.reparacion.id!);
     reparacion.danyos?.addAll(markers);
     btnCntlDanyos.reset();
     reparacion = await reparacionService.saveReparacion(reparacion);
