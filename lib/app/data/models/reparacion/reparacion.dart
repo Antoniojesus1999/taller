@@ -6,17 +6,17 @@ import 'package:taller/app/data/models/taller/taller.dart';
 import '../vehiculo/vehiculo.dart';
 
 class Reparacion {
-    final String? id;
-    final DateTime? fecEntrada;
-    final String? combustible;
-    final String? kilometros;
-    final String? seguro;
-    final String? chasis;
-    final List<Trabajo>? trabajos;
-    final List<Danyo>? danyos;
-    final Taller? taller;
-    final Cliente? cliente;
-    final Vehiculo? vehiculo;
+    String? id;
+    DateTime? fecEntrada;
+    String? combustible;
+    String? kilometros;
+    String? seguro;
+    String? chasis;
+    List<Trabajo>? trabajos;
+    List<Danyo>? danyos;
+    Taller? taller;
+    Cliente? cliente;
+    Vehiculo? vehiculo;
 
     Reparacion({
         this.id,

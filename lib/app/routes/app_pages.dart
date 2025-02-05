@@ -15,10 +15,12 @@ import 'package:get/get.dart';
 import 'package:taller/app/ui/pages/pdf/pdf_page.dart';
 import 'package:taller/app/ui/pages/reparacion/firma_page.dart';
 import 'package:taller/app/ui/pages/home/trabajo_page.dart';
+import 'package:taller/app/ui/pages/reparacion/form_datos_adicionales_page.dart';
 import 'package:taller/app/ui/pages/reparacion/form_persona_page.dart';
 import 'package:taller/app/ui/pages/reparacion/select_vehiculo_page.dart';
 
 import '../bindings/form_danyos_binding.dart';
+import '../bindings/form_datos_adicionales_bindiing.dart';
 import '../bindings/login_binding.dart';
 import '../bindings/reparacion_detail_binding.dart';
 import '../bindings/select_vehiculo_binding.dart';
@@ -67,6 +69,11 @@ abstract class AppPages {
         name: Routes.formVehicle,
         page: () => const FormVehiculoPage(),
         binding: FormVehiculoBinding(),
+        transition: Transition.leftToRightWithFade),
+    GetPage(
+        name: Routes.formDatosAdicionales,
+        page: () => const FormDatosAdicionalesPage(),
+        binding: FormDatosAdicionalesBinding(),
         transition: Transition.leftToRightWithFade),
     GetPage(
         name: Routes.imageWithMarkers,

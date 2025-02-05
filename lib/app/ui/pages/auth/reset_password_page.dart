@@ -54,7 +54,7 @@ class ResetPasswordPage extends StatelessWidget {
                       controller: emailCntrl,
                       hintText: 'Email',
                       obscureText: false,
-                      keyboardTypeEmail: TextInputType.emailAddress,
+                      keyboardType: TextInputType.emailAddress,
                     ),
                   ),
 

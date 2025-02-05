@@ -61,7 +61,7 @@ class RegisterPage extends StatelessWidget {
                           controller: registerCtl.usernameController,
                           hintText: 'Email',
                           obscureText: false,
-                          keyboardTypeEmail: TextInputType.emailAddress,
+                          keyboardType: TextInputType.emailAddress,
                           validator: Helpers.validateEmail,
                         ),
 

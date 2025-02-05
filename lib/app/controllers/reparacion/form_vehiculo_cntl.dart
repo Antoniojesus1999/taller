@@ -99,7 +99,7 @@ class FormVehiculoController extends GetxController {
 
       log.i(
           'Cliente seteado en form vehicle ${clientService.cliente.toString()}');
-      Get.toNamed(Routes.imageWithMarkers);
+      Get.toNamed(Routes.formDatosAdicionales);
       btnCntlVehicle.reset();
     }
   }

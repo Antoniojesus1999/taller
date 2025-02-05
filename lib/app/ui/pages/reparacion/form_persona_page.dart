@@ -104,7 +104,7 @@ class FormPersonaPage extends StatelessWidget {
                           controller: personaCntrl.emailCntrl,
                           //validator: (value) => Helpers.validateEmail(value),
                           hintText: 'Email',
-                          keyboardTypeEmail: TextInputType.emailAddress,
+                          keyboardType: TextInputType.emailAddress,
                           obscureText: false),
                       SizedBox(height: Get.mediaQuery.size.height * 0.02),
                       TextFormFieldCustom(

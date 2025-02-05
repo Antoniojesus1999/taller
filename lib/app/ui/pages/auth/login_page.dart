@@ -55,7 +55,7 @@ class LoginPage extends StatelessWidget {
                     hintText: 'Email',
                     obscureText: false,
                     validator: (value) => Helpers.validateEmail(value),
-                    keyboardTypeEmail: TextInputType.emailAddress,
+                    keyboardType: TextInputType.emailAddress,
                   ),
 
                   SizedBox(height: Get.mediaQuery.size.height * 0.02),
