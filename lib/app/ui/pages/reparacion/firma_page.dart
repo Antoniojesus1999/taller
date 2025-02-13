@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../global_widgets/btn_load.dart';
-import '../../global_widgets/text_form_field_custom.dart';
 
 class FirmaPage extends StatelessWidget {
   final FirmaCntrl controller = Get.find<FirmaCntrl>();

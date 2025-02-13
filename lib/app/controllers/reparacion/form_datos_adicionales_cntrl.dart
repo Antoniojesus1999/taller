@@ -1,16 +1,11 @@
-import 'package:taller/app/data/models/cliente/cliente.dart';
 
 import 'package:taller/app/routes/app_pages.dart';
-import 'package:taller/app/services/cliente_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
-import 'package:taller/app/services/vehiculo_service.dart';
-import 'package:taller/app/utils/snack_bar.dart';
 
 import '../../data/models/reparacion/reparacion.dart';
-import '../../data/models/vehiculo/vehiculo.dart';
 import '../../services/reparacion_service.dart';
 
 class FormDatosAdicionalesCntrl extends GetxController {

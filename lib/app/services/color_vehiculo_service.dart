@@ -1,8 +1,6 @@
-import 'package:taller/app/repositories/marcas_repository.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import '../data/models/coches/color_vehiculo.dart';
-import '../data/models/coches/marca.dart';
 import '../repositories/color_vehiculo_repository.dart';
 
 class ColorVehiculoService extends GetxService {
