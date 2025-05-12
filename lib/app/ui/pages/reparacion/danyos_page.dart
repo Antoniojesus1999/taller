@@ -50,11 +50,11 @@ class ImageWithMarkers extends StatelessWidget {
                               ),
                               ...controller.markers.map((marker) {
                                 return Positioned(
-                                  left: (marker.positionX - 10.5) * (controller.imageWidth.value / marker.origWidth),
-                                  top: (marker.positionY - 10.5) * (controller.imageHeight.value / marker.origHeight),
+                                  left: (marker.positionX - 15) * (controller.imageWidth.value / marker.origWidth),
+                                  top: (marker.positionY - 15) * (controller.imageHeight.value / marker.origHeight),
                                   child: GestureDetector(
                                     onTapUp: (TapUpDetails details) => controller.removeMarker(marker),
-                                    child: Image.asset('assets/images/danyo_v3.png', width: 30, height: 30,),
+                                    child: Image.asset('assets/images/danyo_v3.png', width: 30, height: 30,)
                                   ),
                                 );
                               }),
@@ -80,6 +80,12 @@ class ImageWithMarkers extends StatelessWidget {
                           'assets/images/car_plane_v2.png',
                           fit: BoxFit.contain,
                           key: controller.imageKey,
+                          frameBuilder: (BuildContext context, Widget child, int? frame, bool wasSynchronouslyLoaded) {
+                            if (wasSynchronouslyLoaded || frame != null) {
+                              controller.onImageLoaded();
+                            }
+                            return child;
+                          },
                         ),
                         GestureDetector(
                           onTapUp: (TapUpDetails details) {
@@ -95,8 +101,8 @@ class ImageWithMarkers extends StatelessWidget {
                         ),
                         ...controller.markers.map((marker) {
                           return Positioned(
-                            left: (marker.positionX - 10.5) * (controller.imageWidth.value / marker.origWidth),
-                            top: (marker.positionY - 10.5) * (controller.imageHeight.value / marker.origHeight),
+                            left: (marker.positionX - 15) * (controller.imageWidth.value / marker.origWidth),
+                            top: (marker.positionY - 15) * (controller.imageHeight.value / marker.origHeight),
                             child: GestureDetector(
                               onTapUp: (TapUpDetails details) => controller.removeMarker(marker),
                               child: Image.asset('assets/images/danyo_v3.png', width: 30, height: 30,),
