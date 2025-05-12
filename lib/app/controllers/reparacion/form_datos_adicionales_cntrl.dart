@@ -16,15 +16,10 @@ class FormDatosAdicionalesCntrl extends GetxController {
       RoundedLoadingButtonController();
   //formulario persona
   final GlobalKey<FormState> formKeyDatosAdecionales = GlobalKey<FormState>();
-  final chasisCntrl = TextEditingController();
-  final combustibleCntrl = TextEditingController();
   final kilometrosCntrl = TextEditingController();
-  final seguroCntrl = TextEditingController();
-  
-  RxString chasis      = ''.obs;
+
   RxString selectedCombustible = ''.obs;
   RxString kilometros  = ''.obs;
-  RxString seguro      = ''.obs;
 
   final listCombustible = ['GASOLINA', 'DIESEL', 'HIBRIDO', 'ELECTRICO', 'HIDROGENO'];
   //*Servicios inyectados
@@ -39,18 +34,10 @@ class FormDatosAdicionalesCntrl extends GetxController {
     super.onInit();
     Reparacion? reparacion = reparacionService.reparacion;
 
-    if (reparacion != null && reparacion.chasis != null) {
-      chasis.value = reparacion.chasis!;
-    }
-
     if (reparacion != null && reparacion.combustible != null) {
       selectedCombustible.value = reparacion.combustible!;
     } else {
       selectedCombustible.value = listCombustible.first;
-    }
-
-    if (reparacion != null && reparacion.seguro != null) {
-      seguro.value = reparacion.seguro!;
     }
 
     if (reparacion != null && reparacion.kilometros != null) {
@@ -68,10 +55,8 @@ class FormDatosAdicionalesCntrl extends GetxController {
       log.i("Formulario Datos Adicionales correcto");
 
       Reparacion reparacion  = reparacionService.reparacion;
-      reparacion.chasis      = chasisCntrl.text;
-      reparacion.combustible = combustibleCntrl.text;
       reparacion.kilometros  = kilometrosCntrl.text;
-      reparacion.seguro      = seguroCntrl.text;
+      reparacion.combustible = selectedCombustible.value;
 
       try {
         await reparacionService.saveReparacion(reparacion);
