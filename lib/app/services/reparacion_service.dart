@@ -7,15 +7,18 @@ class ReparacionService extends GetxService {
   final ReparacionRepository reparacionRepository;
 
   late Reparacion _reparacion = Reparacion();
+  late List<Reparacion> _reparaciones = [];
 
 
   ReparacionService({required this.reparacionRepository});
 
   Reparacion get reparacion => _reparacion;
+  List<Reparacion> get reparaciones => _reparaciones;
 
   Future<List<Reparacion>> getReparaciones(
       int page, int limit, String idTaller) async {
-    return reparacionRepository.getReparaciones(page, limit, idTaller);
+    _reparaciones = await reparacionRepository.getReparaciones(page, limit, idTaller);
+    return _reparaciones;
   }
 
   Future<Reparacion> saveReparacion(Reparacion reparacion) async {
