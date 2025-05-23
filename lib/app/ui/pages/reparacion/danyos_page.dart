@@ -23,42 +23,45 @@ class ImageWithMarkers extends StatelessWidget {
                     ? Column(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          Stack(
-                            children: [
-                              Image.asset(
-                                'assets/images/car_plane_v2.png',
-                                fit: BoxFit.contain,
-                                key: controller.imageKey,
-                                frameBuilder: (BuildContext context, Widget child, int? frame, bool wasSynchronouslyLoaded) {
-                                                if (wasSynchronouslyLoaded || frame != null) {
-                                                  controller.onImageLoaded();
-                                                }
-                                                return child;
-                                              },
-                              ),
-                              GestureDetector(
-                                onTapUp: (TapUpDetails details) {
-                                  final RenderBox? imageBox = controller.imageKey.currentContext?.findRenderObject() as RenderBox?;
-                                  final tapPosition = imageBox?.globalToLocal(details.globalPosition);
-                                  controller.addMarker(tapPosition!);
-                                },
-                                child: Container(
-                                  width: controller.imageWidth.value,
-                                  height: controller.imageHeight.value,
-                                  color: Colors.transparent,
+                          RepaintBoundary(
+                            key: controller.screenshotImage,
+                            child: Stack(
+                              children: [
+                                Image.asset(
+                                  'assets/images/car_plane_v2.png',
+                                  fit: BoxFit.contain,
+                                  key: controller.imageKey,
+                                  frameBuilder: (BuildContext context, Widget child, int? frame, bool wasSynchronouslyLoaded) {
+                                                  if (wasSynchronouslyLoaded || frame != null) {
+                                                    controller.onImageLoaded();
+                                                  }
+                                                  return child;
+                                                },
                                 ),
-                              ),
-                              ...controller.markers.map((marker) {
-                                return Positioned(
-                                  left: (marker.positionX - 15) * (controller.imageWidth.value / marker.origWidth),
-                                  top: (marker.positionY - 15) * (controller.imageHeight.value / marker.origHeight),
-                                  child: GestureDetector(
-                                    onTapUp: (TapUpDetails details) => controller.removeMarker(marker),
-                                    child: Image.asset('assets/images/danyo_v3.png', width: 30, height: 30,)
+                                GestureDetector(
+                                  onTapUp: (TapUpDetails details) {
+                                    final RenderBox? imageBox = controller.imageKey.currentContext?.findRenderObject() as RenderBox?;
+                                    final tapPosition = imageBox?.globalToLocal(details.globalPosition);
+                                    controller.addMarker(tapPosition!);
+                                  },
+                                  child: Container(
+                                    width: controller.imageWidth.value,
+                                    height: controller.imageHeight.value,
+                                    color: Colors.transparent,
                                   ),
-                                );
-                              }),
-                            ],
+                                ),
+                                ...controller.markers.map((marker) {
+                                  return Positioned(
+                                    left: (marker.positionX - 15) * (controller.imageWidth.value / marker.origWidth),
+                                    top: (marker.positionY - 15) * (controller.imageHeight.value / marker.origHeight),
+                                    child: GestureDetector(
+                                      onTapUp: (TapUpDetails details) => controller.removeMarker(marker),
+                                      child: Image.asset('assets/images/danyo_v3.png', width: 30, height: 30,)
+                                    ),
+                                  );
+                                }),
+                              ],
+                            ),
                           ),
                           SizedBox(height: Get.mediaQuery.size.height * 0.24),
                           BtnLoad(

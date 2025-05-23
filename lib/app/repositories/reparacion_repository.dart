@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
@@ -12,7 +15,7 @@ class ReparacionRepository extends GetConnect {
   final String _urlSaveReparacion = dotenv.env['URL_SAVE_REPARACION']!;
   final String _urlSaveTrabajo = dotenv.env['URL_SAVE_TRABAJO']!;
   final String _urlGetTrabajo = dotenv.env['URL_GET_TRABAJOS']!;
-    final String _urlGetRepracionById = dotenv.env['URL_FIND_REPARACION_BY_ID']!;
+  final String _urlGetRepracionById = dotenv.env['URL_FIND_REPARACION_BY_ID']!;
 
   final Logger log = Logger();
 
@@ -33,8 +36,7 @@ class ReparacionRepository extends GetConnect {
     return paginationResponse.docs!;
   }
 
-  Future<Reparacion> saveReparacion(
-      Reparacion reparacion) async {
+  Future<Reparacion> saveReparacion(Reparacion reparacion) async {
     String url = _urlHost + _urlSaveReparacion;
     log.i(
         'Se va a guardar la reparacion url $url body -> ${reparacion.toRawJson()}');
@@ -56,9 +58,11 @@ class ReparacionRepository extends GetConnect {
 
   Future<void> saveTrabajo(
       String idReparacion, String descripcionTrabajo) async {
-    String url = _urlHost + _urlSaveTrabajo.replaceFirst('{idReparacion}', idReparacion);
-    log.i(
-        'Se va a guardar la descripción del trabajo  url $url body -> ${[descripcionTrabajo]}');
+    String url =
+        _urlHost + _urlSaveTrabajo.replaceFirst('{idReparacion}', idReparacion);
+    log.i('Se va a guardar la descripción del trabajo  url $url body -> ${[
+      descripcionTrabajo
+    ]}');
     try {
       final response = await put(url, [descripcionTrabajo]);
       if (response.statusCode != 200) {
@@ -73,7 +77,8 @@ class ReparacionRepository extends GetConnect {
   }
 
   Future<List<Trabajo>> getTrabajos(String idReparacion) async {
-    String url = _urlHost + _urlGetTrabajo.replaceFirst('{idReparacion}', idReparacion);
+    String url =
+        _urlHost + _urlGetTrabajo.replaceFirst('{idReparacion}', idReparacion);
     log.i('Se va a obtener los trabajos de la reparacion url $url');
     try {
       final response = await get(url);
@@ -83,13 +88,15 @@ class ReparacionRepository extends GetConnect {
             'Error al obtener los trabajos codigo -> ${response.statusCode}');
       } else {
         log.i('Trabajos obtenidos correctamente ${response.body}');
-        return List<Trabajo>.from(response.body.map((x) => Trabajo.fromJson(x)));
+        return List<Trabajo>.from(
+            response.body.map((x) => Trabajo.fromJson(x)));
       }
     } catch (e) {
       log.e('Error al obtener los trabajos -> $e');
       return Future.error('Error al obtener los trabajos -> $e');
     }
   }
+
   Future<Reparacion> getReparacionById(String id) async {
     String url = _urlHost + _urlGetRepracionById.replaceFirst('{id}', id);
     log.i('Se va a obtener la reparacion url $url');
@@ -107,5 +114,14 @@ class ReparacionRepository extends GetConnect {
       log.e('Error al obtener la reparacion -> $e');
       return Future.error('Error al obtener la reparacion -> $e');
     }
+  }
+
+  Future<void> sendImageToServer(String filename, Uint8List base64Image) async {
+   final form = FormData({
+      'image': MultipartFile(base64Image, filename: filename),
+    });
+
+    final response = await post("$_urlHost/dano-vehiculo-image", form);
+    log.i('Se ha guardado la imgen respuesta -> $response');
   }
 }
