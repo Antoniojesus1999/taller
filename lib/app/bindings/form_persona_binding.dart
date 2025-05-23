@@ -18,7 +18,7 @@ class FormPersonaBinding extends Bindings {
     Get.lazyPut<FormPersonaCntrl>(() => FormPersonaCntrl(
         clientService: Get.find(), vehiculoService: Get.find()));
     Get.lazyPut<SelectVehiculoCntrl>(() => SelectVehiculoCntrl(
-      clientService: Get.find(),vehiculoService: Get.find(),
+      clientService: Get.find(),vehiculoService: Get.find(), reparacionService: Get.find(),
         ));
   }
 }

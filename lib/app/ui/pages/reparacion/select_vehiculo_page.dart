@@ -1,7 +1,6 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:taller/app/routes/app_pages.dart';
 
 import '../../../controllers/reparacion/select_vehiculo_cntl.dart';
 
@@ -74,8 +73,6 @@ class SelectVehiculoPage extends GetView<SelectVehiculoCntrl> {
                     ),
                     onTap: () {
                       controller.setVehiculo(controller.listVehiculo[index]);
-                      Get.toNamed(Routes.formVehicle,
-                          arguments: {'from': 'fromSelectVehicle'});
                     }));
           },
         ),

@@ -95,12 +95,25 @@ class FormVehiculoController extends GetxController {
           cliente: clientService.cliente,
           vehiculo: vehiculoService.vehiculo);
 
-      await reparacionService.saveReparacion(reparacion);
+      bool encontrado = false;
+      List<Reparacion> reparaciones = reparacionService.reparaciones;
+      for (Reparacion rep in reparaciones) {
+        if (rep.vehiculo?.matricula == reparacion.vehiculo?.matricula) {
+          encontrado = true;
+          break;
+        }
+      }
 
-      log.i(
-          'Cliente seteado en form vehicle ${clientService.cliente.toString()}');
-      Get.toNamed(Routes.formDatosAdicionales);
-      btnCntlVehicle.reset();
+      if (encontrado) {
+        openSnackbar(Get.context, 'Ya existe una reparación en curso para este vehiculo', Colors.red);
+      } else {
+        await reparacionService.saveReparacion(reparacion);
+
+        log.i(
+            'Cliente seteado en form vehicle ${clientService.cliente.toString()}');
+        Get.toNamed(Routes.formDatosAdicionales);
+        btnCntlVehicle.reset();
+      }
     }
   }
 

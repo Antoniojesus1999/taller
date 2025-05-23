@@ -1,21 +1,14 @@
-import 'dart:typed_data';
-import 'dart:ui' as ui;
-
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
-
 import 'package:taller/app/routes/app_pages.dart';
 import 'package:taller/app/services/reparacion_service.dart';
-
 import '../../data/models/reparacion/reparacion.dart';
 
 class FormDanyosCntrl extends GetxController {
   final Logger log = Logger();
   final GlobalKey imageKey = GlobalKey();
-  final GlobalKey screenshotImage = GlobalKey();
   final RoundedLoadingButtonController btnCntlDanyos =
       RoundedLoadingButtonController();
 
@@ -55,8 +48,7 @@ class FormDanyosCntrl extends GetxController {
 
   Future<void> onImageLoaded() async {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final RenderBox imageBox =
-          imageKey.currentContext!.findRenderObject() as RenderBox;
+      final RenderBox imageBox = imageKey.currentContext!.findRenderObject() as RenderBox;
       imageWidth.value = imageBox.size.width;
       imageHeight.value = imageBox.size.height;
     });
@@ -64,9 +56,8 @@ class FormDanyosCntrl extends GetxController {
 
   void setDataDanyos() async {
     btnCntlDanyos.success();
-    Reparacion reparacion = await reparacionService
-        .getReparacionById(reparacionService.reparacion.id!);
-    reparacion.danyos?.addAll(markers);
+      Reparacion reparacion = await reparacionService.getReparacionById(reparacionService.reparacion.id!);
+        reparacion.danyos?.assignAll(markers);
     btnCntlDanyos.reset();
     reparacion = await reparacionService.saveReparacion(reparacion);
     await captureAndSend();
