@@ -75,6 +75,7 @@ class TrabajoPage extends GetView<TrabajoController> {
                           onTap: () {
                             controller.btnCntlGenerarPdf.success();
                             Get.toNamed(Routes.viewPdf);
+                            controller.btnCntlGenerarPdf.reset();
                           },
                           btnController: controller.btnCntlGenerarPdf,
                           title: 'Generar PDF',

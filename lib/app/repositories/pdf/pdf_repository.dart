@@ -5,14 +5,13 @@ import 'package:http/http.dart' as http;
 
 class PdfRepository extends GetConnect {
   final String _baseUrl = dotenv.env['URL_HOST_BACK']!;
-  final String _getPdf = dotenv.env['URL_GET_PDF']!;
+  final String _createPdfAndView = dotenv.env['URL_CREATE_PDF']!;
 
   PdfRepository() {// Cambia por tu URL base
   }
 
-  Future<Uint8List> fetchPdfBytes(String nombreFichero) async {
-    nombreFichero = 'output.pdf';
-    String url = '$_baseUrl$_getPdf'.replaceFirst('{nombreFichero}', nombreFichero);
+  Future<Uint8List> fetchPdfBytes(String idReparacion) async {
+    String url = '$_baseUrl$_createPdfAndView'.replaceFirst('{IdReparacion}', idReparacion);
     
     final response = await http.get(
       Uri.parse(url),

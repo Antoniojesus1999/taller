@@ -44,6 +44,6 @@ class ReparacionService extends GetxService {
 
   Future<void> sendImage(Uint8List base64Image) async {
     log.i('se va a enviar la imagen NIF -> ${reparacion.cliente!.nif}');
-    reparacionRepository.sendImageToServer(reparacion.id!, base64Image);
+    reparacionRepository.sendImageToServer('${reparacion.id!}.png', base64Image);
   }
 }

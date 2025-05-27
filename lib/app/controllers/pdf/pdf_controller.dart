@@ -8,6 +8,7 @@ import 'package:share_plus/share_plus.dart';
 import 'dart:io';
 
 import 'package:taller/app/repositories/pdf/pdf_repository.dart';
+import 'package:taller/app/services/reparacion_service.dart';
 
 class PdfController extends GetxController {
   final PdfRepository pdfRepository;
@@ -16,6 +17,7 @@ class PdfController extends GetxController {
   RxBool isLoading = false.obs;
   final btnCntrlDescargarPdf = RoundedLoadingButtonController();
   final btnCntrlEnviarPdf = RoundedLoadingButtonController();
+  final reparacionService = Get.find<ReparacionService>();
 
   PdfController({required this.pdfRepository});
 
@@ -28,7 +30,7 @@ class PdfController extends GetxController {
   Future<void> loadPdf() async {
     try {
       isLoading(true);
-      pdfBytes.value = await pdfRepository.fetchPdfBytes('nombreFichero');
+      pdfBytes.value = await pdfRepository.fetchPdfBytes(reparacionService.reparacion.id!);
     } catch (e) {
       errorMessage.value = e.toString();
     } finally {
