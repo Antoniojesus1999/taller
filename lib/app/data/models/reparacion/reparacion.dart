@@ -8,7 +8,6 @@ import '../vehiculo/vehiculo.dart';
 class Reparacion {
     String? id;
     DateTime? fecEntrada;
-    String? combustible;
     String? kilometros;
     String? seguro;
     String? chasis;
@@ -21,7 +20,6 @@ class Reparacion {
     Reparacion({
         this.id,
         this.fecEntrada,
-        this.combustible,
         this.kilometros,
         this.seguro,
         this.chasis,
@@ -39,7 +37,6 @@ class Reparacion {
     factory Reparacion.fromJson(Map<String, dynamic> json) => Reparacion(
         id:json["id"],
         fecEntrada: json["fecEntrada"] == null ? null : DateTime.parse(json["fecEntrada"]),
-        combustible: json["combustible"],
         kilometros: json["kilometros"],
         seguro: json["seguro"],
         chasis: json["chasis"],
@@ -53,7 +50,6 @@ class Reparacion {
     Map<String, dynamic> toJson() => {
         "id": id,
         "fecEntrada": fecEntrada?.toIso8601String(),
-        "combustible": combustible,
         "kilometros": kilometros,
         "seguro": seguro,
         "chasis": chasis,
@@ -66,7 +62,7 @@ class Reparacion {
   
     @override
     String toString() {
-      return 'Reparacion{id: $id, $fecEntrada: $fecEntrada, combustible: $combustible, kilometros: $kilometros, seguro: $seguro, chasis: $chasis, trabajos: $trabajos, danyos: $danyos, taller: $taller, cliente: $cliente, vehiculo: $vehiculo}';
+      return 'Reparacion{id: $id, $fecEntrada: $fecEntrada, kilometros: $kilometros, seguro: $seguro, chasis: $chasis, trabajos: $trabajos, danyos: $danyos, taller: $taller, cliente: $cliente, vehiculo: $vehiculo}';
    }
 }
 

@@ -140,7 +140,48 @@ class FormVehiculoPage extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            SizedBox(height: Get.mediaQuery.size.height * 0.12),
+                            SizedBox(height: Get.mediaQuery.size.height * 0.04),
+                            Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(6)
+                                ),
+                                width: Get.mediaQuery.size.width * 0.9,
+                                height: Get.mediaQuery.size.height * 0.06,
+                                margin: EdgeInsets.only(left: 5),
+                                child: DropdownButton<String>(
+                                    menuWidth: Get.mediaQuery.size.width * 0.95,
+                                    value: formVehiculoCntrl
+                                        .selectedCombustible.value,
+                                    hint: const Text('Combustible'),
+                                    icon: const Icon(Icons.arrow_drop_down),
+                                    onChanged: (String? combustible) =>
+                                      formVehiculoCntrl
+                                          .handleCombustibleSelection(combustible!),
+                                    items: formVehiculoCntrl.listCombustible
+                                          .map<DropdownMenuItem<String>>((combustible) {
+                                      return DropdownMenuItem<String>(
+                                        value: combustible,
+                                        child: SizedBox(
+                                          width: Get.mediaQuery.size.width * 0.8,
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              Icon(Icons.local_gas_station,
+                                                color: const Color.fromARGB(136, 0, 0, 0)),
+                                              SizedBox(width: 10),
+                                              Text(
+                                                combustible,
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    }).toList(),
+                                  ),
+                              ),
+                            SizedBox(height: Get.mediaQuery.size.height * 0.03),
+
                             BtnLoad(
                                 onTap: () => formVehiculoCntrl.setDataVehicle(),
                                 btnController: formVehiculoCntrl.btnCntlVehicle,

@@ -20,8 +20,7 @@ class FormDatosAdicionalesPage extends StatelessWidget {
       ),
       body: SafeArea(
           minimum: EdgeInsets.all(Get.mediaQuery.size.width * 0.05),
-          child: Obx(
-            () => Form(
+          child: Form(
               key: datosAdicionalesCntrl.formKeyDatosAdecionales,
               child: SizedBox(
                 width: Get.mediaQuery.size.width * 0.9,
@@ -33,46 +32,7 @@ class FormDatosAdicionalesPage extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             SizedBox(height: Get.mediaQuery.size.height * 0.02),
-                            Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(6)
-                                ),
-                                width: Get.mediaQuery.size.width * 0.9,
-                                height: Get.mediaQuery.size.height * 0.06,
-                                margin: EdgeInsets.only(left: 5),
-                                child: DropdownButton<String>(
-                                    menuWidth: Get.mediaQuery.size.width * 0.95,
-                                    value: datosAdicionalesCntrl
-                                        .selectedCombustible.value,
-                                    hint: const Text('Combustible'),
-                                    icon: const Icon(Icons.arrow_drop_down),
-                                    onChanged: (String? combustible) =>
-                                      datosAdicionalesCntrl
-                                          .handleCombustibleSelection(combustible!),
-                                    items: datosAdicionalesCntrl.listCombustible
-                                          .map<DropdownMenuItem<String>>((combustible) {
-                                      return DropdownMenuItem<String>(
-                                        value: combustible,
-                                        child: SizedBox(
-                                          width: Get.mediaQuery.size.width * 0.8,
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            children: [
-                                              Icon(Icons.local_gas_station,
-                                                color: const Color.fromARGB(136, 0, 0, 0)),
-                                              SizedBox(width: 10),
-                                              Text(
-                                                combustible,
-                                                textAlign: TextAlign.center,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      );
-                                    }).toList(),
-                                  ),
-                              ),
-                            SizedBox(height: Get.mediaQuery.size.height * 0.02),
+                            
                             TextFormFieldCustom(
                                 controller: datosAdicionalesCntrl.kilometrosCntrl,
                                 hintText: 'Kms',
@@ -93,7 +53,7 @@ class FormDatosAdicionalesPage extends StatelessWidget {
                 ]),
               ),
             ),
-          )),
+          ),
     );
   }
 }

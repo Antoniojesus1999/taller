@@ -24,6 +24,9 @@ class FormVehiculoController extends GetxController {
   RxList<ColorVehiculo> listColores = <ColorVehiculo>[].obs;
   Rx<ColorVehiculo> selectedColor = ColorVehiculo().obs;
 
+  RxString selectedCombustible = ''.obs;
+  final listCombustible = ['GASOLINA', 'DIESEL', 'HIBRIDO', 'ELECTRICO', 'HIDROGENO'];
+
   final Logger log = Logger();
 
   //*Se usa en el formulario de vehiculo
@@ -65,6 +68,22 @@ class FormVehiculoController extends GetxController {
     super.onInit();
     changeBrandAndModel();
     cargarColor();
+
+     onInitCombustible();
+
+  
+  }
+
+  void onInitCombustible() {
+    Reparacion? reparacion = reparacionService.reparacion;
+
+    if (reparacion.vehiculo != null && reparacion.vehiculo!.combustible != null) {
+      log.i('Combustible seleccionado: ${reparacion.vehiculo!.combustible}');
+      // Si el vehiculo ya tiene un combustible asignado, lo seleccionamos
+     selectedCombustible.value = reparacion.vehiculo!.combustible!;
+    } else {
+     selectedCombustible.value = listCombustible.first;
+    }
   }
 
   //* Se ejecuta cuando se envíe el formulario
@@ -80,6 +99,7 @@ class FormVehiculoController extends GetxController {
         matricula: registrationCntrl.text,
         marca: valueBrandEditing.value.text,
         modelo: valueModelEditing.value.text,
+        combustible: selectedCombustible.value,
         color: selectedColor.value,
       );
       try {
@@ -212,6 +232,10 @@ class FormVehiculoController extends GetxController {
         }
       }
     }
+  }
+
+  void handleCombustibleSelection(String combustible) {
+    selectedCombustible.value = combustible;
   }
   
   
