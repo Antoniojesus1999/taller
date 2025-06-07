@@ -68,19 +68,16 @@ class FormVehiculoController extends GetxController {
     super.onInit();
     changeBrandAndModel();
     cargarColor();
-
-     onInitCombustible();
-
-  
+    onInitCombustible();
   }
 
   void onInitCombustible() {
-    Reparacion? reparacion = reparacionService.reparacion;
+    Vehiculo? vehiculo = vehiculoService.vehiculo;
 
-    if (reparacion.vehiculo != null && reparacion.vehiculo!.combustible != null) {
-      log.i('Combustible seleccionado: ${reparacion.vehiculo!.combustible}');
+    if (vehiculo != null && vehiculo.combustible != null) {
+      log.i('Combustible seleccionado: ${vehiculo.combustible}');
       // Si el vehiculo ya tiene un combustible asignado, lo seleccionamos
-     selectedCombustible.value = reparacion.vehiculo!.combustible!;
+     selectedCombustible.value = vehiculo.combustible!;
     } else {
      selectedCombustible.value = listCombustible.first;
     }
