@@ -10,6 +10,8 @@ import 'dart:io';
 import 'package:taller/app/repositories/pdf/pdf_repository.dart';
 import 'package:taller/app/services/reparacion_service.dart';
 
+import '../../routes/app_pages.dart';
+
 class PdfController extends GetxController {
   final PdfRepository pdfRepository;
   RxString errorMessage = ''.obs;
@@ -17,6 +19,7 @@ class PdfController extends GetxController {
   RxBool isLoading = false.obs;
   final btnCntrlDescargarPdf = RoundedLoadingButtonController();
   final btnCntrlEnviarPdf = RoundedLoadingButtonController();
+  final btnCntrlFirmarPdf = RoundedLoadingButtonController();
   final reparacionService = Get.find<ReparacionService>();
 
   PdfController({required this.pdfRepository});
@@ -104,6 +107,18 @@ class PdfController extends GetxController {
     } catch (e) {
       Get.snackbar('Error', 'Ocurrió un error al guardar el archivo: $e');
     }
+  }
+
+  void firmarPdf() async {
+    final result = await Get.toNamed(Routes.firmar);
+
+    if (result == true) {
+      loadPdf();
+    }
+
+    btnCntrlDescargarPdf.reset();
+    btnCntrlFirmarPdf.reset();
+    btnCntrlEnviarPdf.reset();
   }
 
   void sharePdf() async {

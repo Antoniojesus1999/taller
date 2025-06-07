@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:get/get.dart';
 import 'package:taller/app/controllers/pdf/pdf_controller.dart';
@@ -10,6 +11,7 @@ class PdfPage extends GetView<PdfController> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Generar PDF'),
@@ -47,17 +49,24 @@ class PdfPage extends GetView<PdfController> {
               children: [
                 BtnLoad(
                   btnController: controller.btnCntrlDescargarPdf,
-                  onTap: () => controller.downloadPdf()
-                  ,
-                  title: 'Descargar',
+                  onTap: () => controller.downloadPdf(),
+                  title: '',
                   width: 100,
+                  icon: const Icon(Icons.download, color: Colors.white, size: 30,)
+                ),
+                BtnLoad(
+                  btnController: controller.btnCntrlFirmarPdf,
+                  onTap: () => controller.firmarPdf(),
+                  title: '',
+                  width: 100,
+                  icon: const Icon(Icons.draw_outlined, color: Colors.white, size: 30,),
                 ),
                 BtnLoad(
                   btnController: controller.btnCntrlEnviarPdf,
-                  onTap: () => controller.sharePdf()
-                  ,
-                  title: 'Enviar',
+                  onTap: () => controller.sharePdf(),
+                  title: '',
                   width: 100,
+                  icon: const Icon(Icons.share_outlined, color: Colors.white, size: 30,)
                 ),
               ],
             ),

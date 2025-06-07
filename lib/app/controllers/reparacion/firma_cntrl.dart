@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
@@ -9,6 +10,7 @@ import 'package:signature/signature.dart';
 import 'package:taller/app/utils/snack_bar.dart';
 
 import '../../data/models/cliente/cliente.dart';
+import '../../routes/app_pages.dart';
 import '../../services/cliente_service.dart';
 
 class FirmaCntrl extends GetxController {
@@ -41,6 +43,10 @@ class FirmaCntrl extends GetxController {
   @override
   void onClose() {
     super.onClose();
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     signatureController.dispose();
   }
 
@@ -69,7 +75,9 @@ class FirmaCntrl extends GetxController {
         throw Exception("No se pudo guardar la firma");
       }
 
-      clienteService.saveCliente(cliente);
+      await clienteService.saveCliente(cliente);
+
+      Get.back(result: true);
 
     } else {
       openSnackbar(Get.context, 'Debe dibujar una firma', Colors.red);
