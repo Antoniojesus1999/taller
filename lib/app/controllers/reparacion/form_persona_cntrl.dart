@@ -6,10 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
+import 'package:taller/app/services/micro_service.dart';
 import 'package:taller/app/services/vehiculo_service.dart';
 import 'package:taller/app/utils/snack_bar.dart';
 
 import '../../data/models/vehiculo/vehiculo.dart';
+import '../../ui/global_widgets/opciones_lista_cliente.dart';
 
 class FormPersonaCntrl extends GetxController {
   final Logger log = Logger();
@@ -26,6 +28,21 @@ class FormPersonaCntrl extends GetxController {
   final tlfCntrl = TextEditingController();
   final emailCntrl = TextEditingController();
 
+  final FocusNode nameFocus = FocusNode();
+  final FocusNode surName1Focus = FocusNode();
+  final FocusNode surName2Focus = FocusNode();
+  final FocusNode emailFocus = FocusNode();
+  final FocusNode tlfFocus = FocusNode();
+
+//  late stt.SpeechToText speech;
+  RxBool microActivo = RxBool(false);
+  RxBool isListening = RxBool(false);
+//  late String? localeId;
+  RxString textoRx = "".obs;
+
+  late final LayerLink nifFieldLink = LayerLink();
+  OverlayEntry? overlaySugerenciasPorVoz;
+
   RxBool nifSeleccionado = RxBool(false);
 
   //*Seteamos el cliente que necesita la siguiente pagina para factura
@@ -34,12 +51,25 @@ class FormPersonaCntrl extends GetxController {
   //*Servicios inyectados
   final ClientService clientService;
   final VehiculoService vehiculoService;
+  final MicroService microService;
 
-  FormPersonaCntrl({required this.clientService,required this.vehiculoService});
+  FormPersonaCntrl({required this.clientService,required this.vehiculoService, required this.microService});
 
   @override
-  void onInit() {
+  Future<void> onInit() async {
     super.onInit();
+    await microService.initialize();
+    nifCntrl.addListener(() {
+      textoRx.value = nifCntrl.text;
+      if (nifCntrl.text.isEmpty) {
+        nifSeleccionado.value = false;
+        nameCntrl.clear();
+        surName1Cntrl.clear();
+        surName2Cntrl.clear();
+        emailCntrl.clear();
+        tlfCntrl.clear();
+      }
+    });
     clientService.getAllClientsByTaller();
   }
 
@@ -97,5 +127,128 @@ class FormPersonaCntrl extends GetxController {
       await Get.toNamed(Routes.selectVehicle, arguments: {'listaVehiculo': listaVehiculo});
     }
   }
-  
+
+  Iterable<String> obtenerOpcionesNif(TextEditingValue textEditingValue) {
+    final texto = textEditingValue.text;
+
+    if (texto.isEmpty) {
+      nifSeleccionado.value = false;
+      nifCntrl.text = "";
+      nameCntrl.clear();
+      surName1Cntrl.clear();
+      surName2Cntrl.clear();
+      emailCntrl.clear();
+      tlfCntrl.clear();
+      return const Iterable<String>.empty();
+    }
+
+    final coincidencias = clientService.clientes
+        .where((cliente) => cliente.nif?.startsWith(texto) ?? false)
+        .map((cliente) => cliente.nif!)
+        .toList();
+
+    if (coincidencias.isEmpty) {
+      nifCntrl.text = texto;
+    }
+
+    return coincidencias;
+  }
+
+  Future<void> startListening(BuildContext context) async {
+    microActivo.value = true;
+    isListening.value = true;
+
+    final focus = controladorDelCampoConFocus;
+    final TextEditingController controlador;
+
+    if (focus == "name") {
+      controlador = nameCntrl;
+    } else  {
+      controlador = nifCntrl;
+    }
+
+    await microService.startListening(
+      context: context,
+      focus: focus,
+      controlador: controlador,
+      textoRx: textoRx,
+      obtenerOpcionesNif: obtenerOpcionesNif,
+      mostrarSugerenciasPorVoz: mostrarSugerenciasPorVoz,
+      ocultarSugerenciasPorVoz: ocultarSugerenciasPorVoz,
+    );
+
+    isListening.value = false;
+  }
+
+  void stopListening() {
+    microService.stopListening();
+    microActivo.value = false;
+    isListening.value = false;
+  }
+
+  String get controladorDelCampoConFocus {
+    if (nameFocus.hasFocus) return "name";
+    if (surName1Focus.hasFocus) return "surName1";
+    if (surName2Focus.hasFocus) return "surName2";
+    if (emailFocus.hasFocus) return "email";
+    if (tlfFocus.hasFocus) return "tlf";
+    return "nif"; // Ningún campo tiene focus
+  }
+
+  void mostrarSugerenciasPorVoz(BuildContext context, List<String> sugerencias) {
+    ocultarSugerenciasPorVoz(); // Cierra si ya hay uno
+
+    overlaySugerenciasPorVoz = OverlayEntry(
+      builder: (context) {
+        return Positioned(
+          child: CompositedTransformFollower(
+            link: nifFieldLink,
+            showWhenUnlinked: false,
+            offset: const Offset(0, 56), // Ajusta si la altura del input es distinta
+            child: OpcionesListaCliente(
+              opciones: sugerencias,
+              onSelected: (opcion) {
+                final cliente = clientService.clientes.firstWhere((c) => c.nif == opcion);
+                nifSeleccionado.value = true;
+                this.cliente = cliente;
+
+                nifCntrl.text = cliente.nif ?? '';
+                nameCntrl.text = cliente.nombre ?? '';
+                surName1Cntrl.text = cliente.apellido1 ?? '';
+                surName2Cntrl.text = cliente.apellido2 ?? '';
+                tlfCntrl.text = cliente.telefono ?? '';
+                emailCntrl.text = cliente.email ?? '';
+
+                ocultarSugerenciasPorVoz();
+              },
+            ),
+          ),
+        );
+      },
+    );
+
+    Overlay.of(context, rootOverlay: true).insert(overlaySugerenciasPorVoz!);
+  }
+
+  void ocultarSugerenciasPorVoz() {
+    overlaySugerenciasPorVoz?.remove();
+    overlaySugerenciasPorVoz = null;
+  }
+
+  void onClienteSeleccionado(String nifCliente) {
+    final cliente = clientService.clientes
+        .singleWhere((cliente) => cliente.nif == nifCliente);
+
+    nifSeleccionado = RxBool(true);
+    this.cliente = cliente;
+
+    nifCntrl.text = cliente.nif ?? '';
+    nameCntrl.text = cliente.nombre ?? '';
+    surName1Cntrl.text = cliente.apellido1 ?? '';
+    surName2Cntrl.text = cliente.apellido2 ?? '';
+    tlfCntrl.text = cliente.telefono ?? '';
+    emailCntrl.text = cliente.email ?? '';
+  }
+
+
 }

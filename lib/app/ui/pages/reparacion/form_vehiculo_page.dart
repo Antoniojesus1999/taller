@@ -52,42 +52,19 @@ class FormVehiculoPage extends StatelessWidget {
                                 obscureText: false),
                             SizedBox(height: Get.mediaQuery.size.height * 0.02),
                             AutoCompleteCustom(
-                              initValue: formVehiculoCntrl.valueBrandEditing.value,
-                              controller: formVehiculoCntrl.brandCntrl,
-                              onSelected: formVehiculoCntrl.handleBrandSelection,
-                              displayStringForOption: (String brand) => brand,
-                              optionsBuilder: (TextEditingValue textEditingValue) {
-                                if (textEditingValue.text.isEmpty) {
-                                  return const Iterable<String>.empty();
-                                }
-                                return formVehiculoCntrl.listNameBrand.where((String option) {
-                                  final text = textEditingValue.text.toLowerCase();
-                                  final optionLower = option.toLowerCase();
-                                  // Compara si la opción comienza con el texto ingresado
-                                  return optionLower.startsWith(text);
-                                });
-                              },
-
                               title: 'Marcas',
+                              initValue: formVehiculoCntrl.valueBrandEditing.value,
+                              optionsBuilder: formVehiculoCntrl.obtenerOpcionesMarca,
+                              displayStringForOption: (String brand) {return brand;},
+                              onSelected: formVehiculoCntrl.handleBrandSelection,
                             ),
                             SizedBox(height: Get.mediaQuery.size.height * 0.02),
                             AutoCompleteCustom(
-                              initValue: formVehiculoCntrl.valueModelEditing.value,
-                              controller: formVehiculoCntrl.modelCntrl,
-                              onSelected: formVehiculoCntrl.handleModelSelection,
-                              optionsBuilder: (TextEditingValue textEditingValue) {
-                                if (textEditingValue.text.isEmpty) {
-                                  return const Iterable<String>.empty();
-                                }
-                                return formVehiculoCntrl.modelNameList.where((String option) {
-                                  final text = textEditingValue.text.toLowerCase();
-                                  final optionLower = option.toLowerCase();
-                                  // Compara si la opción comienza con el texto ingresado
-                                  return optionLower.startsWith(text);
-                                });
-                              },
-                              displayStringForOption: (String option) => option,
                               title: 'Modelo',
+                              initValue: formVehiculoCntrl.valueModelEditing.value,
+                              optionsBuilder: formVehiculoCntrl.obtenerOpcionesModelo,
+                              displayStringForOption: (String model) {return model;},
+                              onSelected: formVehiculoCntrl.handleModelSelection,
                             ),
                             SizedBox(height: Get.mediaQuery.size.height * 0.02),
                             SizedBox(
