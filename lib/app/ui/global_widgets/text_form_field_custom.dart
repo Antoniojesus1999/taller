@@ -11,6 +11,7 @@ class TextFormFieldCustom extends StatelessWidget {
   final Icon? suffixIcon;
   final bool? focus;
   final int? maxLines;
+  final FocusNode? focusNode;
 
   const TextFormFieldCustom({
     super.key,
@@ -22,7 +23,8 @@ class TextFormFieldCustom extends StatelessWidget {
     this.label,
     this.suffixIcon,
     this.focus,
-    this.maxLines
+    this.maxLines,
+    this.focusNode,
   });
 
   @override
@@ -31,7 +33,7 @@ class TextFormFieldCustom extends StatelessWidget {
         controller: controller,
         obscureText: obscureText ?? false,
         validator: validator,
-
+        focusNode: focusNode,
         autofocus:focus == null ? false:true,
         keyboardType: keyboardType ?? TextInputType.text,
         maxLines: obscureText == true ? 1 : maxLines,

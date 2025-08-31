@@ -6,6 +6,7 @@ import 'package:taller/app/ui/global_widgets/btn_load.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../global_widgets/text_field_custom.dart';
 import '../../global_widgets/text_form_field_custom.dart';
 
 // ignore: must_be_immutable
@@ -38,80 +39,69 @@ class FormPersonaPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       SizedBox(height: Get.mediaQuery.size.height * 0.02),
-                      AutoCompleteCustom(
-                        controller: personaCntrl.nifCntrl,
-                        title: 'NIF',
-                        optionsBuilder: (TextEditingValue textEditingValue) {
-                            if (textEditingValue.text.isEmpty) {
-                                personaCntrl.nifSeleccionado = RxBool(false);
-                                personaCntrl.nifCntrl.text = "";
-                                personaCntrl.nameCntrl.clear();
-                                personaCntrl.surName1Cntrl.clear();
-                                personaCntrl.surName2Cntrl.clear();
-                                personaCntrl.emailCntrl.clear();
-                                personaCntrl.tlfCntrl.clear();
-
-                                return const Iterable<String>.empty();
-                            }
-
-                            if (personaCntrl.clientService.clientes
-                                .where((cliente) => cliente.nif!.startsWith(textEditingValue.text))
-                                .map((cliente) => cliente.nif!).isEmpty) {
-                                personaCntrl.nifCntrl.text = textEditingValue.text;
-                            }
-
-                            return personaCntrl.clientService.clientes
-                                  .where((cliente) => cliente.nif!.startsWith(textEditingValue.text))
-                                  .map((cliente) => cliente.nif!);
-                        },
-                        displayStringForOption: (String option) {
-                          return option;
-                        },
-                        onSelected: (String nifCliente) {
-                          Cliente cliente = personaCntrl.clientService.clientes.singleWhere((cliente) => cliente.nif == nifCliente);
-                          personaCntrl.nifSeleccionado = RxBool(true);
-                          personaCntrl.cliente = cliente;
-                          personaCntrl.nifCntrl.text = cliente.nif!;
-                          personaCntrl.nameCntrl.text = cliente.nombre!;
-                          personaCntrl.nameCntrl.text = cliente.nombre!;
-                          personaCntrl.surName1Cntrl.text = cliente.apellido1!;
-                          personaCntrl.surName2Cntrl.text = cliente.apellido2!;
-                          personaCntrl.tlfCntrl.text = cliente.telefono!;
-                          personaCntrl.emailCntrl.text = cliente.email!;
-                        },
-                        onSubmitted: (String value) {
-                          personaCntrl.nifCntrl.text = value;
-                        },
-
-                      ),
+                      Obx(() {
+                        if (personaCntrl.microActivo.value) {
+                          return CompositedTransformTarget(
+                            link:personaCntrl.nifFieldLink,
+                            child: TextFieldCustom(
+                              controller: personaCntrl.nifCntrl,
+                              title: 'NIF',
+                            ),
+                          );
+                        } else {
+                          return AutoCompleteCustom(
+                            title: 'NIF',
+                            optionsBuilder: personaCntrl.obtenerOpcionesNif,
+                            displayStringForOption: (String option) {return option;},
+                            onSelected: personaCntrl.onClienteSeleccionado,
+                            onSubmitted: (String value) {personaCntrl.nifCntrl.text = value;},
+                          );
+                        }
+                      }),
                       SizedBox(height: Get.mediaQuery.size.height * 0.02),
                       TextFormFieldCustom(
                           controller: personaCntrl.nameCntrl,
                           hintText: 'Nombre',
-                          obscureText: false),
+                          obscureText: false,
+                          focusNode: personaCntrl.nameFocus),
                       SizedBox(height: Get.mediaQuery.size.height * 0.02),
                       TextFormFieldCustom(
                           controller: personaCntrl.surName1Cntrl,
                           hintText: 'Primer apellido',
-                          obscureText: false),
+                          obscureText: false,
+                          focusNode: personaCntrl.surName1Focus),
                       SizedBox(height: Get.mediaQuery.size.height * 0.02),
                       TextFormFieldCustom(
                           controller: personaCntrl.surName2Cntrl,
                           hintText: 'Segundo apellido',
-                          obscureText: false),
+                          obscureText: false,
+                          focusNode: personaCntrl.surName2Focus),
                       SizedBox(height: Get.mediaQuery.size.height * 0.02),
                       TextFormFieldCustom(
                           controller: personaCntrl.emailCntrl,
                           //validator: (value) => Helpers.validateEmail(value),
                           hintText: 'Email',
                           keyboardType: TextInputType.emailAddress,
-                          obscureText: false),
+                          obscureText: false,
+                          focusNode: personaCntrl.emailFocus),
                       SizedBox(height: Get.mediaQuery.size.height * 0.02),
                       TextFormFieldCustom(
                           controller: personaCntrl.tlfCntrl,
                           hintText: 'Telefono',
-                          obscureText: false),
-                      SizedBox(height: Get.mediaQuery.size.height * 0.12),
+                          obscureText: false,
+                          focusNode: personaCntrl.tlfFocus),
+                      SizedBox(height: Get.mediaQuery.size.height * 0.05),
+                      Obx(() => IconButton(
+                        iconSize: 40,
+                        icon: Icon(
+                          personaCntrl.isListening.value ? Icons.mic : Icons.mic_none,
+                          color: personaCntrl.isListening.value ? Colors.red : Colors.black54,
+                        ),
+                        onPressed: () {
+                          personaCntrl.startListening(context);
+                        },
+                      )),
+                      SizedBox(height: Get.mediaQuery.size.height * 0.06),
                       BtnLoad(
                           onTap: () => personaCntrl.setDataPersona(),
                           btnController: personaCntrl.btnCntlPerson,

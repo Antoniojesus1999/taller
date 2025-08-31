@@ -234,6 +234,28 @@ class FormVehiculoController extends GetxController {
   void handleCombustibleSelection(String combustible) {
     selectedCombustible.value = combustible;
   }
-  
-  
+
+  Iterable<String> obtenerOpcionesMarca(TextEditingValue textEditingValue) {
+    if (textEditingValue.text.isEmpty) {
+      return const Iterable<String>.empty();
+    }
+
+    return listNameBrand.where((String option) {
+      final text = textEditingValue.text.toLowerCase();
+      final optionLower = option.toLowerCase();
+      return optionLower.startsWith(text);
+    });
+  }
+
+  Iterable<String> obtenerOpcionesModelo(TextEditingValue textEditingValue) {
+    if (textEditingValue.text.isEmpty) {
+      return const Iterable<String>.empty();
+    }
+
+    return modelNameList.where((String option) {
+      final text = textEditingValue.text.toLowerCase();
+      final optionLower = option.toLowerCase();
+      return optionLower.startsWith(text);
+    });
+  }
 }

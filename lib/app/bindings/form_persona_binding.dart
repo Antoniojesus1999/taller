@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:taller/app/controllers/reparacion/form_persona_cntrl.dart';
 import 'package:taller/app/controllers/reparacion/select_vehiculo_cntl.dart';
 import 'package:taller/app/services/cliente_service.dart';
+import 'package:taller/app/services/micro_service.dart';
 
 import '../repositories/client_repository.dart';
 import '../repositories/vehiculo_repository.dart';
@@ -15,8 +16,9 @@ class FormPersonaBinding extends Bindings {
 
     Get.lazyPut<ClientRepository>(() => ClientRepository());
     Get.lazyPut(() => ClientService(clientRepository: Get.find()));
+    Get.lazyPut(() => MicroService());
     Get.lazyPut<FormPersonaCntrl>(() => FormPersonaCntrl(
-        clientService: Get.find(), vehiculoService: Get.find()));
+        clientService: Get.find(), vehiculoService: Get.find(), microService: Get.find()));
     Get.lazyPut<SelectVehiculoCntrl>(() => SelectVehiculoCntrl(
       clientService: Get.find(),vehiculoService: Get.find(), reparacionService: Get.find(),
         ));
