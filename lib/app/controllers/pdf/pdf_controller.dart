@@ -67,6 +67,7 @@ class PdfController extends GetxController {
         }
       } catch (e) {
         Get.snackbar('Error', 'Ocurrió un error al guardar el archivo: $e');
+        btnCntrlDescargarPdf.reset();
       }
     } else if (value == 'send') {
       final pdf = pdfBytes.value;
@@ -96,7 +97,7 @@ class PdfController extends GetxController {
           btnCntrlDescargarPdf.success();
           Get.snackbar('Éxito', 'PDF guardado en $finalPath');
           Future.delayed(Duration(seconds: 1), () {
-            btnCntrlDescargarPdf.reset();
+            //btnCntrlDescargarPdf.reset();
           });
         }
       } else {
@@ -106,6 +107,8 @@ class PdfController extends GetxController {
       }
     } catch (e) {
       Get.snackbar('Error', 'Ocurrió un error al guardar el archivo: $e');
+    }finally {
+      btnCntrlDescargarPdf.reset();
     }
   }
 

@@ -34,6 +34,7 @@ class TrabajoController extends GetxController {
       if (args['idReparacion'] != null) {
         idReparacion = args['idReparacion'];
         await getTrabajosByReparacion(idReparacion);
+        reparacionService.reparacion.id ??= idReparacion;
       } else {
         Get.snackbar('Error', 'No se ha podido cargar la reparación');
       }
