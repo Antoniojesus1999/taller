@@ -63,6 +63,7 @@ class RegisterPage extends StatelessWidget {
                           obscureText: false,
                           keyboardType: TextInputType.emailAddress,
                           validator: Helpers.validateEmail,
+                          tieneFocusRx: RxBool(false),
                         ),
 
                         SizedBox(height: Get.mediaQuery.size.height * 0.03),
@@ -73,6 +74,7 @@ class RegisterPage extends StatelessWidget {
                           hintText: 'Contraseña',
                           obscureText: true,
                           validator: Helpers.validateEmptyPass,
+                          tieneFocusRx: RxBool(false),
                         ),
                         SizedBox(height: Get.mediaQuery.size.height * 0.03),
                         // password textfield
@@ -82,6 +84,7 @@ class RegisterPage extends StatelessWidget {
                           validator: (value) => Helpers.validatePasword(
                               value, registerCtl.passwordController.text),
                           obscureText: true,
+                          tieneFocusRx: RxBool(false),
                         ),
                         SizedBox(height: Get.mediaQuery.size.height * 0.03),
 

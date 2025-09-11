@@ -1,3 +1,4 @@
+import 'package:diacritic/diacritic.dart';
 import 'package:taller/app/data/models/cliente/cliente.dart';
 
 import 'package:taller/app/routes/app_pages.dart';
@@ -12,6 +13,7 @@ import 'package:taller/app/utils/snack_bar.dart';
 
 import '../../data/models/vehiculo/vehiculo.dart';
 import '../../ui/global_widgets/opciones_lista_cliente.dart';
+import '../../utils/string_utiles.dart';
 
 class FormPersonaCntrl extends GetxController {
   final Logger log = Logger();
@@ -28,22 +30,38 @@ class FormPersonaCntrl extends GetxController {
   final tlfCntrl = TextEditingController();
   final emailCntrl = TextEditingController();
 
+  final FocusNode nifFocus = FocusNode();
   final FocusNode nameFocus = FocusNode();
   final FocusNode surName1Focus = FocusNode();
   final FocusNode surName2Focus = FocusNode();
   final FocusNode emailFocus = FocusNode();
   final FocusNode tlfFocus = FocusNode();
 
-//  late stt.SpeechToText speech;
+  RxBool tieneFocusNif = RxBool(false);
+  RxBool tieneFocusName = RxBool(false);
+  RxBool tieneFocusSurname1 = RxBool(false);
+  RxBool tieneFocusSurname2 = RxBool(false);
+  RxBool tieneFocusEmail = RxBool(false);
+  RxBool tieneFocusTlf = RxBool(false);
+
   RxBool microActivo = RxBool(false);
   RxBool isListening = RxBool(false);
-//  late String? localeId;
-  RxString textoRx = "".obs;
+
+  //bool mensajeMostrado = false;
+
+  RxString textoNifRx = "".obs;
+  RxString textoNameRx = "".obs;
+  RxString textoSurName1Rx = "".obs;
+  RxString textoSurName2Rx = "".obs;
+  RxString textoEmailRx = "".obs;
+  RxString textoTlfRx = "".obs;
 
   late final LayerLink nifFieldLink = LayerLink();
-  OverlayEntry? overlaySugerenciasPorVoz;
+  OverlayEntry? overlaySugerencias;
 
   RxBool nifSeleccionado = RxBool(false);
+
+  late BuildContext _formContext;
 
   //*Seteamos el cliente que necesita la siguiente pagina para factura
   late Cliente cliente;
@@ -59,18 +77,30 @@ class FormPersonaCntrl extends GetxController {
   Future<void> onInit() async {
     super.onInit();
     await microService.initialize();
-    nifCntrl.addListener(() {
-      textoRx.value = nifCntrl.text;
-      if (nifCntrl.text.isEmpty) {
-        nifSeleccionado.value = false;
-        nameCntrl.clear();
-        surName1Cntrl.clear();
-        surName2Cntrl.clear();
-        emailCntrl.clear();
-        tlfCntrl.clear();
+
+    clientService.getAllClientsByTaller();
+
+    _escucharCambiosEnMicro();
+
+  }
+
+  void setFormContext(BuildContext context) {
+    _formContext = context;
+  }
+
+  void _escucharCambiosEnMicro() {
+    ever(microActivo, (bool escuchando) {
+      if (escuchando) {
+        Get.snackbar(
+          'Micrófono activo',
+          'Seleccciona un campo y dicta el texto por voz',
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.indigo,
+          colorText: Colors.white,
+          duration: const Duration(milliseconds: 2500),
+        );
       }
     });
-    clientService.getAllClientsByTaller();
   }
 
   //* Setea la primera parte del formulario y nos da la posibilidad de meter al final de este metodo el guardado en baes de datos
@@ -128,7 +158,7 @@ class FormPersonaCntrl extends GetxController {
     }
   }
 
-  Iterable<String> obtenerOpcionesNif(TextEditingValue textEditingValue) {
+  Iterable<String> obtenerOpcionesNif(TextEditingValue textEditingValue, bool contieneNumeros) {
     final texto = textEditingValue.text;
 
     if (texto.isEmpty) {
@@ -142,42 +172,52 @@ class FormPersonaCntrl extends GetxController {
       return const Iterable<String>.empty();
     }
 
-    final coincidencias = clientService.clientes
-        .where((cliente) => cliente.nif?.startsWith(texto) ?? false)
-        .map((cliente) => cliente.nif!)
-        .toList();
+    Iterable<String> coincidencias;
 
-    if (coincidencias.isEmpty) {
+    if (contieneNumeros) {
+      coincidencias = clientService.clientes
+          .where((cliente) => cliente.nif?.startsWith(texto) ?? false)
+          .map((cliente) => '${cliente.nif} - ${cliente.nombre} ${cliente.apellido1 ?? ''} ${cliente.apellido2 ?? ''}')
+          .toList();
+    } else {
+      final normalizado = removeDiacritics(texto.toLowerCase().replaceAll(RegExp(r'\s+'), ' ').trim());
+
+      coincidencias = clientService.clientes.where((cliente) {
+        final nombre = removeDiacritics((cliente.nombre ?? '').toLowerCase().trim());
+        final apellido1 = removeDiacritics((cliente.apellido1 ?? '').toLowerCase().trim());
+        final apellido2 = removeDiacritics((cliente.apellido2 ?? '').toLowerCase().trim());
+
+        final completo1 = "$nombre $apellido1";
+        final completo2 = "$nombre $apellido1 $apellido2";
+
+        return completo1 == normalizado || completo2 == normalizado;
+      }).map((cliente) =>
+      '${cliente.nif} - ${cliente.nombre} ${cliente.apellido1 ?? ''} ${cliente.apellido2 ?? ''}'
+      ).toList();
+    }
+
+    if (coincidencias.isEmpty && contieneNumeros) {
       nifCntrl.text = texto;
     }
 
     return coincidencias;
   }
 
-  Future<void> startListening(BuildContext context) async {
-    microActivo.value = true;
+  Future<void> startListening(String focus, TextEditingController controlador, RxString textoInput, FocusNode focusNode) async {
+
     isListening.value = true;
 
-    final focus = controladorDelCampoConFocus;
-    final TextEditingController controlador;
-
-    if (focus == "name") {
-      controlador = nameCntrl;
-    } else  {
-      controlador = nifCntrl;
-    }
-
     await microService.startListening(
-      context: context,
+      context: _formContext,
       focus: focus,
+      focusNode: focusNode,
       controlador: controlador,
-      textoRx: textoRx,
-      obtenerOpcionesNif: obtenerOpcionesNif,
-      mostrarSugerenciasPorVoz: mostrarSugerenciasPorVoz,
-      ocultarSugerenciasPorVoz: ocultarSugerenciasPorVoz,
+      textoRx: textoInput,
+      isListening: isListening,
+      obtenerOpciones: (focus == "nif") ?obtenerOpcionesNif :null,
+      mostrarSugerencias: (focus == "nif") ?mostrarSugerencias :null,
+      ocultarSugerencias: (focus == "nif") ?ocultarSugerencias :null,
     );
-
-    isListening.value = false;
   }
 
   void stopListening() {
@@ -186,19 +226,32 @@ class FormPersonaCntrl extends GetxController {
     isListening.value = false;
   }
 
-  String get controladorDelCampoConFocus {
-    if (nameFocus.hasFocus) return "name";
-    if (surName1Focus.hasFocus) return "surName1";
-    if (surName2Focus.hasFocus) return "surName2";
-    if (emailFocus.hasFocus) return "email";
-    if (tlfFocus.hasFocus) return "tlf";
-    return "nif"; // Ningún campo tiene focus
+  void onTapInputs(String field, TextEditingController controller, RxString textoRx, FocusNode focus, RxBool tieneFocus) {
+    _inicializaTieneFocus();
+    tieneFocus.value = true;
+
+    if (microActivo.value) {
+      if (controller.text.isNotEmpty) {
+        stopListening();
+      } else {
+        startListening(field, controller, textoRx, focus);
+      }
+    }
   }
 
-  void mostrarSugerenciasPorVoz(BuildContext context, List<String> sugerencias) {
-    ocultarSugerenciasPorVoz(); // Cierra si ya hay uno
+  void _inicializaTieneFocus() {
+    tieneFocusNif.value = false;
+    tieneFocusName.value = false;
+    tieneFocusSurname1.value =false;
+    tieneFocusSurname2.value = false;
+    tieneFocusEmail.value = false;
+    tieneFocusTlf.value = false;
+  }
 
-    overlaySugerenciasPorVoz = OverlayEntry(
+  void mostrarSugerencias(BuildContext context, List<String> sugerencias) {
+    ocultarSugerencias(); // Cierra si ya hay uno
+
+    overlaySugerencias = OverlayEntry(
       builder: (context) {
         return Positioned(
           child: CompositedTransformFollower(
@@ -212,6 +265,7 @@ class FormPersonaCntrl extends GetxController {
                 nifSeleccionado.value = true;
                 this.cliente = cliente;
 
+                textoNifRx.value = cliente.nif ?? '';
                 nifCntrl.text = cliente.nif ?? '';
                 nameCntrl.text = cliente.nombre ?? '';
                 surName1Cntrl.text = cliente.apellido1 ?? '';
@@ -219,7 +273,7 @@ class FormPersonaCntrl extends GetxController {
                 tlfCntrl.text = cliente.telefono ?? '';
                 emailCntrl.text = cliente.email ?? '';
 
-                ocultarSugerenciasPorVoz();
+                ocultarSugerencias();
               },
             ),
           ),
@@ -227,12 +281,12 @@ class FormPersonaCntrl extends GetxController {
       },
     );
 
-    Overlay.of(context, rootOverlay: true).insert(overlaySugerenciasPorVoz!);
+    Overlay.of(context, rootOverlay: true).insert(overlaySugerencias!);
   }
 
-  void ocultarSugerenciasPorVoz() {
-    overlaySugerenciasPorVoz?.remove();
-    overlaySugerenciasPorVoz = null;
+  void ocultarSugerencias() {
+    overlaySugerencias?.remove();
+    overlaySugerencias = null;
   }
 
   void onClienteSeleccionado(String nifCliente) {
@@ -250,5 +304,26 @@ class FormPersonaCntrl extends GetxController {
     emailCntrl.text = cliente.email ?? '';
   }
 
+  void clearInput(TextEditingController controller, RxString stringRx, FocusNode focusNode) {
+    controller.clear();
+    stringRx.value = '';
+    focusNode.unfocus();
+  }
+
+  void limpiarFormulario() {
+    clearInput(nifCntrl, textoNifRx, nifFocus);
+    nameCntrl.clear();
+    surName1Cntrl.clear();
+    surName2Cntrl.clear();
+    emailCntrl.clear();
+    tlfCntrl.clear();
+    nifSeleccionado.value = false;
+  }
+
+  void onChangeRestInputs(String texto, TextEditingController controller, RxString textoRx) {
+    final textoCap = capitalizeFirstLetter(texto);
+    controller.text = textoCap;
+    textoRx.value = textoCap;
+  }
 
 }

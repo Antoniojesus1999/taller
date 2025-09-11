@@ -56,6 +56,7 @@ class LoginPage extends StatelessWidget {
                     obscureText: false,
                     validator: (value) => Helpers.validateEmail(value),
                     keyboardType: TextInputType.emailAddress,
+                    tieneFocusRx: RxBool(false),
                   ),
 
                   SizedBox(height: Get.mediaQuery.size.height * 0.02),
@@ -66,6 +67,7 @@ class LoginPage extends StatelessWidget {
                     hintText: 'Contraseña',
                     validator: Helpers.validateEmptyPass,
                     obscureText: true,
+                    tieneFocusRx: RxBool(false),
                   ),
 
                   const SizedBox(height: 10),

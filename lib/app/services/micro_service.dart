@@ -2,16 +2,29 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
+import 'package:taller/app/utils/avisos_utils.dart';
+import 'package:taller/app/utils/micro_utils.dart';
+import 'package:taller/app/utils/string_utiles.dart';
+
+import '../utils/email_voice_to_text.dart';
 
 class MicroService {
   final stt.SpeechToText _speech = stt.SpeechToText();
   String? localeId;
   bool isInitialized = false;
+  FocusNode? _currentFocusNode;
+
+  void setCurrentFocus(FocusNode focusNode) {
+    _currentFocusNode = focusNode;
+  }
 
   Future<bool> initialize() async {
     isInitialized = await _speech.initialize(
       onStatus: (status) => print('🎤 Estado: \$status'),
-      onError: (error) => print('❌ Error: \$error'),
+      onError: (error) {
+        print('❌ Error: $error');
+        _currentFocusNode?.unfocus();
+      },
     );
     if (isInitialized) {
       final systemLocale = await _speech.systemLocale();
@@ -23,21 +36,15 @@ class MicroService {
   Future<void> startListening({
     required BuildContext context,
     required String focus,
+    required FocusNode focusNode,
     required TextEditingController controlador,
     required RxString textoRx,
-    required Iterable<String> Function(TextEditingValue) obtenerOpcionesNif,
-    required void Function(BuildContext, List<String>) mostrarSugerenciasPorVoz,
-    required void Function() ocultarSugerenciasPorVoz,
+    required RxBool isListening,
+    Iterable<String> Function(TextEditingValue, bool)? obtenerOpciones,
+    void Function(BuildContext, List<String>)? mostrarSugerencias,
+    void Function()? ocultarSugerencias,
   }) async {
-    final disponible = await _speech.initialize(
-      onStatus: (status) => print('🎤 Estado: $status'),
-      onError: (error) => print('❌ Error: $error'),
-    );
-
-    if (!disponible) {
-      print("🚫 No se pudo inicializar el reconocimiento de voz");
-      return;
-    }
+    setCurrentFocus(focusNode);
 
     _speech.listen(
       onResult: (result) {
@@ -46,12 +53,31 @@ class MicroService {
               result: result,
               nifCntrl: controlador,
               textoRx: textoRx,
-              obtenerOpcionesNif: obtenerOpcionesNif,
-              mostrarSugerenciasPorVoz: mostrarSugerenciasPorVoz,
-              ocultarSugerenciasPorVoz: ocultarSugerenciasPorVoz,
+              isListenig: isListening,
+              obtenerOpciones: obtenerOpciones,
+              mostrarSugerencias: mostrarSugerencias,
+              ocultarSugerencias: ocultarSugerencias,
+              context: context);
+        } else if (focus == "email") {
+          onResultEmail(
+              result: result,
+              emailCntrl: controlador,
+              textoRx: textoRx,
+              isListenig: isListening,
+              context: context);
+        } else if (focus == "tlf") {
+          onResultTlf(
+              result: result,
+              emailCntrl: controlador,
+              textoRx: textoRx,
+              isListenig: isListening,
               context: context);
         } else {
-          //TODO: function onResultName
+          onResult(
+              result: result,
+              controller: controlador,
+              textoRx: textoRx,
+              isListenig: isListening);
         }
       },
       listenOptions: stt.SpeechListenOptions(
@@ -60,86 +86,135 @@ class MicroService {
         cancelOnError: false,
         onDevice: false,
       ),
+      pauseFor: Duration(seconds: 15),
       localeId: localeId ?? 'es-ES',
     );
+
   }
 
   void onResultNif({
     required SpeechRecognitionResult result,
     required TextEditingController nifCntrl,
     required RxString textoRx,
-    required Iterable<String> Function(TextEditingValue) obtenerOpcionesNif,
-    required void Function(BuildContext, List<String>) mostrarSugerenciasPorVoz,
-    required void Function() ocultarSugerenciasPorVoz,
+    required RxBool isListenig,
+    Iterable<String> Function(TextEditingValue, bool)? obtenerOpciones,
+    void Function(BuildContext, List<String>)? mostrarSugerencias,
+    void Function()? ocultarSugerencias,
     required BuildContext context,
   }) {
-    final texto = result.recognizedWords.trim();
-
     if (result.finalResult) {
-      final resultado = convertirPalabrasANif(texto);
-      textoRx.value += resultado;
+      final texto = result.recognizedWords.trim();
+      print('texto: $texto');
+      final resultado = convertirVozANif(texto);
+      if (resultado.contains('ERRMIL')) {
+        mostrarAviso('', 'El dictado por voz sólo reconoce números de 0 a 999', false);
+      } else if (resultado.contains('ERRDIC')) {
+        mostrarAviso('', 'Por favor, dicte el NIF/NIE de forma clara. Si es necesario, diga los caracteres de uno en uno.', false);
+      } else {
+        textoRx.value += resultado;
+      }
+
 
       nifCntrl
         ..text = textoRx.value
         ..selection = TextSelection.collapsed(offset: textoRx.value.length);
 
-      final sugerencias = obtenerOpcionesNif(TextEditingValue(text: textoRx.value)).toList();
+      final contieneNumeros = RegExp(r'\d').hasMatch(textoRx.value);
+
+      String cadena;
+
+      if (contieneNumeros) {
+        cadena = textoRx.value;
+      } else {
+        cadena = texto;
+      }
+
+      final sugerencias = obtenerOpciones!(TextEditingValue(text: cadena), contieneNumeros).toList();
 
       if (sugerencias.isNotEmpty) {
-        mostrarSugerenciasPorVoz(context, sugerencias);
+        mostrarSugerencias!(context, sugerencias);
       } else {
-        ocultarSugerenciasPorVoz();
+        ocultarSugerencias!();
       }
+
+      isListenig.value = false;
     }
   }
 
-  String convertirPalabrasANif(String texto) {
-    final mapa = {
-      'cero': '0',
-      'uno': '1',
-      'dos': '2', 'do': '2',
-      'tres': '3', 'tre': '3',
-      'cuatro': '4',
-      'cinco': '5',
-      'seis': '6', 'cei': '6', 'ceis': '6',
-      'siete': '7', 'ciete': '7',
-      'ocho': '8', 'osho': '8',
-      'nueve': '9',
-      // Letras
-      'a': 'A',
-      'be': 'B', 'b': 'B',
-      'ce': 'C', 'c': 'C',
-      'de': 'D', 'd': 'D',
-      'e': 'E',
-      'efe': 'F', 'f': 'F',
-      'ge': 'G', 'g': 'G', 'je': 'G',
-      'hache': 'H', 'ache': 'H', 'h': 'H',
-      'i': 'I',
-      'jota': 'J', 'j': 'J',
-      'ka': 'K', 'ca': 'K', 'k': 'K',
-      'ele': 'L', 'l': 'L',
-      'eme': 'M', 'm': 'M',
-      'ene': 'N', 'n': 'N',
-      'eñe': 'Ñ', 'ñ': 'Ñ',
-      'o': 'O',
-      'pe': 'P', 'p': 'P',
-      'cu': 'Q', 'q': 'Q',
-      'erre': 'R', 'r': 'R',
-      'ese': 'S', 's': 'S',
-      'te': 'T', 't': 'T',
-      'u': 'U',
-      'uve': 'V', 'v': 'V',
-      'uve doble': 'W', 'ube doble': 'W', 'w': 'W',
-      'equis': 'X', 'x': 'X',
-      'i griega': 'Y', 'y': 'Y',
-      'zeta': 'Z', 'ceta': 'Z', 'z': 'Z'
-    };
+  void onResultEmail({
+    required SpeechRecognitionResult result,
+    required TextEditingController emailCntrl,
+    required RxString textoRx,
+    required RxBool isListenig,
+    required BuildContext context,
+  }) {
+    if (result.finalResult) {
+      final texto = result.recognizedWords.trim();
+      print('texto: $texto');
+      final resultado = procesarEmailDictado(texto);
 
-    final palabras = texto.toLowerCase().split(RegExp(r'\s+'));
-    final numeros = palabras.map((p) => mapa[p]).where((n) => n != null).join();
-    return numeros;
+      print('contieNumMayorNueve: ${resultado.contieneNumeroMayorQueNueve}; email: ${resultado.email}');
+
+      if (resultado.contieneNumeroMayorQueNueve) {
+        mostrarAviso('', 'Si el email contiene números, díctelos de forma clara y uno a uno', false);
+      } else {
+        if (resultado.email != null) {
+          textoRx.value += resultado.email!;
+          emailCntrl
+            ..text = textoRx.value
+            ..selection = TextSelection.collapsed(offset: textoRx.value.length);
+        }
+      }
+
+      isListenig.value = false;
+    }
   }
 
+  void onResultTlf({
+    required SpeechRecognitionResult result,
+    required TextEditingController emailCntrl,
+    required RxString textoRx,
+    required RxBool isListenig,
+    required BuildContext context,
+  }) {
+    if (result.finalResult) {
+      final texto = result.recognizedWords.trim();
+      final resultado = convertirVozATlf(texto);
+
+      if (resultado == 'ERROR') {
+        mostrarAviso('', 'Dicta los números de forma clara y uno a uno', false);
+      } else {
+        if (resultado != '') {
+          textoRx.value += resultado;
+          emailCntrl
+            ..text = textoRx.value
+            ..selection = TextSelection.collapsed(offset: textoRx.value.length);
+        } else {
+          mostrarAviso('', 'El campo teléfono sólo admite números', false);
+        }
+      }
+
+      isListenig.value = false;
+    }
+  }
+
+  void onResult({
+    required SpeechRecognitionResult result,
+    required TextEditingController controller,
+    required RxString textoRx,
+    required RxBool isListenig,
+  }) {
+    if (result.finalResult) {
+      textoRx.value += capitalizeFirstLetter(result.recognizedWords.trim());
+
+      controller
+        ..text = textoRx.value
+        ..selection = TextSelection.collapsed(offset: textoRx.value.length);
+
+      isListenig.value = false;
+    }
+  }
+  
   void stopListening() {
     _speech.stop();
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:taller/app/ui/global_widgets/opciones_lista_cliente.dart';
 
 import 'text_field_custom.dart';
@@ -10,6 +11,7 @@ class AutoCompleteCustom extends StatelessWidget {
   final Iterable<String> Function(TextEditingValue) optionsBuilder;
   final AutocompleteOptionToString<String> displayStringForOption;
   final void Function(String)? onSubmitted;
+  final void Function() onClear;
 
   const AutoCompleteCustom({
     super.key,
@@ -17,6 +19,7 @@ class AutoCompleteCustom extends StatelessWidget {
     required this.displayStringForOption,
     required this.onSelected,
     required this.title,
+    required this.onClear,
     this.initValue,
     this.onSubmitted,
   });
@@ -34,10 +37,12 @@ class AutoCompleteCustom extends StatelessWidget {
       fieldViewBuilder: (context, controller, focusNode, onEditingComplete) {
         return TextFieldCustom(
           controller: controller,
-          title: title,
+          hintText: title,
           focusNode: focusNode,
           onEditingComplete: onEditingComplete,
           onSubmitted: onSubmitted,
+          textoRx: RxString(""),
+          onClear: onClear,
         );
       }
     );
