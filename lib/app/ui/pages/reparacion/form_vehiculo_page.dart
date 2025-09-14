@@ -49,7 +49,9 @@ class FormVehiculoPage extends StatelessWidget {
                                 controller: formVehiculoCntrl.registrationCntrl,
                                 validator: (value) => Helpers.validateEmpty(value),
                                 hintText: 'Matricula',
-                                obscureText: false),
+                                obscureText: false,
+                                tieneFocusRx: RxBool(false)
+                            ),
                             SizedBox(height: Get.mediaQuery.size.height * 0.02),
                             AutoCompleteCustom(
                               title: 'Marcas',
@@ -57,6 +59,7 @@ class FormVehiculoPage extends StatelessWidget {
                               optionsBuilder: formVehiculoCntrl.obtenerOpcionesMarca,
                               displayStringForOption: (String brand) {return brand;},
                               onSelected: formVehiculoCntrl.handleBrandSelection,
+                              onClear: (){},
                             ),
                             SizedBox(height: Get.mediaQuery.size.height * 0.02),
                             AutoCompleteCustom(
@@ -65,6 +68,7 @@ class FormVehiculoPage extends StatelessWidget {
                               optionsBuilder: formVehiculoCntrl.obtenerOpcionesModelo,
                               displayStringForOption: (String model) {return model;},
                               onSelected: formVehiculoCntrl.handleModelSelection,
+                              onClear: (){},
                             ),
                             SizedBox(height: Get.mediaQuery.size.height * 0.02),
                             SizedBox(

@@ -60,6 +60,7 @@ class TrabajoPage extends GetView<TrabajoController> {
                           value!.isEmpty ? 'Campo requerido' : null,
                       maxLines: 5,
                       obscureText: false,
+                      tieneFocusRx: RxBool(false),
                     ),
                     SizedBox(height: 16),
                     Row(

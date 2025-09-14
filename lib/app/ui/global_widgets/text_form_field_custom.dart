@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get_rx/src/rx_types/rx_types.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 
 class TextFormFieldCustom extends StatelessWidget {
   final TextEditingController controller;
   final String hintText;
+  final RxString? textoRx;
   final bool? obscureText;
   final FormFieldValidator<String>? validator;
   final TextInputType? keyboardType;
@@ -12,11 +15,14 @@ class TextFormFieldCustom extends StatelessWidget {
   final bool? focus;
   final int? maxLines;
   final FocusNode? focusNode;
+  final bool? readonly;
+  final RxBool? tieneFocusRx;
 
   const TextFormFieldCustom({
     super.key,
     required this.controller,
     required this.hintText,
+    this.textoRx,
     this.obscureText,
     this.validator,
     this.keyboardType,
@@ -25,11 +31,28 @@ class TextFormFieldCustom extends StatelessWidget {
     this.focus,
     this.maxLines,
     this.focusNode,
+    this.readonly,
+    this.tieneFocusRx,
   });
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
+    return Obx(() {
+      late bool tieneTexto;
+      if (textoRx != null) {
+        tieneTexto = textoRx!.value.isNotEmpty;
+      } else {
+        tieneTexto = false;
+      }
+
+      late bool tieneFocus;
+      if (tieneFocusRx != null) {
+        tieneFocus = tieneFocusRx!.value;
+      } else {
+        tieneFocus = false;
+      }
+
+      return TextFormField(
         controller: controller,
         obscureText: obscureText ?? false,
         validator: validator,
@@ -37,26 +60,37 @@ class TextFormFieldCustom extends StatelessWidget {
         autofocus:focus == null ? false:true,
         keyboardType: keyboardType ?? TextInputType.text,
         maxLines: obscureText == true ? 1 : maxLines,
-/*        inputFormatters: keyboardType == TextInputType.number
-          ? [ThousandsSeparatorInputFormatter()]
-          : null,*/
         decoration: InputDecoration(
-          enabledBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.white),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: BorderSide(color: Colors.grey[400]!),
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.grey.shade400),
+            borderRadius: BorderRadius.circular(8),
+            borderSide: BorderSide(color: Colors.grey[600]!),
           ),
-          fillColor: const Color.fromARGB(255, 238, 238, 238),
-          filled: true,
           hintText: hintText,
-          labelText: label,
-          hintStyle: TextStyle(color: Colors.grey[500]),
-          suffixIcon: suffixIcon,
+          hintStyle: TextStyle(color: Colors.grey),
+          suffixIcon: (tieneTexto && tieneFocus)
+              ? GestureDetector(
+                onTap: controller.clear,
+                child: const Icon(Icons.clear),
+              )
+              : suffixIcon,
           errorStyle: const TextStyle(color: Colors.red),
-          
         ),
+        onChanged: textoRx != null
+            ? (texto) {
+          textoRx!.value = texto;
+
+          if (texto.isEmpty) {
+            textoRx!.value = '';
+          }
+        }
+            : null,
+        readOnly: readonly ?? false,
       );
+    });
   }
 }
 

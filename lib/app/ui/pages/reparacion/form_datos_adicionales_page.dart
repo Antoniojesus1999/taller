@@ -38,7 +38,9 @@ class FormDatosAdicionalesPage extends StatelessWidget {
                                 hintText: 'Kms',
                                 obscureText: false,
                                 keyboardType:
-                                    TextInputType.numberWithOptions(decimal: true)),
+                                    TextInputType.numberWithOptions(decimal: true),
+                                tieneFocusRx: RxBool(false),
+                            ),
                             SizedBox(height: Get.mediaQuery.size.height * 0.12),
                             BtnLoad(
                               onTap: () => datosAdicionalesCntrl.setDatosAdicionales(),
