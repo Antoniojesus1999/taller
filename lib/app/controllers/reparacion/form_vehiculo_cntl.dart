@@ -25,7 +25,7 @@ class FormVehiculoController extends GetxController {
   Rx<ColorVehiculo> selectedColor = ColorVehiculo().obs;
 
   RxString selectedCombustible = ''.obs;
-  final listCombustible = ['GASOLINA', 'DIESEL', 'HIBRIDO', 'ELECTRICO', 'HIDROGENO'];
+  final listCombustible = ['GASOLINA', 'DIESEL', 'HEV', 'PHEV', 'ELECTRICO', 'HIDROGENO'];
 
   final Logger log = Logger();
 
