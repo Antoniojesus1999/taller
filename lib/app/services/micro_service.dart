@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_disposable.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:taller/app/utils/avisos_utils.dart';
@@ -8,7 +9,7 @@ import 'package:taller/app/utils/string_utiles.dart';
 
 import '../utils/email_voice_to_text.dart';
 
-class MicroService {
+class MicroService extends GetxService {
   final stt.SpeechToText _speech = stt.SpeechToText();
   String? localeId;
   bool isInitialized = false;
@@ -87,7 +88,7 @@ class MicroService {
         onDevice: false,
       ),
       pauseFor: Duration(seconds: 15),
-      localeId: localeId ?? 'es-ES',
+      localeId: 'es_ES',
     );
 
   }
