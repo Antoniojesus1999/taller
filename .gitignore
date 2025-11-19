@@ -40,6 +40,10 @@ app.*.map.json
 
 # Android Studio will place build artifacts here
 /android
+/linux
+/macos
+/windows
+/web
 devtools_options.yaml
 .vscode/launch.json
 pubspec.lock
