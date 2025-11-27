@@ -57,6 +57,7 @@ dependencies:
   flutter_file_dialog: ^3.0.2
   path_provider: ^2.1.5
   http: ^1.5.0
+  rive: ^0.13.5
 
 dev_dependencies:
   device_preview: ^1.2.0
