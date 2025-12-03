@@ -65,6 +65,9 @@ class VehiculoRepository extends GetConnect {
 
     if (response.statusCode == 200) {
       log.i('Vehículo eliminado con éxito');
+    } else if (response.statusCode == 409) {
+      log.w('Conflicto: El vehículo está asociado a una reparación activa');
+      throw Exception('CONFLICT_409');
     } else {
       log.i('Error al eliminar vehículo: ${response.body}');
       throw Exception('Error al eliminar vehículo');

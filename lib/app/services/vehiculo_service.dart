@@ -25,7 +25,10 @@ class VehiculoService extends GetxService {
     return await vehiculoRepository.getAllVehiculosByCliente(idCliente);
   }
   Future<void> deleteClienteVehiculo(String idCliente, String idVehiculo) async {
-    await vehiculoRepository.deleteClienteVehiculo(idCliente,idVehiculo);
-    return Future.value();
+    try {
+      await vehiculoRepository.deleteClienteVehiculo(idCliente, idVehiculo);
+    } catch (e) {
+      rethrow; // Re-lanzar la excepción para que el controlador la maneje
+    }
   }
 }

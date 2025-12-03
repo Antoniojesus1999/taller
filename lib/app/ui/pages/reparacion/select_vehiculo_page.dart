@@ -1,8 +1,8 @@
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../controllers/reparacion/select_vehiculo_cntl.dart';
+import '../../global_widgets/dialog_custom.dart';
 
 class SelectVehiculoPage extends GetView<SelectVehiculoCntrl> {
   const SelectVehiculoPage({super.key});
@@ -48,27 +48,24 @@ class SelectVehiculoPage extends GetView<SelectVehiculoCntrl> {
                         ],
                       ),
                     ),
-                    subtitle: Text('${controller.listVehiculo[index].updatedAt}'),
+                    subtitle:
+                        Text('${controller.listVehiculo[index].updatedAt}'),
                     trailing: IconButton(
                       icon: const Icon(Icons.delete, color: Colors.red),
                       onPressed: () {
-                        AwesomeDialog(
+                        showCustomDialog(
                           context: context,
-                          dialogType: DialogType.question,
-                          headerAnimationLoop: false,
-                          animType: AnimType.topSlide,
                           title: 'Confirmación',
-                          desc:
+                          description:
                               '¿Estás seguro de que deseas eliminar este vehículo?',
-                          btnCancelOnPress: () {
-                            Get.back();
+                          type: DialogType.question,
+                          okText: 'Sí',
+                          cancelText: 'No',
+                          onOk: () async {
+                            await controller.eliminarVehiculo(
+                                controller.listVehiculo[index]);
                           },
-                          btnOkOnPress: () {
-                            controller.eliminarVehiculo(controller.listVehiculo[index]);
-                            Get.snackbar(
-                                'Éxito', 'El vehiculo ha sido eliminado');
-                          },
-                        ).show();
+                        );
                       },
                     ),
                     onTap: () {

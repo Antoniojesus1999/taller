@@ -1,12 +1,12 @@
 import 'package:taller/app/services/auth_service.dart';
 import 'package:taller/app/ui/global_widgets/global_widgets.dart';
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 import '../../../routes/app_pages.dart';
+import '../../global_widgets/dialog_custom.dart';
 
 class ResetPasswordPage extends StatelessWidget {
   ResetPasswordPage({super.key});
@@ -64,15 +64,14 @@ class ResetPasswordPage extends StatelessWidget {
                   BtnLoad(
                     onTap: () async {
                       await resetPassword(emailCntrl.text.trim());
-                      AwesomeDialog(
-                        context: Get.context!,
-                        dialogType: DialogType.success,
-                        animType: AnimType.bottomSlide,
+                      showCustomDialog(
+                        context: context,
+                        type: DialogType.success,
                         title: 'Email enviado con exito',
-                        desc:
+                        description:
                             'Revisa tu bandeja de entrada y resetea la contraseña',
-                        btnOkOnPress: () => Get.offAllNamed(Routes.login),
-                      ).show();
+                        onOk: () => Get.offAllNamed(Routes.login),
+                      );
                     },
                     title: "Enviar email",
                     width: Get.mediaQuery.size.width * 0.9,
@@ -143,7 +142,11 @@ class ResetPasswordPage extends StatelessWidget {
   }
 
   Future resetPassword(String email) async {
-    await authService.resetPassword(email);
-    btnController.success();
+    try {
+      await authService.resetPassword(email);
+      btnController.success();
+    } catch (e) {
+      btnController.reset();
+    }
   }
 }

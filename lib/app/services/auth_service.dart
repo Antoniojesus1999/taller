@@ -1,17 +1,17 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:logger/logger.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:taller/app/data/models/taller/empleado.dart';
 import 'package:taller/app/repositories/auth_repository.dart';
 import 'package:taller/app/repositories/taller_repository.dart';
 import 'package:taller/app/routes/app_pages.dart';
-import 'package:taller/app/utils/snack_bar.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-
 import 'package:taller/app/services/taller_service.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:logger/logger.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:taller/app/utils/snack_bar.dart';
 
 class AuthService extends GetxService {
   final Logger log = Logger();
@@ -57,7 +57,7 @@ class AuthService extends GetxService {
       _isSignedIn.value = true;
     } catch (e) {
       openSnackbar(Get.context, "Huella no configurada", Colors.red);
-        log.e('Error signing in with Google: $e');
+      log.e('Error signing in with Google: $e');
     }
   }
 
@@ -210,7 +210,22 @@ class AuthService extends GetxService {
   }
 
   Future<void> resetPassword(String email) async {
-    await firebaseAuth.sendPasswordResetEmail(email: email);
+    try {
+      await firebaseAuth.sendPasswordResetEmail(email: email);
+    } on FirebaseAuthException catch (e) {
+      String message;
+      if (e.code == 'invalid-email') {
+        message = 'El formato del email es incorrecto';
+      } else if (e.code == 'user-not-found') {
+        message = 'No existe un usuario con este email';
+      } else {
+        message = 'Error al enviar el email de recuperación';
+      }
+
+      log.e('Error al resetear contraseña: ${e.code}');
+      openSnackbar(Get.context, message, Colors.red);
+      rethrow;
+    }
   }
 
   Future<void> sendEmailVerification() async {

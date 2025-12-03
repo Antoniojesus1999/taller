@@ -26,7 +26,6 @@ class SelectVehiculoCntrl extends GetxController {
     required this.reparacionService,
   });
 
-
   setVehiculo(Vehiculo vehiculo) {
     vehiculoService.setVehiculo = vehiculo;
 
@@ -40,16 +39,32 @@ class SelectVehiculoCntrl extends GetxController {
     }
 
     if (encontrado) {
-      openSnackbar(Get.context, 'Ya existe una reparación en curso para este vehiculo', Colors.red);
+      openSnackbar(Get.context,
+          'Ya existe una reparación en curso para este vehiculo', Colors.red);
     } else {
-      Get.toNamed(Routes.formVehicle,
-          arguments: {'from': 'fromSelectVehicle'});
+      Get.toNamed(Routes.formVehicle, arguments: {'from': 'fromSelectVehicle'});
     }
   }
 
-  void eliminarVehiculo(Vehiculo vehiculo) {
-    vehiculoService.deleteClienteVehiculo(
-        clientService.cliente.id!, vehiculo.id!);
+  Future<void> eliminarVehiculo(Vehiculo vehiculo) async {
+    try {
+      await vehiculoService.deleteClienteVehiculo(
+          clientService.cliente.id!, vehiculo.id!);
+      // Si se elimina correctamente, actualizar la lista
+      listVehiculo.remove(vehiculo);
+      Get.snackbar('Éxito', 'El vehículo ha sido eliminado',
+          backgroundColor: Colors.green, colorText: Colors.white);
+    } catch (e) {
+      if (e.toString().contains('CONFLICT_409')) {
+        openSnackbar(
+            Get.context,
+            'No se ha podido borrar el vehículo porque está asociado a una reparación activa',
+            Colors.red);
+      } else {
+        openSnackbar(Get.context, 'Error al eliminar el vehículo', Colors.red);
+      }
+      log.e('Error al eliminar vehículo: $e');
+    }
   }
 
   void handleArguments(Map<String, dynamic>? args) {
