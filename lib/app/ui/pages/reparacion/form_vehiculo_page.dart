@@ -7,6 +7,7 @@ import 'package:taller/app/utils/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../global_widgets/text_field_custom.dart';
 import '../../global_widgets/text_form_field_custom.dart';
 
 class FormVehiculoPage extends StatelessWidget {
@@ -45,14 +46,18 @@ class FormVehiculoPage extends StatelessWidget {
                           children: [
                             Expanded(child: Container()),
                             SizedBox(height: Get.mediaQuery.size.height * 0.12),
-                            TextFormFieldCustom(
-                                controller: formVehiculoCntrl.registrationCntrl,
-                                validator: (value) => Helpers.validateEmpty(value),
+                            TextFieldCustom(
+                                controller: formVehiculoCntrl.matriculaCntrl,
                                 hintText: 'Matricula',
-                                obscureText: false,
-                                tieneFocusRx: RxBool(false)
+                                textoRx: formVehiculoCntrl.textoMatriculaRx,
+                                focusNode: formVehiculoCntrl.matriculaFocus,
+                                readonly: formVehiculoCntrl.microActivo.value,
+                                tieneFocusRx: formVehiculoCntrl.tieneFocusMatricula,
+                                onClear: formVehiculoCntrl.limpiarFormulario,
+                                onChanged: (texto) => formVehiculoCntrl.onChangeRestInputs(texto, formVehiculoCntrl.matriculaCntrl, formVehiculoCntrl.textoMatriculaRx),
+                                onTap: () => formVehiculoCntrl.onTapInputs("matricula", formVehiculoCntrl.matriculaCntrl, formVehiculoCntrl.textoMatriculaRx, formVehiculoCntrl.matriculaFocus, formVehiculoCntrl.tieneFocusMatricula),
                             ),
-                            SizedBox(height: Get.mediaQuery.size.height * 0.02),
+/*                            SizedBox(height: Get.mediaQuery.size.height * 0.02),
                             AutoCompleteCustom(
                               title: 'Marcas',
                               initValue: formVehiculoCntrl.valueBrandEditing.value,
@@ -160,9 +165,17 @@ class FormVehiculoPage extends StatelessWidget {
                                       );
                                     }).toList(),
                                   ),
-                              ),
-                            SizedBox(height: Get.mediaQuery.size.height * 0.03),
-
+                              ),*/
+                            SizedBox(height: Get.mediaQuery.size.height * 0.05),
+                            Obx(() => IconButton(
+                                iconSize: 40,
+                                icon: Icon(
+                                  formVehiculoCntrl.isListening.value ? Icons.mic : Icons.mic_none,
+                                  color: formVehiculoCntrl.microActivo.value ? Colors.red : Colors.black54,
+                                ),
+                                onPressed: () => formVehiculoCntrl.toggleMicro(context: context)
+                            )),
+                            SizedBox(height: Get.mediaQuery.size.height * 0.06),
                             BtnLoad(
                                 onTap: () => formVehiculoCntrl.setDataVehicle(),
                                 btnController: formVehiculoCntrl.btnCntlVehicle,

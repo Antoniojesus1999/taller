@@ -9,7 +9,7 @@ class FormDatosAdicionalesBinding extends Bindings {
     Get.lazyPut<ClientRepository>(() => ClientRepository());
     Get.lazyPut(() => ClientService(clientRepository: Get.find()));
     Get.lazyPut<FormDatosAdicionalesCntrl>(() => FormDatosAdicionalesCntrl(
-      reparacionService: Get.find(),
+      reparacionService: Get.find(), microService: Get.find(),
     ));
   }
 }

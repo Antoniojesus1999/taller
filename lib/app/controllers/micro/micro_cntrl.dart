@@ -1,102 +1,69 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
-import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:taller/app/utils/avisos_utils.dart';
 import 'package:taller/app/utils/micro_utils.dart';
 import 'package:taller/app/utils/string_utiles.dart';
 
-import '../utils/email_voice_to_text.dart';
+import '../../utils/email_voice_to_text.dart';
 
-class MicroService {
-  final stt.SpeechToText _speech = stt.SpeechToText();
-  String? localeId;
-  bool isInitialized = false;
-  FocusNode? _currentFocusNode;
-
-  void setCurrentFocus(FocusNode focusNode) {
-    _currentFocusNode = focusNode;
-  }
-
-  Future<bool> initialize() async {
-    isInitialized = await _speech.initialize(
-      onStatus: (status) => print('🎤 Estado: \$status'),
-      onError: (error) {
-        print('❌ Error: $error');
-        _currentFocusNode?.unfocus();
-      },
-    );
-    if (isInitialized) {
-      final systemLocale = await _speech.systemLocale();
-      localeId = systemLocale?.localeId;
-    }
-    return isInitialized;
-  }
-
-  Future<void> startListening({
-    required BuildContext context,
-    required String focus,
-    required FocusNode focusNode,
+class MicroCntrl {
+  void handleOnResult({
+    required String input,
+    required SpeechRecognitionResult result,
     required TextEditingController controlador,
     required RxString textoRx,
     required RxBool isListening,
     Iterable<String> Function(TextEditingValue, bool)? obtenerOpciones,
     void Function(BuildContext, List<String>)? mostrarSugerencias,
     void Function()? ocultarSugerencias,
-  }) async {
-    setCurrentFocus(focusNode);
-
-    _speech.listen(
-      onResult: (result) {
-        if (focus == "nif") {
-          onResultNif(
-              result: result,
-              nifCntrl: controlador,
-              textoRx: textoRx,
-              isListenig: isListening,
-              obtenerOpciones: obtenerOpciones,
-              mostrarSugerencias: mostrarSugerencias,
-              ocultarSugerencias: ocultarSugerencias,
-              context: context);
-        } else if (focus == "email") {
-          onResultEmail(
-              result: result,
-              emailCntrl: controlador,
-              textoRx: textoRx,
-              isListenig: isListening,
-              context: context);
-        } else if (focus == "tlf") {
-          onResultTlf(
-              result: result,
-              emailCntrl: controlador,
-              textoRx: textoRx,
-              isListenig: isListening,
-              context: context);
-        } else {
-          onResult(
-              result: result,
-              controller: controlador,
-              textoRx: textoRx,
-              isListenig: isListening);
-        }
-      },
-      listenOptions: stt.SpeechListenOptions(
-        listenMode: stt.ListenMode.dictation,
-        partialResults: true,
-        cancelOnError: false,
-        onDevice: false,
-      ),
-      pauseFor: Duration(seconds: 15),
-      localeId: localeId ?? 'es-ES',
-    );
-
+    required BuildContext context,
+  }) {
+    if (input == "nif") {
+      onResultNif(
+          result: result,
+          controlador: controlador,
+          textoRx: textoRx,
+          isListening: isListening,
+          obtenerOpciones: obtenerOpciones,
+          mostrarSugerencias: mostrarSugerencias,
+          ocultarSugerencias: ocultarSugerencias,
+          context: context);
+    } else if (input == "email") {
+      onResultEmail(
+          result: result,
+          controlador: controlador,
+          textoRx: textoRx,
+          isListening: isListening,
+          context: context);
+    } else if (input == "tlf") {
+      onResultTlf(
+          result: result,
+          controlador: controlador,
+          textoRx: textoRx,
+          isListening: isListening,
+          context: context);
+    } else if (input == "matricula") {
+      onResultMatricula(
+          result: result,
+          controlador: controlador,
+          textoRx: textoRx,
+          isListening: isListening,
+          context: context);
+    } else {
+      onResult(
+          result: result,
+          controlador: controlador,
+          textoRx: textoRx,
+          isListening: isListening);
+    }
   }
 
   void onResultNif({
     required SpeechRecognitionResult result,
-    required TextEditingController nifCntrl,
+    required TextEditingController controlador,
     required RxString textoRx,
-    required RxBool isListenig,
+    required RxBool isListening,
     Iterable<String> Function(TextEditingValue, bool)? obtenerOpciones,
     void Function(BuildContext, List<String>)? mostrarSugerencias,
     void Function()? ocultarSugerencias,
@@ -115,7 +82,7 @@ class MicroService {
       }
 
 
-      nifCntrl
+      controlador
         ..text = textoRx.value
         ..selection = TextSelection.collapsed(offset: textoRx.value.length);
 
@@ -137,15 +104,15 @@ class MicroService {
         ocultarSugerencias!();
       }
 
-      isListenig.value = false;
+      isListening.value = false;
     }
   }
 
   void onResultEmail({
     required SpeechRecognitionResult result,
-    required TextEditingController emailCntrl,
+    required TextEditingController controlador,
     required RxString textoRx,
-    required RxBool isListenig,
+    required RxBool isListening,
     required BuildContext context,
   }) {
     if (result.finalResult) {
@@ -160,21 +127,21 @@ class MicroService {
       } else {
         if (resultado.email != null) {
           textoRx.value += resultado.email!;
-          emailCntrl
+          controlador
             ..text = textoRx.value
             ..selection = TextSelection.collapsed(offset: textoRx.value.length);
         }
       }
 
-      isListenig.value = false;
+      isListening.value = false;
     }
   }
 
   void onResultTlf({
     required SpeechRecognitionResult result,
-    required TextEditingController emailCntrl,
+    required TextEditingController controlador,
     required RxString textoRx,
-    required RxBool isListenig,
+    required RxBool isListening,
     required BuildContext context,
   }) {
     if (result.finalResult) {
@@ -186,7 +153,7 @@ class MicroService {
       } else {
         if (resultado != '') {
           textoRx.value += resultado;
-          emailCntrl
+          controlador
             ..text = textoRx.value
             ..selection = TextSelection.collapsed(offset: textoRx.value.length);
         } else {
@@ -194,30 +161,53 @@ class MicroService {
         }
       }
 
-      isListenig.value = false;
+      isListening.value = false;
+    }
+  }
+
+  void onResultMatricula({
+    required SpeechRecognitionResult result,
+    required TextEditingController controlador,
+    required RxString textoRx,
+    required RxBool isListening,
+    required BuildContext context,
+  }) {
+    if (result.finalResult) {
+      final texto = result.recognizedWords.trim();
+      final resultado = convertirVozAMatricula(texto);
+
+/*      if (resultado == 'ERROR') {
+        mostrarAviso('', 'Dicta los números de forma clara y uno a uno', false);
+      } else {
+        if (resultado != '') {
+          textoRx.value += resultado;
+          controlador
+            ..text = textoRx.value
+            ..selection = TextSelection.collapsed(offset: textoRx.value.length);
+        } else {
+          mostrarAviso('', 'El campo teléfono sólo admite números', false);
+        }
+      }*/
+
+      isListening.value = false;
     }
   }
 
   void onResult({
     required SpeechRecognitionResult result,
-    required TextEditingController controller,
+    required TextEditingController controlador,
     required RxString textoRx,
-    required RxBool isListenig,
+    required RxBool isListening,
   }) {
     if (result.finalResult) {
       textoRx.value += capitalizeFirstLetter(result.recognizedWords.trim());
 
-      controller
+      controlador
         ..text = textoRx.value
         ..selection = TextSelection.collapsed(offset: textoRx.value.length);
 
-      isListenig.value = false;
+      isListening.value = false;
     }
   }
-  
-  void stopListening() {
-    _speech.stop();
-  }
-
 
 }

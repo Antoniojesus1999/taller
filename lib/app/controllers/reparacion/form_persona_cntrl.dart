@@ -7,21 +7,20 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
-import 'package:taller/app/services/micro_service.dart';
+import 'package:taller/app/controllers/micro/micro_cntrl.dart';
 import 'package:taller/app/services/vehiculo_service.dart';
 import 'package:taller/app/utils/snack_bar.dart';
 
 import '../../data/models/vehiculo/vehiculo.dart';
+import '../../mixins/micro_mixin.dart';
 import '../../ui/global_widgets/opciones_lista_cliente.dart';
 import '../../utils/string_utiles.dart';
 
-class FormPersonaCntrl extends GetxController {
+class FormPersonaCntrl extends GetxController with MicroMixinRgp {
   final Logger log = Logger();
 
-  //*Se usa en el formulario de persona
-  final RoundedLoadingButtonController btnCntlPerson =
-      RoundedLoadingButtonController();
-  //formulario persona
+  final RoundedLoadingButtonController btnCntlPerson = RoundedLoadingButtonController();
+
   final GlobalKey<FormState> formKeyPerson = GlobalKey<FormState>();
   final nifCntrl = TextEditingController();
   final nameCntrl = TextEditingController();
@@ -44,11 +43,6 @@ class FormPersonaCntrl extends GetxController {
   RxBool tieneFocusEmail = RxBool(false);
   RxBool tieneFocusTlf = RxBool(false);
 
-  RxBool microActivo = RxBool(false);
-  RxBool isListening = RxBool(false);
-
-  //bool mensajeMostrado = false;
-
   RxString textoNifRx = "".obs;
   RxString textoNameRx = "".obs;
   RxString textoSurName1Rx = "".obs;
@@ -63,20 +57,18 @@ class FormPersonaCntrl extends GetxController {
 
   late BuildContext _formContext;
 
-  //*Seteamos el cliente que necesita la siguiente pagina para factura
   late Cliente cliente;
 
-  //*Servicios inyectados
   final ClientService clientService;
   final VehiculoService vehiculoService;
-  final MicroService microService;
+  final MicroCntrl microService;
 
   FormPersonaCntrl({required this.clientService,required this.vehiculoService, required this.microService});
 
   @override
   Future<void> onInit() async {
     super.onInit();
-    await microService.initialize();
+    await initializeMicro();
 
     clientService.getAllClientsByTaller();
 
@@ -103,7 +95,6 @@ class FormPersonaCntrl extends GetxController {
     });
   }
 
-  //* Setea la primera parte del formulario y nos da la posibilidad de meter al final de este metodo el guardado en baes de datos
   void setDataPersona() async {
     if (!formKeyPerson.currentState!.validate()) {
       log.i("Formulario de login no correcto");
@@ -158,6 +149,37 @@ class FormPersonaCntrl extends GetxController {
     }
   }
 
+  void onTapInputs(String input, TextEditingController controlador, RxString textoRx, FocusNode focus, RxBool tieneFocus) {
+    _inicializaTieneFocus();
+    tieneFocus.value = true;
+
+    if (microActivo.value) {
+      if (controlador.text.isNotEmpty) {
+        stopMicro();
+      } else {
+        startListening(
+          input: input,
+          focusNode: focus,
+          controlador: controlador,
+          textoRx: textoRx,
+          context: _formContext,
+          obtenerOpciones: (input == "nif") ?obtenerOpcionesNif :null,
+          mostrarSugerencias: (input == "nif") ?mostrarSugerencias :null,
+          ocultarSugerencias: (input == "nif") ?ocultarSugerencias :null,
+        );
+      }
+    }
+  }
+
+  void _inicializaTieneFocus() {
+    tieneFocusNif.value = false;
+    tieneFocusName.value = false;
+    tieneFocusSurname1.value =false;
+    tieneFocusSurname2.value = false;
+    tieneFocusEmail.value = false;
+    tieneFocusTlf.value = false;
+  }
+
   Iterable<String> obtenerOpcionesNif(TextEditingValue textEditingValue, bool contieneNumeros) {
     final texto = textEditingValue.text;
 
@@ -201,51 +223,6 @@ class FormPersonaCntrl extends GetxController {
     }
 
     return coincidencias;
-  }
-
-  Future<void> startListening(String focus, TextEditingController controlador, RxString textoInput, FocusNode focusNode) async {
-
-    isListening.value = true;
-
-    await microService.startListening(
-      context: _formContext,
-      focus: focus,
-      focusNode: focusNode,
-      controlador: controlador,
-      textoRx: textoInput,
-      isListening: isListening,
-      obtenerOpciones: (focus == "nif") ?obtenerOpcionesNif :null,
-      mostrarSugerencias: (focus == "nif") ?mostrarSugerencias :null,
-      ocultarSugerencias: (focus == "nif") ?ocultarSugerencias :null,
-    );
-  }
-
-  void stopListening() {
-    microService.stopListening();
-    microActivo.value = false;
-    isListening.value = false;
-  }
-
-  void onTapInputs(String field, TextEditingController controller, RxString textoRx, FocusNode focus, RxBool tieneFocus) {
-    _inicializaTieneFocus();
-    tieneFocus.value = true;
-
-    if (microActivo.value) {
-      if (controller.text.isNotEmpty) {
-        stopListening();
-      } else {
-        startListening(field, controller, textoRx, focus);
-      }
-    }
-  }
-
-  void _inicializaTieneFocus() {
-    tieneFocusNif.value = false;
-    tieneFocusName.value = false;
-    tieneFocusSurname1.value =false;
-    tieneFocusSurname2.value = false;
-    tieneFocusEmail.value = false;
-    tieneFocusTlf.value = false;
   }
 
   void mostrarSugerencias(BuildContext context, List<String> sugerencias) {

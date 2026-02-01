@@ -1,5 +1,6 @@
 import 'package:taller/app/data/models/coches/color_vehiculo.dart';
 import 'package:taller/app/data/models/coches/marca.dart';
+import 'package:taller/app/mixins/micro_mixin.dart';
 
 import 'package:taller/app/routes/app_pages.dart';
 import 'package:taller/app/services/color_vehiculo_service.dart';
@@ -16,8 +17,10 @@ import 'package:taller/app/utils/snack_bar.dart';
 
 import '../../data/models/reparacion/reparacion.dart';
 import '../../data/models/vehiculo/vehiculo.dart';
+import '../micro/micro_cntrl.dart';
+import '../../utils/string_utiles.dart';
 
-class FormVehiculoController extends GetxController {
+class FormVehiculoController extends GetxController with MicroMixinRgp {
   RxList<Modelo> modelList = <Modelo>[].obs;
   RxList<String> modelNameList = <String>[].obs;
   RxList<String> listNameBrand = <String>[].obs;
@@ -25,7 +28,7 @@ class FormVehiculoController extends GetxController {
   Rx<ColorVehiculo> selectedColor = ColorVehiculo().obs;
 
   RxString selectedCombustible = ''.obs;
-  final listCombustible = ['GASOLINA', 'DIESEL', 'HIBRIDO', 'ELECTRICO', 'HIDROGENO'];
+  final listCombustible = ['GASOLINA', 'DIESEL', 'HEV', 'PHEV', 'ELECTRICO', 'HIDROGENO'];
 
   final Logger log = Logger();
 
@@ -34,7 +37,7 @@ class FormVehiculoController extends GetxController {
   final RoundedLoadingButtonController btnCntlVehicle =
       RoundedLoadingButtonController();
 
-  final registrationCntrl = TextEditingController();
+  final matriculaCntrl = TextEditingController();
   final modelCntrl = TextEditingController();
   final brandCntrl = TextEditingController();
 
@@ -46,6 +49,14 @@ class FormVehiculoController extends GetxController {
   RxBool changedListBrand = RxBool(true);
   RxBool changedListColor = RxBool(true);
 
+  late BuildContext _formContext;
+  RxString textoMatriculaRx = "".obs;
+  RxBool tieneFocusMatricula = RxBool(false);
+
+
+  final FocusNode matriculaFocus = FocusNode();
+
+
   //*Servicios inyectados
   final TallerService tallerService;
   final ClientService clientService;
@@ -53,15 +64,16 @@ class FormVehiculoController extends GetxController {
   final VehiculoService vehiculoService;
   final MarcaService marcaService;
   final ColorVehiculoService colorVehiculoService;
+  final MicroCntrl microService;
 
-  FormVehiculoController({
-    required this.tallerService,
-    required this.clientService,
-    required this.marcaService,
-    required this.reparacionService,
-    required this.vehiculoService,
-    required this.colorVehiculoService,
-  });
+  FormVehiculoController(
+      {required this.tallerService,
+      required this.clientService,
+      required this.marcaService,
+      required this.reparacionService,
+      required this.vehiculoService,
+      required this.colorVehiculoService,
+      required this.microService});
 
   @override
   void onInit() {
@@ -69,6 +81,7 @@ class FormVehiculoController extends GetxController {
     changeBrandAndModel();
     cargarColor();
     onInitCombustible();
+    _escucharCambiosEnMicro();
   }
 
   void onInitCombustible() {
@@ -77,9 +90,9 @@ class FormVehiculoController extends GetxController {
     if (vehiculo != null && vehiculo.combustible != null) {
       log.i('Combustible seleccionado: ${vehiculo.combustible}');
       // Si el vehiculo ya tiene un combustible asignado, lo seleccionamos
-     selectedCombustible.value = vehiculo.combustible!;
+      selectedCombustible.value = vehiculo.combustible!;
     } else {
-     selectedCombustible.value = listCombustible.first;
+      selectedCombustible.value = listCombustible.first;
     }
   }
 
@@ -93,7 +106,7 @@ class FormVehiculoController extends GetxController {
       log.i("Formulario de login correcto");
 
       Vehiculo vehiculo = Vehiculo(
-        matricula: registrationCntrl.text,
+        matricula: matriculaCntrl.text,
         marca: valueBrandEditing.value.text,
         modelo: valueModelEditing.value.text,
         combustible: selectedCombustible.value,
@@ -103,7 +116,7 @@ class FormVehiculoController extends GetxController {
         await vehiculoService.saveVehiculo(vehiculo);
       } catch (e) {
         openSnackbar(Get.context, 'Error al guardar el vehiculo', Colors.red);
-      }finally{
+      } finally {
         btnCntlVehicle.reset();
       }
 
@@ -122,7 +135,8 @@ class FormVehiculoController extends GetxController {
       }
 
       if (encontrado) {
-        openSnackbar(Get.context, 'Ya existe una reparación en curso para este vehiculo', Colors.red);
+        openSnackbar(Get.context,
+            'Ya existe una reparación en curso para este vehiculo', Colors.red);
       } else {
         await reparacionService.saveReparacion(reparacion);
 
@@ -136,12 +150,12 @@ class FormVehiculoController extends GetxController {
 
   //* Precargamos los datos que ha seleccionado el usuario
   void setDataVehiculoInPage() {
-      registrationCntrl.text = vehiculoService.vehiculo.matricula!;
-      valueBrandEditing.value =
-          TextEditingValue(text: vehiculoService.vehiculo.marca!);
-      valueModelEditing.value =
-          TextEditingValue(text: vehiculoService.vehiculo.modelo!);
-      selectedColor.value = vehiculoService.vehiculo.color!;
+    matriculaCntrl.text = vehiculoService.vehiculo.matricula!;
+    valueBrandEditing.value =
+        TextEditingValue(text: vehiculoService.vehiculo.marca!);
+    valueModelEditing.value =
+        TextEditingValue(text: vehiculoService.vehiculo.modelo!);
+    selectedColor.value = vehiculoService.vehiculo.color!;
   }
 
   //* Se inicia en el onInit y hace una petición para obtener las marcas y los modelos
@@ -177,7 +191,8 @@ class FormVehiculoController extends GetxController {
       throw Exception('Error al cargar los colores');
     } finally {
       if (vehiculoService.vehiculo.id != null) {
-        selectedColor.value = listColores.firstWhere((color) => color.nombre == vehiculoService.vehiculo.color.nombre);
+        selectedColor.value = listColores.firstWhere(
+            (color) => color.nombre == vehiculoService.vehiculo.color.nombre);
       } else {
         selectedColor.value = listColores.first;
       }
@@ -219,10 +234,10 @@ class FormVehiculoController extends GetxController {
 
   void handleArguments(Map<String, dynamic>? args) {
     if (args != null && args.containsKey('from')) {
-      if (args['from'] == 'fromSelectVehicle' ) {
+      if (args['from'] == 'fromSelectVehicle') {
         setDataVehiculoInPage();
       } else if (args['from'] == 'fromPerson') {
-        List<Vehiculo> listaVehiculo =args['listaVehiculo'];
+        List<Vehiculo> listaVehiculo = args['listaVehiculo'];
         if (listaVehiculo.isNotEmpty) {
           vehiculoService.setVehiculo = listaVehiculo.first;
           setDataVehiculoInPage();
@@ -257,5 +272,67 @@ class FormVehiculoController extends GetxController {
       final optionLower = option.toLowerCase();
       return optionLower.startsWith(text);
     });
+  }
+
+  void _escucharCambiosEnMicro() {
+    ever(microActivo, (bool escuchando) {
+      if (escuchando) {
+        Get.snackbar(
+          'Micrófono activo',
+          'Seleccciona un campo y dicta el texto por voz',
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.indigo,
+          colorText: Colors.white,
+          duration: const Duration(milliseconds: 2500),
+        );
+      }
+    });
+  }
+
+   void clearInput(TextEditingController controller, RxString stringRx, FocusNode focusNode) {
+    controller.clear();
+    stringRx.value = '';
+    focusNode.unfocus();
+  }
+
+  void limpiarFormulario() {
+    clearInput(matriculaCntrl,textoMatriculaRx , matriculaFocus);
+    matriculaCntrl.clear();
+/*    modelCntrl.clear();
+    brandCntrl.clear();*/
+
+  }
+
+  void onChangeRestInputs(String texto, TextEditingController controller, RxString textoRx) {
+    final textoCap = capitalizeFirstLetter(texto);
+    controller.text = textoCap;
+    textoRx.value = textoCap;
+  }
+
+  void onTapInputs(String input, TextEditingController controlador, RxString textoRx, FocusNode focus, RxBool tieneFocus) {
+    _inicializaTieneFocus();
+    tieneFocus.value = true;
+
+    if (microActivo.value) {
+      if (controlador.text.isNotEmpty) {
+        stopMicro();
+      } else {
+        startListening(
+          input: input,
+          focusNode: focus,
+          controlador: controlador,
+          textoRx: textoRx,
+          context: _formContext,
+        );
+      }
+    }
+  }
+
+  void _inicializaTieneFocus() {
+    tieneFocusMatricula.value = false;
+  }
+
+  void setFormContext(BuildContext context) {
+    _formContext = context;
   }
 }
