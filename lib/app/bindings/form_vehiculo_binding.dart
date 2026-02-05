@@ -20,7 +20,6 @@ class FormVehiculoBinding extends Bindings {
         marcaService: Get.find(),
         reparacionService: Get.find(),
         vehiculoService: Get.find(),
-        colorVehiculoService: Get.find(),
-        microService: Get.find()));
+        colorVehiculoService: Get.find()));
   }
 }

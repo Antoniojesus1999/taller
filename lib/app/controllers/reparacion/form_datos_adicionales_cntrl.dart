@@ -32,11 +32,9 @@ class FormDatosAdicionalesCntrl extends GetxController {
   
   //*Servicios inyectados
   final ReparacionService reparacionService;
-  final MicroCntrl microService;
 
   FormDatosAdicionalesCntrl({
-    required this.reparacionService,
-    required this.microService
+    required this.reparacionService
   });
 
   @override

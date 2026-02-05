@@ -61,9 +61,8 @@ class FormPersonaCntrl extends GetxController with MicroMixinRgp {
 
   final ClientService clientService;
   final VehiculoService vehiculoService;
-  final MicroCntrl microService;
 
-  FormPersonaCntrl({required this.clientService,required this.vehiculoService, required this.microService});
+  FormPersonaCntrl({required this.clientService,required this.vehiculoService});
 
   @override
   Future<void> onInit() async {

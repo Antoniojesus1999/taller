@@ -64,7 +64,6 @@ class FormVehiculoController extends GetxController with MicroMixinRgp {
   final VehiculoService vehiculoService;
   final MarcaService marcaService;
   final ColorVehiculoService colorVehiculoService;
-  final MicroCntrl microService;
 
   FormVehiculoController(
       {required this.tallerService,
@@ -72,8 +71,7 @@ class FormVehiculoController extends GetxController with MicroMixinRgp {
       required this.marcaService,
       required this.reparacionService,
       required this.vehiculoService,
-      required this.colorVehiculoService,
-      required this.microService});
+      required this.colorVehiculoService});
 
   @override
   void onInit() {
