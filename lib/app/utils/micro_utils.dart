@@ -1,4 +1,7 @@
 import 'package:taller/app/utils/string_utiles.dart';
+import 'package:logger/logger.dart';
+
+Logger log = Logger();
 
 const mapaUnidades = {
   'uno': '1',
@@ -69,7 +72,64 @@ const mapaLetras = {
   'uve doble': 'W', 'ube doble': 'W', 'w': 'W',
   'equis': 'X', 'x': 'X',
   'i griega': 'Y', 'y': 'Y',
-  'zeta': 'Z', 'ceta': 'Z', 'z': 'Z'
+  'zeta': 'Z', 'ceta': 'Z', 'z': 'Z',
+  'guión': '-'
+};
+
+const mapaProvMatricula = {
+  'alicante': 'A',
+  'albacete': 'AB',
+  'almería':	'AL',
+  'a coruña': 'AC', 'coruña': 'C',
+  'avila': 'AV',
+  'badajoz': 'BA',
+  'barcelona': 'B',
+  'burgos': 'BU',
+  'cadiz': 'CA',
+  'caceres': 'CC',
+  'ceuta': 'CE',
+  'cordoba': 'CO',
+  'ciudad real': 'CR',
+  'castellon': 'CS',
+  'cuenca': 'CU',
+  'girona': 'G', 'gerona': 'G', 'llirona': 'G', 'yirona': 'G',
+  'las palmas': 'GC', 'gran canaria': 'GC',
+  'granada': 'GR',
+  'guadalajara': 'GU',
+  'huelva': 'H',
+  'huesca': 'HU',
+  'jaen': 'J',
+  'leon': 'LE',
+  'lleida': 'L', 'lerida': 'L',
+  'logroño': 'LO',
+  'lugo': 'LU',
+  'madrid': 'M',
+  'malaga': 'MA',
+  'melilla': 'ML',
+  'murcia': 'MU',
+  'navarra': 'NA',
+  'ourense': 'OR', 'orense': 'OR',
+  'oviedo': 'O',
+  'palencia': 'P',
+  'palma de mallorca': 'PM', 'parma de mallorca': 'PM',
+  'pontevedra': 'PO',
+  'santander': 'S',
+  'salamanca': 'SA',
+  'santa cruz de tenerife': 'SC', 'santa cruz': 'SC',
+  'segovia': 'SG',
+  'sevilla': 'SE',
+  'soria': 'SO',
+  'san sebastian': 'SS', 'donosti': 'SS',
+  'tarragona': 'T',
+  'teruel': 'TE',
+  'tenerife': 'TF',
+  'toledo': 'TO',
+  'valencia': 'V',
+  'valladolid': 'VA',
+  'vitoria': 'VI',
+  'vizcaya': 'BI',
+  'zamora': 'ZA',
+  'zaragoza': 'Z'
 };
 
 String convertirVozANif(String texto) {
@@ -87,11 +147,11 @@ String convertirVozANif(String texto) {
       .trim();
 
   final palabras = textoClean.toLowerCase().split(RegExp(r'\s+'));
-  print('palabras: $palabras');
+  log.i('palabras: $palabras');
   for (int i = 0; i < palabras.length; i++) {
-    print('valor de i: $i');
+    log.i('valor de i: $i');
     final palabra = palabras[i];
-    print('valor de palabra : $palabra');
+    log.i('valor de palabra : $palabra');
     if (i == 0) {
       if (int.tryParse(palabra) != null) {
         if (calculo > 0) {
@@ -123,7 +183,7 @@ String convertirVozANif(String texto) {
       }
     } else if (i < palabras.length -1) {
       if (contieneLetrasYNumeros(palabra)) {
-        print('Error: ERRDIC0');
+        log.i('Error: ERRDIC0');
         resultado += 'ERRDIC';
         break;
       } else if (int.tryParse(palabra) != null) {
@@ -139,13 +199,13 @@ String convertirVozANif(String texto) {
         if (palabra == 'y') {
           yGriega = true;
         } else {
-          print('Error: ERRDIC1');
+          log.i('Error: ERRDIC1');
           resultado += 'ERRDIC';
           break;
         }
       } else if (mapaNumEspeciales.containsKey(palabra)) {
         if (yGriega) {
-          print('Error: ERRDIC2');
+          log.i('Error: ERRDIC2');
           resultado += 'ERRDIC';
           break;
         }
@@ -170,7 +230,7 @@ String convertirVozANif(String texto) {
       } else {
         if (yGriega) {
           if (mapaCentenas.containsKey(palabra) || mapaDecenas.containsKey(palabra) || !mapaUnidades.containsKey(palabra)) {
-            print('Error: ERRDIC3');
+            log.i('Error: ERRDIC3');
             resultado += 'ERRDIC';
             break;
           } else {
@@ -222,7 +282,7 @@ String convertirVozANif(String texto) {
       }
     } else {
       if (contieneLetrasYNumeros(palabra)) {
-        print('Error: ERRDIC4');
+        log.i('Error: ERRDIC4');
         resultado += 'ERRDIC';
         break;
       } else if (int.tryParse(palabra) != null) {
@@ -242,7 +302,7 @@ String convertirVozANif(String texto) {
 
       } else if (mapaNumEspeciales.containsKey(palabra)) {
         if (yGriega) {
-          print('Error: ERRDIC5');
+          log.i('Error: ERRDIC5');
           resultado += 'ERRDIC';
           break;
         }
@@ -308,14 +368,19 @@ String convertirVozATlf(String texto) {
       .trim();
 
   final palabras = textoClean.toLowerCase().split(RegExp(r'\s+'));
-  print('palabras: $palabras');
+  log.i('palabras: $palabras');
   for (int i = 0; i < palabras.length; i++) {
-    print('valor de i: $i');
+    log.i('valor de i: $i');
     final palabra = palabras[i];
-    print('valor de palabra : $palabra');
+    log.i('valor de palabra : $palabra');
 
     if (i < palabras.length -1) {
-      if (palabra == 'mil') {
+      if (int.tryParse(palabra) != null) {
+        if (calculo > 0) {
+          resultado += calculo.toString();
+        }
+        resultado += palabra;
+      } else if (palabra == 'mil') {
         resultado += 'ERRMIL';
         break;
       } else if (palabra == 'ciento' && (unidades && !centenas && !decenas)) {
@@ -331,7 +396,7 @@ String convertirVozATlf(String texto) {
         }
       } else if (mapaNumEspeciales.containsKey(palabra)) {
         if (yGriega) {
-          print('Error: ERRDIC1');
+          log.i('Error: ERRDIC1');
           resultado += 'ERRDIC';
           break;
         }
@@ -356,7 +421,352 @@ String convertirVozATlf(String texto) {
       } else {
         if (yGriega) {
           if (mapaCentenas.containsKey(palabra) || mapaDecenas.containsKey(palabra) || !mapaUnidades.containsKey(palabra)) {
-            print('Error: ERRDIC2');
+            log.i('Error: ERRDIC2');
+            resultado += 'ERRDIC';
+            break;
+          } else {
+            calculo += int.parse(mapaUnidades[palabra]!);
+            resultado += calculo.toString();
+            calculo = 0;
+            centenas = false;
+            decenas = false;
+            unidades = false;
+            yGriega = false;
+          }
+        } else {
+          if (mapaCentenas.containsKey(palabra)) {
+            if (centenas || decenas || unidades) {
+              resultado += calculo.toString();
+              calculo = int.parse(mapaCentenas[palabra]!);
+              decenas = false;
+              unidades = false;
+            } else {
+              calculo += int.parse(mapaCentenas[palabra]!);
+              centenas = true;
+            }
+          }
+
+          if (mapaDecenas.containsKey(palabra)) {
+            if (decenas || unidades) {
+              resultado += calculo.toString();
+              calculo = int.parse(mapaDecenas[palabra]!);
+              centenas = false;
+              unidades = false;
+            } else {
+              calculo += int.parse(mapaDecenas[palabra]!);
+              decenas = true;
+            }
+          }
+
+          if (mapaUnidades.containsKey(palabra)) {
+            if (unidades) {
+              resultado += calculo.toString();
+              calculo = int.parse(mapaUnidades[palabra]!);
+              centenas = false;
+              decenas = false;
+            } else {
+              calculo += int.parse(mapaUnidades[palabra]!);
+              unidades = true;
+            }
+          }
+        }
+      }
+    } else {
+      if (int.tryParse(palabra) != null) {
+        if (calculo > 0) {
+          resultado += calculo.toString();
+        }
+        resultado += palabra;
+      } else if (palabra == 'mil') {
+        resultado += 'ERRMIL';
+        break;
+      } else if (mapaNumEspeciales.containsKey(palabra)) {
+        if (yGriega) {
+          log.i('Error: ERRDIC3');
+          resultado += 'ERRDIC';
+          break;
+        }
+
+        if (calculo > 0) {
+          if (centenas) {
+            calculo += int.parse(mapaNumEspeciales[palabra]!);
+            resultado += calculo.toString();
+          } else {
+            resultado += calculo.toString();
+            resultado += mapaNumEspeciales[palabra]!;
+          }
+        } else {
+          resultado += mapaNumEspeciales[palabra]!;
+        }
+      } else {
+        if (mapaCentenas.containsKey(palabra)) {
+          if (centenas || decenas || unidades) {
+            resultado += calculo.toString();
+          }
+          resultado += mapaCentenas[palabra]!;
+        }
+
+        if (mapaDecenas.containsKey(palabra)) {
+          if (decenas || unidades) {
+            resultado += calculo.toString();
+            resultado += mapaDecenas[palabra]!;
+          } else {
+            calculo += int.parse(mapaDecenas[palabra]!);
+            resultado += calculo.toString();
+          }
+        }
+
+        if (mapaUnidades.containsKey(palabra)) {
+          if (unidades) {
+            resultado += calculo.toString();
+            resultado += mapaUnidades[palabra]!;
+          } else {
+            calculo += int.parse(mapaUnidades[palabra]!);
+            resultado += calculo.toString();
+          }
+        }
+      }
+    }
+  }
+
+  return resultado;
+}
+
+String convertirVozAMatricula(String texto) {
+  String resultado = '';
+  int calculo = 0;
+  bool unidades = false;
+  bool decenas = false;
+  bool centenas = false;
+  bool yGriega = false;
+  bool miles = false;
+  bool esNumero = false;
+
+  String textoClean = texto
+      .replaceAll('-', ' ')
+      .replaceAll(':', ' ')
+      .replaceAll('.', '')
+      .replaceAll(RegExp(r'\s+'), ' ')
+      .trim();
+
+  final palabras = textoClean.toLowerCase().split(RegExp(r'\s+'));
+  log.i('palabras: $palabras');
+  for (int i = 0; i < palabras.length; i++) {
+    log.i('valor de i: $i');
+    final palabra = palabras[i];
+    log.i('valor de palabra : $palabra');
+
+    if (int.tryParse(palabra) != null) {
+      if (calculo > 0) {
+        resultado += calculo.toString();
+      }
+      resultado += palabra;
+    } else if (!mapaLetras.containsKey(palabra) && palabra != 'mil' && palabra != 'ciento' &&
+        !mapaNumEspeciales.containsKey(palabra) && !mapaUnidades.containsKey(palabra) &&
+        !mapaDecenas.containsKey(palabra) && !mapaCentenas.containsKey(palabra)) {
+      resultado += palabra;
+    } else {
+      if (mapaLetras.containsKey(palabra)) {
+        if (esNumero) {
+          if (palabra == 'y' && !unidades) {
+            yGriega = true;
+          } else {
+            if (calculo > 0) {
+              resultado += calculo.toString();
+              calculo = 0;
+            }
+            esNumero = false;
+            resultado += mapaLetras[palabra]!;
+          }
+        } else {
+          resultado += mapaLetras[palabra]!;
+        }
+
+      } else {
+        if (!esNumero) {
+          esNumero = true;
+        }
+
+        if (palabra == 'mil') {
+          if (miles) {
+            log.i('Error: ERRDIC1');
+            resultado += 'ERRDIC';
+            break;
+          } else {
+            miles = true;
+            if (calculo > 0) {
+              calculo = calculo * 1000;
+            } else {
+              if (resultado.isEmpty) {
+                calculo = 1000;
+              }
+            }
+          }
+        } else if (palabra == 'ciento' && (unidades && !centenas && !decenas)) {
+          calculo = calculo * 100;
+          unidades = false;
+          centenas = true;
+        } else if (mapaNumEspeciales.containsKey(palabra)) {
+          if (yGriega) {
+            log.i('Error: ERRDIC2');
+            resultado += 'ERRDIC';
+            break;
+          }
+
+          if (calculo > 0) {
+            if (centenas) {
+              calculo += int.parse(mapaNumEspeciales[palabra]!);
+              resultado += calculo.toString();
+            } else {
+              resultado += calculo.toString();
+              resultado += mapaNumEspeciales[palabra]!;
+            }
+          } else {
+            resultado += mapaNumEspeciales[palabra]!;
+          }
+
+          calculo = 0;
+          centenas = false;
+          decenas = false;
+          unidades = false;
+
+        } else {
+          if (yGriega) {
+            if (mapaCentenas.containsKey(palabra) || mapaDecenas.containsKey(palabra) || !mapaUnidades.containsKey(palabra)) {
+              log.i('Error: ERRDIC3');
+              resultado += 'ERRDIC';
+              break;
+            } else {
+              calculo += int.parse(mapaUnidades[palabra]!);
+              resultado += calculo.toString();
+              calculo = 0;
+              centenas = false;
+              decenas = false;
+              unidades = false;
+              yGriega = false;
+            }
+          } else {
+            if (mapaCentenas.containsKey(palabra)) {
+              if (centenas || decenas || unidades) {
+                resultado += calculo.toString();
+                calculo = int.parse(mapaCentenas[palabra]!);
+                decenas = false;
+                unidades = false;
+              } else {
+                calculo += int.parse(mapaCentenas[palabra]!);
+                centenas = true;
+              }
+            }
+
+            if (mapaDecenas.containsKey(palabra)) {
+              if (decenas || unidades) {
+                resultado += calculo.toString();
+                calculo = int.parse(mapaDecenas[palabra]!);
+                centenas = false;
+                unidades = false;
+              } else {
+                calculo += int.parse(mapaDecenas[palabra]!);
+                decenas = true;
+              }
+            }
+
+            if (mapaUnidades.containsKey(palabra)) {
+              if (unidades) {
+                resultado += calculo.toString();
+                calculo = int.parse(mapaUnidades[palabra]!);
+                centenas = false;
+                decenas = false;
+              } else {
+                calculo += int.parse(mapaUnidades[palabra]!);
+                unidades = true;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  return resultado;
+}
+
+String convertirVozAKms(String texto) {
+  String resultado = '';
+  int calculo = 0;
+  bool unidades = false;
+  bool decenas = false;
+  bool centenas = false;
+  bool yGriega = false;
+  bool miles = false;
+
+  String textoClean = texto
+      .replaceAll('-', ' ')
+      .replaceAll(':', ' ')
+      .replaceAll(RegExp(r'\s+'), ' ')
+      .trim();
+
+  final palabras = textoClean.toLowerCase().split(RegExp(r'\s+'));
+  log.i('palabras: $palabras');
+  for (int i = 0; i < palabras.length; i++) {
+    log.i('valor de i: $i');
+    final palabra = palabras[i];
+    log.i('valor de palabra : $palabra');
+
+    if (i < palabras.length -1) {
+      if (palabra == 'mil') {
+        if (miles) {
+          log.i('Error: ERRDIC1');
+          resultado += 'ERRDIC';
+          break;
+        } else {
+          miles = true;
+          if (calculo > 0) {
+            calculo = calculo * 1000;
+          } else {
+            if (resultado.isEmpty) {
+              calculo = 1000;
+            }
+          }
+        }
+      } else if (palabra == 'ciento' && (unidades && !centenas && !decenas)) {
+        calculo = calculo * 100;
+        unidades = false;
+        centenas = true;
+      } else if (mapaLetras.containsKey(palabra)) {
+        if (palabra == 'y') {
+          yGriega = true;
+        } else {
+          resultado += 'ERRKMS';
+          break;
+        }
+      } else if (mapaNumEspeciales.containsKey(palabra)) {
+        if (yGriega) {
+          log.i('Error: ERRDIC2');
+          resultado += 'ERRDIC';
+          break;
+        }
+
+        if (calculo > 0) {
+          if (centenas) {
+            calculo += int.parse(mapaNumEspeciales[palabra]!);
+            resultado += calculo.toString();
+          } else {
+            resultado += calculo.toString();
+            resultado += mapaNumEspeciales[palabra]!;
+          }
+        } else {
+          resultado += mapaNumEspeciales[palabra]!;
+        }
+
+        calculo = 0;
+        centenas = false;
+        decenas = false;
+        unidades = false;
+
+      } else {
+        if (yGriega) {
+          if (mapaCentenas.containsKey(palabra) || mapaDecenas.containsKey(palabra) || !mapaUnidades.containsKey(palabra)) {
+            log.i('Error: ERRDIC3');
             resultado += 'ERRDIC';
             break;
           } else {
@@ -408,11 +818,23 @@ String convertirVozATlf(String texto) {
       }
     } else {
       if (palabra == 'mil') {
-        resultado += 'ERRMIL';
-        break;
+        if (miles) {
+          log.i('Error: ERRDIC4');
+          resultado += 'ERRDIC';
+          break;
+        } else {
+          if (calculo > 0) {
+            calculo = calculo * 1000;
+          } else {
+            if (resultado.isEmpty) {
+              calculo = 1000;
+            }
+          }
+          resultado = calculo.toString();
+        }
       } else if (mapaNumEspeciales.containsKey(palabra)) {
         if (yGriega) {
-          print('Error: ERRDIC3');
+          log.i('Error: ERRDIC5');
           resultado += 'ERRDIC';
           break;
         }

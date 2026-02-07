@@ -1,5 +1,6 @@
 import 'package:taller/app/data/models/coches/color_vehiculo.dart';
 import 'package:taller/app/data/models/coches/marca.dart';
+import 'package:taller/app/mixins/micro_mixin.dart';
 
 import 'package:taller/app/routes/app_pages.dart';
 import 'package:taller/app/services/color_vehiculo_service.dart';
@@ -13,13 +14,13 @@ import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:taller/app/utils/snack_bar.dart';
-import 'package:taller/app/utils/string_utiles.dart';
 
 import '../../data/models/reparacion/reparacion.dart';
 import '../../data/models/vehiculo/vehiculo.dart';
-import '../../services/micro_service.dart';
+import '../micro/micro_cntrl.dart';
+import '../../utils/string_utiles.dart';
 
-class FormVehiculoController extends GetxController {
+class FormVehiculoController extends GetxController with MicroMixinRgp {
   RxList<Modelo> modelList = <Modelo>[].obs;
   RxList<String> modelNameList = <String>[].obs;
   RxList<String> listNameBrand = <String>[].obs;
@@ -48,13 +49,10 @@ class FormVehiculoController extends GetxController {
   RxBool changedListBrand = RxBool(true);
   RxBool changedListColor = RxBool(true);
 
-  RxBool microActivo = RxBool(false);
-  RxBool isListening = RxBool(false);
   late BuildContext _formContext;
   RxString textoMatriculaRx = "".obs;
   RxBool tieneFocusMatricula = RxBool(false);
-  RxString textoEmailRx = "".obs;
-  RxString textoTlfRx = "".obs;
+
 
   final FocusNode matriculaFocus = FocusNode();
 
@@ -66,7 +64,6 @@ class FormVehiculoController extends GetxController {
   final VehiculoService vehiculoService;
   final MarcaService marcaService;
   final ColorVehiculoService colorVehiculoService;
-  final MicroService microService;
 
   FormVehiculoController(
       {required this.tallerService,
@@ -74,8 +71,7 @@ class FormVehiculoController extends GetxController {
       required this.marcaService,
       required this.reparacionService,
       required this.vehiculoService,
-      required this.colorVehiculoService,
-      required this.microService});
+      required this.colorVehiculoService});
 
   @override
   void onInit() {
@@ -291,29 +287,6 @@ class FormVehiculoController extends GetxController {
     });
   }
 
-  void stopListening() {
-    microService.stopListening();
-    microActivo.value = false;
-    isListening.value = false;
-  }
-
-  Future<void> startListening(String focus, TextEditingController controlador,
-      RxString textoInput, FocusNode focusNode) async {
-    isListening.value = true;
-
-    await microService.startListening(
-      context: _formContext,
-      focus: focus,
-      focusNode: focusNode,
-      controlador: controlador,
-      textoRx: textoInput,
-      isListening: isListening,
-      obtenerOpciones: (focus == "nif") ? null : null,
-      mostrarSugerencias: (focus == "nif") ? null : null,
-      ocultarSugerencias: (focus == "nif") ? null : null,
-    );
-  }
-
    void clearInput(TextEditingController controller, RxString stringRx, FocusNode focusNode) {
     controller.clear();
     stringRx.value = '';
@@ -323,8 +296,8 @@ class FormVehiculoController extends GetxController {
   void limpiarFormulario() {
     clearInput(matriculaCntrl,textoMatriculaRx , matriculaFocus);
     matriculaCntrl.clear();
-    modelCntrl.clear();
-    brandCntrl.clear();
+/*    modelCntrl.clear();
+    brandCntrl.clear();*/
 
   }
 
@@ -334,15 +307,21 @@ class FormVehiculoController extends GetxController {
     textoRx.value = textoCap;
   }
 
-  void onTapInputs(String field, TextEditingController controller, RxString textoRx, FocusNode focus, RxBool tieneFocus) {
+  void onTapInputs(String input, TextEditingController controlador, RxString textoRx, FocusNode focus, RxBool tieneFocus) {
     _inicializaTieneFocus();
     tieneFocus.value = true;
 
     if (microActivo.value) {
-      if (controller.text.isNotEmpty) {
-        stopListening();
+      if (controlador.text.isNotEmpty) {
+        stopMicro();
       } else {
-        startListening(field, controller, textoRx, focus);
+        startListening(
+          input: input,
+          focusNode: focus,
+          controlador: controlador,
+          textoRx: textoRx,
+          context: _formContext,
+        );
       }
     }
   }

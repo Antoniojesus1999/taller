@@ -38,20 +38,21 @@ class FormPersonaPage extends StatelessWidget {
                     children: [
                       SizedBox(height: Get.mediaQuery.size.height * 0.02),
                       Obx(() => AutoCompleteCustomRgp(
-                        controller: personaCntrl.nifCntrl,
-                        focusNode: personaCntrl.nifFocus,
-                        layerLink: personaCntrl.nifFieldLink,
-                        hintText: 'NIF',
-                        textoRx: personaCntrl.textoNifRx,
-                        obtenerOpciones: personaCntrl.obtenerOpcionesNif,
-                        mostrarSugerencias: personaCntrl.mostrarSugerencias,
-                        ocultarSugerencias: personaCntrl.ocultarSugerencias,
-                        readonly: personaCntrl.microActivo.value,
-                        tieneFocusRx: personaCntrl.tieneFocusNif,
-                        suffixIcon: Icon(Icons.search),
-                        onClear: personaCntrl.limpiarFormulario,
-                        onTap: () => personaCntrl.onTapInputs("nif", personaCntrl.nifCntrl, personaCntrl.textoNifRx, personaCntrl.nifFocus, personaCntrl.tieneFocusNif),
-                      )),
+                          controller: personaCntrl.nifCntrl,
+                          focusNode: personaCntrl.nifFocus,
+                          layerLink: personaCntrl.nifFieldLink,
+                          hintText: 'NIF',
+                          textoRx: personaCntrl.textoNifRx,
+                          obtenerOpciones: personaCntrl.obtenerOpcionesNif,
+                          mostrarSugerencias: personaCntrl.mostrarSugerencias,
+                          ocultarSugerencias: personaCntrl.ocultarSugerencias,
+                          readonly: personaCntrl.microActivo.value,
+                          tieneFocusRx: personaCntrl.tieneFocusNif,
+                          suffixIcon: Icon(Icons.search),
+                          onClear: personaCntrl.limpiarFormulario,
+                          onTap: () => personaCntrl.onTapInputs("nif", personaCntrl.nifCntrl, personaCntrl.textoNifRx, personaCntrl.nifFocus, personaCntrl.tieneFocusNif),
+                        ),
+                      ),
                       SizedBox(height: Get.mediaQuery.size.height * 0.02),
                       Obx(() => TextFieldCustom(
                         controller: personaCntrl.nameCntrl,
@@ -119,15 +120,7 @@ class FormPersonaPage extends StatelessWidget {
                           personaCntrl.isListening.value ? Icons.mic : Icons.mic_none,
                           color: personaCntrl.microActivo.value ? Colors.red : Colors.black54,
                         ),
-                        onPressed: () {
-                          if (personaCntrl.microActivo.value) {
-                            FocusScope.of(context).unfocus();
-                            personaCntrl.stopListening();
-                          } else {
-                            personaCntrl.microActivo.value = true;
-                          }
-                          //personaCntrl.startListening(context);
-                        },
+                        onPressed: () => personaCntrl.toggleMicro(context: context)
                       )),
                       SizedBox(height: Get.mediaQuery.size.height * 0.06),
                       BtnLoad(

@@ -5,6 +5,7 @@ import 'package:taller/app/services/color_vehiculo_service.dart';
 
 import '../repositories/color_vehiculo_repository.dart';
 import '../services/marca_service.dart';
+import '../controllers/micro/micro_cntrl.dart';
 
 class FormVehiculoBinding extends Bindings {
   @override
@@ -19,8 +20,6 @@ class FormVehiculoBinding extends Bindings {
         marcaService: Get.find(),
         reparacionService: Get.find(),
         vehiculoService: Get.find(),
-        colorVehiculoService: Get.find(),
-        microService: Get.find()));
-
+        colorVehiculoService: Get.find()));
   }
 }
