@@ -74,7 +74,12 @@ class PdfController extends GetxController {
       final tempDir = await getTemporaryDirectory();
       final file =
           await File('${tempDir.path}/output.pdf').writeAsBytes(pdf!.toList());
-      Share.shareXFiles([XFile(file.path)], text: 'Aquí tienes el PDF');
+
+      ShareParams(
+        files: [XFile(file.path)],
+        text: 'Aquí tienes el PDF',
+        downloadFallbackEnabled: true, // conservar comportamiento antiguo
+      );
     }
   }
 
@@ -132,6 +137,14 @@ class PdfController extends GetxController {
     final tempDir = await getTemporaryDirectory();
     final file = await File('${tempDir.path}/output.pdf')
         .writeAsBytes(pdfBytes.value!.toList());
-    Share.shareXFiles([XFile(file.path)], text: 'Aquí tienes el PDF');
+
+    SharePlus.instance.share(
+      ShareParams(
+        files: [XFile(file.path)],
+        text: 'Aquí tienes el PDF',
+        // downloadFallbackEnabled: true, // si necesitas el comportamiento antiguo
+      ),
+    );
+
   }
 }
