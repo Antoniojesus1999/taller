@@ -2,7 +2,7 @@
   "project_info": {
     "project_number": "282498333237",
     "project_id": "tallerapp-62bfb",
-    "storage_bucket": "tallerapp-62bfb.appspot.com"
+    "storage_bucket": "tallerapp-62bfb.firebasestorage.app"
   },
   "client": [
     {
@@ -19,6 +19,30 @@
           "android_info": {
             "package_name": "com.surcode.taller",
             "certificate_hash": "0fec134a236695b07ee02739d260e677673f738f"
+          }
+        },
+        {
+          "client_id": "282498333237-rsfhhlcnh69o7knnliokv239912o1e6s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.surcode.taller",
+            "certificate_hash": "a621bbc6fdc030dbb48046bbf0cedb520853df21"
+          }
+        },
+        {
+          "client_id": "282498333237-s96aljtn9mkq5gf6dqoiheovn18gde9q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.surcode.taller",
+            "certificate_hash": "e516b966a9fe4749e7d7dbb12f05b373076c7c0c"
+          }
+        },
+        {
+          "client_id": "282498333237-u820eab4iafhr92n24m7d9144uqn8fl4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.surcode.taller",
+            "certificate_hash": "4f0b4edc0a4c8ce3cc56244a83812eeec3cb2871"
           }
         },
         {
@@ -39,10 +63,10 @@
               "client_type": 3
             },
             {
-              "client_id": "282498333237-d6pov6b35e9ohtvclafjdave7n56utfa.apps.googleusercontent.com",
+              "client_id": "282498333237-boa7r7dqdl1cv18pu4d1iocp79egss2t.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.appTaller"
+                "bundle_id": "com.surcode.taller"
               }
             }
           ]
